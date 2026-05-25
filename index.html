@@ -249,8 +249,17 @@ const FLASHCARD_DECKS = {
 function Header({ title }) {
   return (
     <div style={{ background:"#1B3A6B", flexShrink:0 }} className="text-white px-4 py-3 flex items-center gap-2 shadow-md">
-      <span className="text-xl">🚗</span>
-      <span className="font-bold text-sm">Bharath Auto</span>
+      <div style={{background:"white", borderRadius:"5px", padding:"2px 7px 2px 3px", display:"inline-flex", alignItems:"center", flexShrink:0}}>
+        <svg width="118" height="30" viewBox="0 0 316 80" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="38" fill="#CC0000"/>
+          <text x="40" y="57" fontFamily="Arial Black,Arial,sans-serif" fontSize="54" fontWeight="900" fill="white" textAnchor="middle">B</text>
+          <text x="86" y="26" fontFamily="Arial Black,Arial,sans-serif" fontSize="24" fontWeight="900" fill="#1B3A6B">BHARATH</text>
+          <text x="86" y="42" fontFamily="Arial,sans-serif" fontSize="12" fontWeight="700" fill="#1B3A6B">AUTO CARS (P) LTD.</text>
+          <text x="86" y="55" fontFamily="Arial,sans-serif" fontSize="8" fontWeight="400" fill="#2E75B6" letterSpacing="2">DRIVEN BY EXCELLENCE</text>
+          <line x1="86" y1="60" x2="314" y2="60" stroke="#ccc" strokeWidth="0.5"/>
+          <text x="86" y="72" fontFamily="Arial,sans-serif" fontSize="6.5" fontWeight="700" fill="#444">AUTHORISED MARUTI SUZUKI DEALER &amp; SERVICES CENTER</text>
+        </svg>
+      </div>
       <span className="text-blue-300 text-xs ml-1">· {title}</span>
     </div>
   );
@@ -275,9 +284,18 @@ function SplashScreen({ onStart }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
       <div className="w-full max-w-sm text-center">
-        <div className="text-7xl mb-5">🚗</div>
-        <h1 className="text-4xl font-bold text-white tracking-tight">Bharath Auto</h1>
-        <p className="text-blue-200 text-xl font-medium mt-2">Sales Trainer</p>
+        <div style={{background:"white", borderRadius:"14px", padding:"14px 20px", marginBottom:"10px", display:"inline-block", boxShadow:"0 4px 24px rgba(0,0,0,0.28)"}}>
+          <svg width="240" height="61" viewBox="0 0 316 80" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="38" fill="#CC0000"/>
+            <text x="40" y="57" fontFamily="Arial Black,Arial,sans-serif" fontSize="54" fontWeight="900" fill="white" textAnchor="middle">B</text>
+            <text x="86" y="26" fontFamily="Arial Black,Arial,sans-serif" fontSize="24" fontWeight="900" fill="#1B3A6B">BHARATH</text>
+            <text x="86" y="42" fontFamily="Arial,sans-serif" fontSize="12" fontWeight="700" fill="#1B3A6B">AUTO CARS (P) LTD.</text>
+            <text x="86" y="55" fontFamily="Arial,sans-serif" fontSize="8" fontWeight="400" fill="#2E75B6" letterSpacing="2">DRIVEN BY EXCELLENCE</text>
+            <line x1="86" y1="60" x2="314" y2="60" stroke="#ccc" strokeWidth="0.5"/>
+            <text x="86" y="72" fontFamily="Arial,sans-serif" fontSize="6.5" fontWeight="700" fill="#444">AUTHORISED MARUTI SUZUKI DEALER &amp; SERVICES CENTER</text>
+          </svg>
+        </div>
+        <p className="text-blue-200 text-xl font-medium mt-1">Sales Trainer</p>
         <p className="text-blue-300 text-sm mt-3 mb-2">Your Smart Sales Companion</p>
         <span className="inline-block bg-blue-500 bg-opacity-30 text-blue-100 text-xs px-4 py-1.5 rounded-full border border-blue-400 border-opacity-40 mb-8">Maruti Suzuki Arena</span>
         <div className="bg-white bg-opacity-10 rounded-2xl p-5 mb-8 text-left space-y-3">
