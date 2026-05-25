@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bharath Auto — Sales Trainer</title>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1B3A6B" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Auto Trainer" />
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { -webkit-user-select: none; user-select: none; }
+    input, textarea { -webkit-user-select: text; user-select: text; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f3f4f6; overflow: hidden; }
+    #root { height: 100vh; display: flex; flex-direction: column; }
+    @keyframes bounce3 { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }
+    .dot { animation: bounce3 1.2s infinite ease-in-out; }
+    .dot:nth-child(2){animation-delay:.15s} .dot:nth-child(3){animation-delay:.3s}
+    @keyframes spin360 { to{transform:rotate(360deg)} }
+    .spin { animation: spin360 .7s linear infinite; }
+    ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+    .tab-content { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+
+    /* Flip card */
+    .flip-scene { perspective: 800px; width:100%; height:200px; cursor:pointer; }
+    .flip-card { width:100%; height:100%; transition:transform 0.5s cubic-bezier(.4,.2,.2,1); transform-style:preserve-3d; position:relative; }
+    .flip-card.flipped { transform:rotateY(180deg); }
+    .flip-face { position:absolute; width:100%; height:100%; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; box-sizing:border-box; }
+    .flip-front { background:white; border:1.5px solid #e5e7eb; }
+    .flip-back  { background:#1B3A6B; transform:rotateY(180deg); }
+
+    /* Compare table */
+    .cmp-table { width:100%; border-collapse:collapse; }
+    .cmp-table td, .cmp-table th { padding:8px 10px; font-size:12px; border-bottom:0.5px solid #f0f0f0; vertical-align:top; }
+    .cmp-table th { background:#f8f9fa; font-weight:600; color:#6b7280; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; width:32%; }
+    .cmp-cell { width:34%; }
+    .cmp-diff { background:#fffbeb !important; }
+    .cmp-better { background:#f0fdf4 !important; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useRef, useEffect } = React;
+
+// ── Groq — works in both Electron (IPC) and browser (web server proxy) ────────
+async function callGroq(messages, maxTokens = 1024, temperature = 0.7) {
+  if (window.electronAPI) {
+    // Desktop app: key is in main.js, never in renderer
+    const result = await window.electronAPI.callGroq(messages, maxTokens, temperature);
+    if (!result.success) throw new Error(result.error);
+    return result.content;
+  } else {
+    // Phone/browser: key is in server.js on the PC, never sent to the phone
+    const res = await fetch('/api/groq', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages, maxTokens, temperature })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error);
+    return data.content;
+  }
+}
+
+// ── Car Knowledge (plain text for AI) ─────────────────────────────────────────
+const CAR_DATA = `
+ALTO K10 | Hatchback | 998cc K10C | 68.5 PS | 91.1 Nm | Petrol: 24.39 km/l MT, 24.90 AGS | CNG: 33.40 km/kg | Tank: 27L | Variants: STD MT, LXi MT, LXi CNG, VXi(O) MT/CNG, VXi+(O) MT/AGS | Key upgrades: VXi+(O) gets SmartPlay Studio touchscreen, Android Auto, 4 speakers, steering controls, alloy-style covers | 6 airbags standard all variants
+
+S-PRESSO | Mini SUV | 998cc K10C | 68.5 PS | 91.1 Nm | Petrol: 24.12 MT / 25.30 AGS | CNG: 32.73 km/kg | Tank: 27L | Variants: Std MT, LXi MT/CNG, VXi(O) MT/CNG, VXi+(O) MT/AGS | Key upgrades: VXi+(O) gets SmartPlay Studio, Android Auto, steering voice controls, body coloured bumpers & ORVMs | ESP only on AGS variants | 6 airbags standard
+
+CELERIO | Hatchback | 998cc K10C | 68.5 PS | 91.1 Nm | Petrol: 25.24 LXi MT / 26.00 ZXi+ AGS | CNG: 34.43 km/kg | Tank: 32L | Boot: 292L | Variants: LXi MT, VXi MT/CNG, ZXi MT, ZXi+ MT, VXi AGS, ZXi AGS, ZXi+ AGS | Key upgrades: ZXi gets SmartPlay Studio touchscreen + fog lamps; ZXi+ adds alloy wheels, push start, smart key, foldable ORVMs; AGS variants add gear position indicator | ESP from ZXi onwards | 6 airbags standard
+
+WAGONR | Tall Hatchback | 998cc K10C (1.0L) or 1197cc K12N (1.2L) | 68.5/90.9 PS | Petrol: 24.35 (1.0L MT), 24.43 (1.2L MT), 25.19 (AGS) | CNG: 33.47 km/kg | Tank: 32L | Boot: 335L | Variants: LXi 1.0L MT/CNG, VXi 1.0L AGS/CNG, ZXi 1.0L AGS, ZXi+ 1.0L AGS, ZXi 1.2L MT, ZXi+ 1.2L MT/AGS | Key upgrades: ZXi+ 1.2L gets SmartPlay Studio touchscreen, 4 speakers, steering controls, white instrument cluster, retractable ORVMs, rear wiper | 6 airbags standard
+
+SWIFT | Hatchback | 1197cc Z12E | 81.58 PS | 111.7 Nm | Petrol MT: 24.80 / AMT: 25.75 | CNG: 32.85 km/kg | Tank: 37L | Boot: 265L | Variants: LXi MT, VXi MT/AMT, VXi(O) MT/AMT, ZXi MT/AMT, ZXi+ MT/AMT + VXi CNG, VXi(O) CNG, ZXi CNG | LXi: basic, no touchscreen | VXi: SmartPlay Pro 17.78cm, Android Auto, 4 speakers | VXi(O): adds push start, Suzuki Connect | ZXi: LED headlamps, alloy wheels, wireless charger, rear AC vents, auto AC, 60:40 split seat, tweeters, rear USB | ZXi+: precision cut alloys, LED fog lamps, SmartPlay Pro+ 22.86cm, surround sound ARKAMYS, cruise control, rear camera | 6 airbags standard
+
+DZIRE | Sedan | 1197cc Z12E | 81.58 PS | 111.7 Nm | Petrol MT: 24.79 / AMT: 25.71 | CNG: 33.73 km/kg | Tank: 37L | Boot: 382L | Variants: LXi MT, VXi MT/AMT/CNG, ZXi MT/AMT/CNG, ZXi+ MT/AMT | LXi: basic, no touchscreen | VXi: SmartPlay Pro 17.78cm, rear AC vent, electrically foldable ORVMs, height adjustable driver seat | ZXi: LED Crystal Vision headlamps, painted alloy wheels, reverse camera, push start, TPMS, Suzuki Connect, wireless charger | ZXi+: 22.86cm SmartPlay Pro+, precision cut alloys, sunroof, cruise control, 360° camera, shock sensor alarm, surround sound, LED fog lamps, auto-fold ORVMs | 6 airbags standard
+
+BREZZA | Compact SUV | 1462cc K15C Smart Hybrid | 103.1 PS | 139 Nm | Mileage: 17.80 LXi-VXi MT / 19.89 ZXi-ZXi+ MT / 19.80 AT / 25.51 CNG km/kg | Tank: 48L | Boot: 328L | Variants: LXi MT/CNG, VXi MT/AT/CNG, ZXi MT/AT/CNG, ZXi+ MT/AT | Smart Hybrid NOT available on LXi/VXi MT | LXi: basic, halogen, steel wheels | VXi: SmartPlay Studio, Android Auto, rear defogger | ZXi: LED headlamps, painted alloys, rear camera, rear wiper, auto AC, Suzuki Connect, floating LED DRL | ZXi+: 22.86cm SmartPlay Pro+, ARKAMYS sound, 360° camera, head-up display, electric sunroof, wireless charger, cruise control, cooled glovebox, ambient lighting, leather steering | 6 airbags standard
+
+ERTIGA | MPV 7-Seater | 1462cc K15C Smart Hybrid | 103.06 PS | 137 Nm | Petrol: 20.51 MT / 20.30 AT | CNG: 26.11 km/kg | Tank: 45L | Variants: LXi MT, VXi MT/CNG, ZXi MT/CNG, ZXi+ MT/AT | LXi: basic, halogen, steel wheels, no touchscreen | VXi: rear AC vents, USB charging, body coloured ORVMs | ZXi: SmartPlay Pro touchscreen, Android Auto, alloy wheels, push start, auto AC, rear camera, Suzuki Connect | ZXi+: SmartPlay Pro+, ARKAMYS surround, cruise control, paddle shifters (AT), TPMS, plush dual-tone interiors, TFT colour MID | 6 airbags standard
+
+EECO | Van/MPV | 1197cc K12N | 60.5 PS | 105.5 Nm | Petrol: 19.71 km/l | CNG: 26.78 km/kg | Tank: 32L | Seating: 5 or 6 | Variants: 5-Seater Standard, 5-Seater AC, 5-Seater AC CNG, 6-Seater Standard | No touchscreen in any variant | 6 airbags standard | Commercial use
+
+VICTORIS | Premium SUV | 1462cc K15C (Petrol/CNG) or 1490cc M15D (Strong Hybrid) | Petrol: 103.06 PS / CNG: 92.45 PS / Hybrid: 68+80 PS | Mileage: 21.18 MT / 21.06 AT / 27.02 CNG / 19.07 ALLGRIP / 28.65 eCVT | Tank: 45L | Variants: Lxi, Vxi, Zxi, Zxi(O), Zxi+, Zxi+(O) | Lxi: SmartPlay Pro 17.78cm, 6 airbags | Vxi: leatherette seats, 2 tweeters, Suzuki Connect | Zxi: LED headlamps, painted alloys, 360° camera (11 views), smart powered tailgate, wireless charger, PM2.5 filter | Zxi(O): adds panoramic sunroof | Zxi+: 25.65cm SmartPlay Pro X, Infinity 8-speaker + subwoofer, Dolby Atmos, Alexa Auto, 64-colour ambient lighting, ventilated seats, 8-way powered driver seat, HUD, Level 2 ADAS | Zxi+(O): adds panoramic sunroof + ALLGRIP AWD
+`;
+const SYS = `You are an expert Maruti Suzuki Arena sales trainer AI for Bharath Auto dealership. Use this car data:\n${CAR_DATA}\nBe helpful, accurate, concise. Use ₹ symbols. Suggest visiting showroom for exact on-road prices.`;
+
+// ── Structured car data for Compare (no API needed) ───────────────────────────
+const CARS_STRUCTURED = {
+  "Alto K10":  { body:"Hatchback",       engine:"998cc K10C",               power:"68.5 PS",  torque:"91.1 Nm",   petrolMT:"24.39 km/l", petrolAuto:"24.90 km/l (AGS)", cng:"33.40 km/kg", tank:"27 L",  boot:"—",     seats:"5", airbags:"6 (all variants)", segment:"Entry hatchback", topVariant:"VXi+(O)", topFeatures:"SmartPlay Studio, Android Auto, steering controls" },
+  "S-Presso":  { body:"Mini SUV",        engine:"998cc K10C",               power:"68.5 PS",  torque:"91.1 Nm",   petrolMT:"24.12 km/l", petrolAuto:"25.30 km/l (AGS)", cng:"32.73 km/kg", tank:"27 L",  boot:"—",     seats:"5", airbags:"6 (all variants)", segment:"Entry hatchback", topVariant:"VXi+(O)", topFeatures:"SmartPlay Studio, voice controls, ESP on AGS" },
+  "Celerio":   { body:"Hatchback",       engine:"998cc K10C",               power:"68.5 PS",  torque:"91.1 Nm",   petrolMT:"25.24 km/l", petrolAuto:"26.00 km/l (AGS)", cng:"34.43 km/kg", tank:"32 L",  boot:"292 L", seats:"5", airbags:"6 (all variants)", segment:"Hatchback",       topVariant:"ZXi+ AGS",topFeatures:"Best mileage 26 km/l, alloys, push start, smart key" },
+  "WagonR":    { body:"Tall Hatchback",  engine:"998cc K10C / 1197cc K12N", power:"68.5 / 90.9 PS", torque:"91.1 / 113 Nm", petrolMT:"24.35–24.43 km/l", petrolAuto:"25.19 km/l (AGS)", cng:"33.47 km/kg", tank:"32 L", boot:"335 L", seats:"5", airbags:"6 (all variants)", segment:"Hatchback", topVariant:"ZXi+ 1.2L", topFeatures:"Largest boot 335L, 1.2L engine, SmartPlay Studio" },
+  "Swift":     { body:"Hatchback",       engine:"1197cc Z12E",              power:"81.58 PS", torque:"111.7 Nm",  petrolMT:"24.80 km/l", petrolAuto:"25.75 km/l (AMT)", cng:"32.85 km/kg", tank:"37 L",  boot:"265 L", seats:"5", airbags:"6 (all variants)", segment:"Premium hatchback", topVariant:"ZXi+",    topFeatures:"ARKAMYS surround, cruise control, LED headlamps, wireless charger" },
+  "Dzire":     { body:"Sedan",           engine:"1197cc Z12E",              power:"81.58 PS", torque:"111.7 Nm",  petrolMT:"24.79 km/l", petrolAuto:"25.71 km/l (AMT)", cng:"33.73 km/kg", tank:"37 L",  boot:"382 L", seats:"5", airbags:"6 (all variants)", segment:"Compact sedan",    topVariant:"ZXi+",    topFeatures:"Sunroof, 382L boot, 360° camera, cruise control" },
+  "Brezza":    { body:"Compact SUV",     engine:"1462cc K15C Smart Hybrid", power:"103.1 PS", torque:"139 Nm",    petrolMT:"19.89 km/l", petrolAuto:"19.80 km/l (AT)",  cng:"25.51 km/kg", tank:"48 L",  boot:"328 L", seats:"5", airbags:"6 (all variants)", segment:"Compact SUV",      topVariant:"ZXi+",    topFeatures:"Electric sunroof, HUD, 360° camera, ARKAMYS, Smart Hybrid" },
+  "Ertiga":    { body:"MPV 7-Seater",    engine:"1462cc K15C Smart Hybrid", power:"103.06 PS",torque:"137 Nm",    petrolMT:"20.51 km/l", petrolAuto:"20.30 km/l (AT)",  cng:"26.11 km/kg", tank:"45 L",  boot:"—",     seats:"7", airbags:"6 (all variants)", segment:"MPV",             topVariant:"ZXi+ AT", topFeatures:"7 seats, Smart Hybrid, ARKAMYS, paddle shifters" },
+  "EECO":      { body:"Van / MPV",       engine:"1197cc K12N",              power:"60.5 PS",  torque:"105.5 Nm",  petrolMT:"19.71 km/l", petrolAuto:"—",                cng:"26.78 km/kg", tank:"32 L",  boot:"—",     seats:"5 or 6", airbags:"6 (all variants)", segment:"Commercial van", topVariant:"5-Seater AC CNG", topFeatures:"CNG + AC, 5 or 6 seat options, low running cost" },
+  "Victoris":  { body:"Premium SUV",     engine:"K15C Petrol/CNG or M15D Hybrid", power:"103 PS / 148 PS hybrid", torque:"137–188 Nm", petrolMT:"21.18 km/l", petrolAuto:"21.06 km/l (AT)", cng:"27.02 km/kg", tank:"45 L", boot:"—", seats:"5", airbags:"6 (all variants)", segment:"Premium SUV", topVariant:"Zxi+(O)", topFeatures:"Dolby Atmos, Level 2 ADAS, 28.65 eCVT hybrid, panoramic sunroof, ALLGRIP AWD" },
+};
+
+const CAR_NAMES = Object.keys(CARS_STRUCTURED);
+
+// ── Flashcard decks (no API needed) ──────────────────────────────────────────
+const FLASHCARD_DECKS = {
+  "Alto K10": [
+    { q:"What is the petrol mileage of Alto K10 MT?",                  a:"24.39 km/l" },
+    { q:"What is the petrol mileage of Alto K10 AGS?",                 a:"24.90 km/l" },
+    { q:"What is the CNG mileage of Alto K10?",                        a:"33.40 km/kg" },
+    { q:"Which Alto K10 variant gets SmartPlay Studio?",               a:"VXi+(O) — both MT and AGS" },
+    { q:"How many airbags does Alto K10 have?",                        a:"6 airbags — standard on ALL variants" },
+    { q:"What is the engine displacement of Alto K10?",                a:"998cc K10C" },
+    { q:"What is the fuel tank capacity of Alto K10?",                 a:"27 litres" },
+    { q:"Which Alto K10 variants offer CNG?",                         a:"LXi CNG and VXi(O) CNG" },
+    { q:"What is the power output of Alto K10?",                       a:"68.5 PS" },
+    { q:"What automatic option does Alto K10 offer?",                  a:"AGS — Auto Gear Shift (on VXi+(O))" },
+    { q:"Does Alto K10 LXi have Android Auto?",                       a:"No — Android Auto is only on VXi+(O)" },
+  ],
+  "S-Presso": [
+    { q:"What body style is S-Presso?",                                a:"Mini SUV" },
+    { q:"What is S-Presso petrol mileage (MT)?",                       a:"24.12 km/l" },
+    { q:"What is S-Presso petrol mileage (AGS)?",                      a:"25.30 km/l" },
+    { q:"What is S-Presso CNG mileage?",                               a:"32.73 km/kg" },
+    { q:"Which S-Presso variants have ESP?",                           a:"Only AGS variants — not on MT" },
+    { q:"Which S-Presso variant gets SmartPlay Studio?",               a:"VXi+(O)" },
+    { q:"What are the unique exterior features of VXi+(O)?",           a:"Body coloured bumpers and ORVMs" },
+    { q:"How many airbags does S-Presso have?",                        a:"6 — standard on all variants" },
+    { q:"What is S-Presso's fuel tank size?",                          a:"27 litres" },
+    { q:"Does S-Presso have a CNG variant at VXi(O) level?",          a:"Yes — VXi(O) MT is available with CNG" },
+    { q:"What special voice feature is on VXi+(O)?",                  a:"Steering-mounted voice controls" },
+  ],
+  "Celerio": [
+    { q:"What is Celerio's best mileage figure?",                      a:"26.00 km/l — ZXi+ AGS (best in segment)" },
+    { q:"What is Celerio LXi MT mileage?",                             a:"25.24 km/l" },
+    { q:"What is Celerio CNG mileage?",                                a:"34.43 km/kg" },
+    { q:"What is Celerio's boot space?",                               a:"292 litres" },
+    { q:"What is Celerio's fuel tank capacity?",                       a:"32 litres" },
+    { q:"From which variant does Celerio get ESP?",                    a:"ZXi onwards" },
+    { q:"Which Celerio variants get SmartPlay Studio?",               a:"ZXi, ZXi+, and their AGS versions" },
+    { q:"What does ZXi+ add over ZXi in Celerio?",                    a:"Alloy wheels, push start, smart key, foldable ORVMs" },
+    { q:"What extra feature do AGS variants have?",                    a:"Gear position indicator" },
+    { q:"What fog lamps does Celerio ZXi+ get?",                      a:"LED fog lamps (ZXi gets regular fog lamps)" },
+    { q:"How many airbags does Celerio have?",                         a:"6 airbags — standard on all variants" },
+  ],
+  "WagonR": [
+    { q:"What two engine options does WagonR offer?",                  a:"998cc K10C (1.0L) and 1197cc K12N (1.2L)" },
+    { q:"What is WagonR's boot space?",                                a:"335 litres — largest in its segment" },
+    { q:"What is WagonR 1.0L MT mileage?",                             a:"24.35 km/l" },
+    { q:"What is WagonR 1.2L MT mileage?",                             a:"24.43 km/l" },
+    { q:"What is WagonR AGS mileage?",                                 a:"25.19 km/l" },
+    { q:"What is WagonR CNG mileage?",                                 a:"33.47 km/kg" },
+    { q:"Which WagonR variant gets SmartPlay Studio?",                 a:"ZXi+ 1.2L" },
+    { q:"What extra instrument cluster does ZXi+ 1.2L have?",         a:"White instrument cluster" },
+    { q:"How many airbags does WagonR have?",                          a:"6 — standard on all variants" },
+    { q:"What is the fuel tank size of WagonR?",                       a:"32 litres" },
+    { q:"Which WagonR variants are available in 1.2L?",               a:"ZXi 1.2L MT and ZXi+ 1.2L MT/AGS" },
+  ],
+  "Swift": [
+    { q:"What engine powers the Swift?",                               a:"1197cc Z12E" },
+    { q:"What is Swift MT mileage?",                                   a:"24.80 km/l" },
+    { q:"What is Swift AMT mileage?",                                  a:"25.75 km/l" },
+    { q:"What is Swift CNG mileage?",                                  a:"32.85 km/kg" },
+    { q:"What surround sound system does Swift ZXi+ have?",            a:"ARKAMYS surround sound" },
+    { q:"Which Swift variant gets wireless charger?",                  a:"ZXi onwards" },
+    { q:"What does Swift ZXi+ add over ZXi?",                         a:"22.86cm SmartPlay Pro+, ARKAMYS, cruise control, LED fog lamps, precision cut alloys" },
+    { q:"Which Swift variants get LED headlamps?",                     a:"ZXi and ZXi+" },
+    { q:"What touchscreen size does Swift VXi get?",                   a:"17.78cm SmartPlay Pro" },
+    { q:"What is Swift's fuel tank size?",                             a:"37 litres" },
+    { q:"Does Swift VXi get Suzuki Connect?",                         a:"No — only VXi(O) and above" },
+    { q:"What split does the rear seat have on ZXi?",                  a:"60:40 split folding rear seat" },
+  ],
+  "Dzire": [
+    { q:"What is Dzire's body type?",                                  a:"Sedan" },
+    { q:"What is Dzire MT mileage?",                                   a:"24.79 km/l" },
+    { q:"What is Dzire AMT mileage?",                                  a:"25.71 km/l" },
+    { q:"What is Dzire CNG mileage?",                                  a:"33.73 km/kg" },
+    { q:"What is Dzire's boot space?",                                 a:"382 litres" },
+    { q:"Which Dzire variant has a sunroof?",                          a:"ZXi+ only" },
+    { q:"What camera does Dzire ZXi+ have?",                          a:"360° camera" },
+    { q:"What LED headlights does Dzire ZXi have?",                   a:"LED Crystal Vision headlamps" },
+    { q:"Which Dzire variant has cruise control?",                     a:"ZXi+" },
+    { q:"What security feature does Dzire ZXi+ add?",                 a:"Shock sensor alarm" },
+    { q:"What is Dzire's fuel tank capacity?",                         a:"37 litres" },
+    { q:"Does Dzire VXi have electrically foldable ORVMs?",           a:"Yes — electrically foldable ORVMs from VXi" },
+  ],
+  "Brezza": [
+    { q:"What is Brezza's engine?",                                    a:"1462cc K15C Smart Hybrid" },
+    { q:"What is Brezza ZXi+ MT mileage?",                             a:"19.89 km/l" },
+    { q:"What is Brezza AT mileage?",                                  a:"19.80 km/l" },
+    { q:"What is Brezza CNG mileage?",                                 a:"25.51 km/kg" },
+    { q:"Is Smart Hybrid available on Brezza LXi MT?",                a:"No — Smart Hybrid is NOT on LXi or VXi MT" },
+    { q:"What is Brezza's boot space?",                                a:"328 litres" },
+    { q:"What is Brezza's fuel tank capacity?",                        a:"48 litres" },
+    { q:"Which Brezza variant gets electric sunroof?",                 a:"ZXi+ only" },
+    { q:"What is the HUD feature on Brezza ZXi+?",                    a:"Head-up display — projects speed and navigation on windscreen" },
+    { q:"What sound system does Brezza ZXi+ have?",                   a:"ARKAMYS surround sound" },
+    { q:"What comfort feature does ZXi+ cooled glovebox provide?",    a:"Cooled glovebox — chills items like water bottles" },
+    { q:"What DRL style does Brezza ZXi have?",                       a:"Floating LED DRL" },
+  ],
+  "Ertiga": [
+    { q:"How many seats does Ertiga have?",                            a:"7 seats" },
+    { q:"What is Ertiga MT mileage?",                                  a:"20.51 km/l" },
+    { q:"What is Ertiga AT mileage?",                                  a:"20.30 km/l" },
+    { q:"What is Ertiga CNG mileage?",                                 a:"26.11 km/kg" },
+    { q:"What is Ertiga's fuel tank size?",                            a:"45 litres" },
+    { q:"Does Ertiga LXi have a touchscreen?",                        a:"No — touchscreen starts from ZXi variant" },
+    { q:"What exclusive feature do ZXi+ AT variants have?",           a:"Paddle shifters" },
+    { q:"What sound system does Ertiga ZXi+ have?",                   a:"ARKAMYS surround sound" },
+    { q:"What dashboard display does Ertiga ZXi+ have?",              a:"TFT colour MID (Multi-Information Display)" },
+    { q:"Which Ertiga variants are available with CNG?",              a:"VXi CNG and ZXi CNG" },
+    { q:"How many airbags does Ertiga have?",                          a:"6 — standard on all variants" },
+  ],
+  "EECO": [
+    { q:"What is EECO's primary use case?",                            a:"Commercial — school transport, last-mile delivery, cab" },
+    { q:"What is EECO's petrol mileage?",                              a:"19.71 km/l" },
+    { q:"What is EECO's CNG mileage?",                                 a:"26.78 km/kg" },
+    { q:"Does any EECO variant have a touchscreen?",                  a:"No — no touchscreen in any EECO variant" },
+    { q:"What seating options does EECO offer?",                      a:"5-seater and 6-seater" },
+    { q:"What is EECO's fuel tank size?",                              a:"32 litres" },
+    { q:"What is EECO's engine?",                                      a:"1197cc K12N — 60.5 PS" },
+    { q:"Which EECO variant has both AC and CNG?",                    a:"5-Seater AC CNG" },
+    { q:"How many airbags does EECO have?",                            a:"6 — standard on all variants" },
+    { q:"What is EECO's power output?",                                a:"60.5 PS — lowest in the Arena range" },
+  ],
+  "Victoris": [
+    { q:"What engine options does Victoris offer?",                    a:"K15C Petrol/CNG or M15D Strong Hybrid (1490cc)" },
+    { q:"What is Victoris eCVT hybrid mileage?",                       a:"28.65 km/l — highest in the Arena range" },
+    { q:"What is Victoris CNG mileage?",                               a:"27.02 km/kg" },
+    { q:"What is Victoris ALLGRIP MT mileage?",                        a:"19.07 km/l" },
+    { q:"Which Victoris variant gets panoramic sunroof?",              a:"Zxi(O) and Zxi+(O)" },
+    { q:"What sound system is in Victoris Zxi+?",                      a:"Infinity 8-speaker + subwoofer with Dolby Atmos" },
+    { q:"What Level 2 ADAS features does Victoris Zxi+ have?",        a:"ACC, Lane Keep Assist, AEB, Blind Spot Monitoring" },
+    { q:"What AWD system does Victoris offer?",                        a:"ALLGRIP AWD — available on Zxi+(O)" },
+    { q:"How many ambient lighting colours does Victoris Zxi+ have?", a:"64-colour ambient lighting" },
+    { q:"What does the powered driver seat offer in Victoris Zxi+?",  a:"8-way powered adjustment" },
+    { q:"What smart assistant is built into Victoris Zxi+?",          a:"Alexa Auto — voice-controlled assistant" },
+    { q:"What is the wheelbase of Victoris?",                          a:"2600mm" },
+  ],
+};
+
+// ── Shared UI ─────────────────────────────────────────────────────────────────
+function Header({ title }) {
+  return (
+    <div style={{ background:"#1B3A6B", flexShrink:0 }} className="text-white px-4 py-3 flex items-center gap-2 shadow-md">
+      <span className="text-xl">🚗</span>
+      <span className="font-bold text-sm">Bharath Auto</span>
+      <span className="text-blue-300 text-xs ml-1">· {title}</span>
+    </div>
+  );
+}
+function Spinner({ small }) {
+  return <span className={`spin inline-block border-2 border-white border-t-transparent rounded-full flex-shrink-0 ${small?"w-4 h-4":"w-5 h-5"}`} />;
+}
+function TypingDots() {
+  return (
+    <div className="flex items-center gap-1 px-2 py-1">
+      <div className="bg-gray-100 rounded-2xl px-4 py-2.5 flex gap-1 items-center">
+        <span className="dot w-2 h-2 bg-gray-400 rounded-full inline-block" />
+        <span className="dot w-2 h-2 bg-gray-400 rounded-full inline-block" />
+        <span className="dot w-2 h-2 bg-gray-400 rounded-full inline-block" />
+      </div>
+    </div>
+  );
+}
+
+// ── Splash Screen ──────────────────────────────────────────────────────────────
+function SplashScreen({ onStart }) {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
+      <div className="w-full max-w-sm text-center">
+        <div className="text-7xl mb-5">🚗</div>
+        <h1 className="text-4xl font-bold text-white tracking-tight">Bharath Auto</h1>
+        <p className="text-blue-200 text-xl font-medium mt-2">Sales Trainer</p>
+        <p className="text-blue-300 text-sm mt-3 mb-2">Your Smart Sales Companion</p>
+        <span className="inline-block bg-blue-500 bg-opacity-30 text-blue-100 text-xs px-4 py-1.5 rounded-full border border-blue-400 border-opacity-40 mb-8">Maruti Suzuki Arena</span>
+        <div className="bg-white bg-opacity-10 rounded-2xl p-5 mb-8 text-left space-y-3">
+          {[["🔍","Ask Anything","Full knowledge base chat"],
+            ["🧠","Quiz Me","Test your variant knowledge"],
+            ["🎭","Roleplay","Practice pitching to AI customers"],
+            ["🎯","Match","AI car recommendations"],
+            ["⚖️","Compare","Side-by-side spec comparison"],
+            ["🃏","Flashcards","Drill variant features fast"]
+          ].map(([ic,t,d]) => (
+            <div key={t} className="flex items-center gap-3">
+              <span className="text-xl">{ic}</span>
+              <div><p className="text-white text-sm font-semibold">{t}</p><p className="text-blue-200 text-xs">{d}</p></div>
+            </div>
+          ))}
+        </div>
+        <button onClick={onStart} className="w-full bg-white font-bold py-4 rounded-2xl text-lg shadow-lg" style={{ color:"#1B3A6B" }}>Start Training 🚀</button>
+        <p className="text-blue-300 text-xs mt-5">Powered by Llama 3.3 · Groq AI</p>
+      </div>
+    </div>
+  );
+}
+
+// ── TAB 1 — Ask Anything ──────────────────────────────────────────────────────
+function AskTab() {
+  const [msgs, setMsgs] = useState([{ role:"assistant", content:"Hi! I'm your Maruti Suzuki Arena knowledge assistant 👋\n\nAsk me anything about our cars — variants, features, mileage, comparisons, or which car fits a customer best!" }]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const endRef = useRef(null);
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior:"smooth" }); }, [msgs, loading]);
+
+  async function send() {
+    const t = input.trim(); if (!t || loading) return;
+    setInput("");
+    const next = [...msgs, { role:"user", content:t }];
+    setMsgs(next); setLoading(true);
+    try {
+      const reply = await callGroq([{ role:"system", content:SYS }, ...next.map(m => ({ role:m.role, content:m.content }))], 1024);
+      setMsgs(p => [...p, { role:"assistant", content:reply }]);
+    } catch (e) { setMsgs(p => [...p, { role:"assistant", content:"❌ "+e.message }]); }
+    finally { setLoading(false); }
+  }
+
+  const chips = ["Compare Swift ZXi and ZXi+", "Which cars have a sunroof?", "Best CNG option under ₹8L?", "Brezza vs Ertiga?"];
+  return (
+    <div className="tab-content">
+      <Header title="Ask Anything" />
+      <div style={{ flex:1, overflowY:"auto", background:"#f9fafb" }}>
+        {msgs.length === 1 && (
+          <div className="px-4 pt-3 pb-1">
+            <p className="text-xs text-gray-400 mb-2 font-semibold uppercase tracking-wide">Quick questions</p>
+            <div className="flex flex-wrap gap-2">
+              {chips.map(c => <button key={c} onClick={() => setInput(c)} className="text-xs rounded-full px-3 py-1.5 border" style={{ background:"white", borderColor:"#2E75B6", color:"#2E75B6" }}>{c}</button>)}
+            </div>
+          </div>
+        )}
+        <div className="px-4 py-3 space-y-3">
+          {msgs.map((m,i) => (
+            <div key={i} className={`flex ${m.role==="user"?"justify-end":"justify-start"}`}>
+              <div className="rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap" style={{ maxWidth:"85%", background:m.role==="user"?"#1B3A6B":"white", color:m.role==="user"?"white":"#1f2937", borderBottomRightRadius:m.role==="user"?"4px":undefined, borderBottomLeftRadius:m.role==="assistant"?"4px":undefined, boxShadow:m.role==="assistant"?"0 1px 4px rgba(0,0,0,0.07)":undefined, border:m.role==="assistant"?"1px solid #f0f0f0":undefined }}>{m.content}</div>
+            </div>
+          ))}
+          {loading && <TypingDots />}
+          <div ref={endRef} />
+        </div>
+      </div>
+      <div className="bg-white border-t border-gray-200 px-4 py-3 flex gap-2" style={{ flexShrink:0 }}>
+        <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==="Enter"&&send()} placeholder="Ask about any car or variant…" disabled={loading} className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none bg-gray-50" />
+        <button onClick={send} disabled={loading||!input.trim()} className="text-white rounded-xl px-4 py-2.5 text-sm font-medium disabled:opacity-40 flex items-center gap-1" style={{ background:"#1B3A6B" }}>{loading?<Spinner small />:"Send"}</button>
+      </div>
+    </div>
+  );
+}
+
+// ── TAB 2 — Quiz ──────────────────────────────────────────────────────────────
+function QuizTab() {
+  const [car, setCar] = useState("All Cars");
+  const [diff, setDiff] = useState("Medium");
+  const [phase, setPhase] = useState("idle");
+  const [qs, setQs] = useState([]);
+  const [cur, setCur] = useState(0);
+  const [sel, setSel] = useState(null);
+  const [score, setScore] = useState(0);
+  const [hist, setHist] = useState([]);
+  const [errMsg, setErrMsg] = useState("");
+
+  async function gen() {
+    setPhase("loading"); setErrMsg("");
+    const scope = car==="All Cars"?"all the Maruti Suzuki Arena cars":`the ${car}`;
+    const p = `Generate exactly 5 multiple choice quiz questions for a car salesperson training about ${scope}.\nDifficulty: ${diff}\nSource:\n${CAR_DATA}\nRules: test variant features, mileage figures, engine specs. 4 options (A B C D), one correct.\nReturn ONLY JSON array:\n[{"question":"...","options":{"A":"...","B":"...","C":"...","D":"..."},"answer":"A","explanation":"..."}]`;
+    try {
+      const raw = await callGroq([{ role:"user", content:p }], 2048, 0.5);
+      const m = raw.match(/\[[\s\S]*\]/);
+      if (!m) throw new Error("No JSON — please try again");
+      const parsed = JSON.parse(m[0]);
+      if (!Array.isArray(parsed)||parsed.length<3) throw new Error("Too few questions — retry");
+      setQs(parsed); setCur(0); setSel(null); setScore(0); setHist([]); setPhase("active");
+    } catch(e) { setErrMsg(e.message); setPhase("idle"); }
+  }
+
+  function pick(opt) {
+    if (sel) return;
+    const ok = opt===qs[cur].answer;
+    setSel(opt); if (ok) setScore(s=>s+1);
+    setHist(h=>[...h,{ok,sel:opt}]);
+  }
+  function next() { if (cur+1>=qs.length){setPhase("done");return;} setCur(c=>c+1); setSel(null); }
+  const scoreMsg = ["Don't give up! 💡","Keep going! 📚","Good effort! 💪","Getting there!","Great job! 🚀","Perfect! 🏆"];
+
+  if (phase==="loading") return <div className="tab-content"><Header title="Quiz Me" /><div style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:"16px" }}><div className="spin w-12 h-12 border-4 rounded-full" style={{ borderColor:"#2E75B6", borderTopColor:"transparent" }} /><p className="font-medium" style={{ color:"#1B3A6B" }}>Generating quiz…</p></div></div>;
+
+  if (phase==="done") return (
+    <div className="tab-content"><Header title="Quiz Results" />
+      <div style={{ flex:1, overflowY:"auto" }} className="px-4 py-5">
+        <div className="rounded-2xl p-5 text-white text-center mb-5" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
+          <div className="text-5xl mb-2">{score===qs.length?"🏆":score>=3?"🚀":"📚"}</div>
+          <div className="text-4xl font-bold">{score}/{qs.length}</div>
+          <p className="text-sm mt-2 text-blue-100">{scoreMsg[Math.min(score,scoreMsg.length-1)]}</p>
+        </div>
+        <div className="space-y-3 mb-5">
+          {qs.map((q,i) => (
+            <div key={i} className={`rounded-xl p-3 border ${hist[i]?.ok?"bg-green-50 border-green-200":"bg-red-50 border-red-200"}`}>
+              <div className="flex gap-2"><span>{hist[i]?.ok?"✅":"❌"}</span>
+                <div><p className="text-xs font-semibold text-gray-700 mb-1">Q{i+1}: {q.question}</p>
+                  {!hist[i]?.ok && <p className="text-xs text-red-600 mb-0.5">Your: {hist[i]?.sel}: {q.options[hist[i]?.sel]}</p>}
+                  <p className="text-xs text-green-700">Correct: {q.answer}: {q.options[q.answer]}</p>
+                  <p className="text-xs text-gray-400 mt-1 italic">{q.explanation}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button onClick={() => setPhase("idle")} className="w-full text-white py-3 rounded-xl font-semibold text-sm" style={{ background:"#1B3A6B" }}>Try Another Quiz</button>
+      </div>
+    </div>
+  );
+
+  if (phase==="active") {
+    const q = qs[cur];
+    return (
+      <div className="tab-content"><Header title="Quiz Me" />
+        <div style={{ flex:1, overflowY:"auto" }} className="px-4 py-4">
+          <div className="flex justify-between mb-2"><span className="text-xs text-gray-500">Q {cur+1}/{qs.length}</span><span className="text-xs font-bold" style={{ color:"#1B3A6B" }}>Score: {score}</span></div>
+          <div className="h-2 bg-gray-100 rounded-full mb-3 overflow-hidden"><div className="h-2 rounded-full" style={{ width:`${(cur+1)/qs.length*100}%`, background:"#2E75B6" }} /></div>
+          <div className="bg-white rounded-2xl p-4 mb-4 shadow-sm border border-gray-100"><p className="text-gray-800 font-semibold text-sm leading-relaxed">{q.question}</p></div>
+          <div className="space-y-2.5 mb-4">
+            {Object.entries(q.options).map(([lt,txt]) => {
+              let bg="white",border="#e5e7eb",color="#374151";
+              if (sel) { if(lt===q.answer){bg="#f0fdf4";border="#4ade80";color="#166534";}else if(lt===sel){bg="#fef2f2";border="#f87171";color="#991b1b";}else{bg="#f9fafb";color="#9ca3af";} }
+              return <button key={lt} onClick={()=>pick(lt)} disabled={!!sel} className="w-full text-left rounded-xl px-4 py-3 text-sm flex items-center gap-3" style={{ background:bg, border:`1.5px solid ${border}`, color }}><span className="w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-bold flex-shrink-0" style={{ borderColor:color }}>{lt}</span>{txt}</button>;
+            })}
+          </div>
+          {sel && <div className={`rounded-xl p-3 mb-4 ${sel===q.answer?"bg-green-50 border border-green-200":"bg-amber-50 border border-amber-200"}`}><p className="text-xs font-semibold mb-1">{sel===q.answer?"✅ Correct!":"❌ Incorrect — Answer: "+q.answer}</p><p className="text-xs text-gray-600">{q.explanation}</p></div>}
+          {sel && <button onClick={next} className="w-full text-white py-3 rounded-xl font-semibold text-sm" style={{ background:"#1B3A6B" }}>{cur+1>=qs.length?"See Results →":"Next →"}</button>}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="tab-content"><Header title="Quiz Me" />
+      <div style={{ flex:1, overflowY:"auto" }} className="px-4 py-5">
+        <div className="text-center mb-5"><div className="text-4xl mb-1">🧠</div><h2 className="text-xl font-bold" style={{ color:"#1B3A6B" }}>Test Your Knowledge</h2><p className="text-gray-500 text-sm mt-1">5 MCQs from live car data</p></div>
+        <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm space-y-4 mb-4">
+          <div><label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Select Car</label>
+            <select value={car} onChange={e=>setCar(e.target.value)} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 focus:outline-none">
+              {["All Cars",...CAR_NAMES].map(c=><option key={c}>{c}</option>)}
+            </select>
+          </div>
+          <div><label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Difficulty</label>
+            <div className="flex gap-2">
+              {["Easy","Medium","Hard"].map(d=><button key={d} onClick={()=>setDiff(d)} className="flex-1 py-2.5 rounded-xl text-sm font-semibold border" style={diff===d?{background:d==="Easy"?"#22c55e":d==="Medium"?"#eab308":"#ef4444",color:"white",border:"none"}:{background:"#f9fafb",color:"#6b7280",border:"1.5px solid #e5e7eb"}}>{d}</button>)}
+            </div>
+          </div>
+        </div>
+        {errMsg && <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-3 text-xs text-red-700">{errMsg}</div>}
+        <button onClick={gen} className="w-full text-white py-4 rounded-xl font-bold text-base shadow-md" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>Generate Quiz 🎯</button>
+      </div>
+    </div>
+  );
+}
+
+// ── TAB 3 — Roleplay ──────────────────────────────────────────────────────────
+const PROFILES = [
+  { icon:"👨‍👩‍👧", title:"Family of 4",      desc:"Budget ₹8–10L, city use, wants automatic" },
+  { icon:"🏍️",  title:"Young Professional", desc:"First car, budget ₹5–7L, wants good mileage" },
+  { icon:"🚗",  title:"Cab / Commercial",   desc:"High daily km, CNG preferred, budget ₹10–12L" },
+  { icon:"🏔️",  title:"SUV Lover",          desc:"Family weekend trips, budget ₹12–15L, premium" },
+];
+function RoleplayTab() {
+  const [stage, setStage] = useState("select");
+  const [profile, setProfile] = useState("");
+  const [custom, setCustom] = useState("");
+  const [msgs, setMsgs] = useState([]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [fbLoading, setFbLoading] = useState(false);
+  const [feedback, setFeedback] = useState(null);
+  const [exchanges, setExchanges] = useState(0);
+  const sysRef = useRef("");
+  const endRef = useRef(null);
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior:"smooth" }); }, [msgs, loading]);
+
+  async function start(p) {
+    setProfile(p); setMsgs([]); setExchanges(0); setFeedback(null); setStage("chat"); setLoading(true);
+    const sys = `You are roleplaying as a car customer at Bharath Auto (Maruti Suzuki Arena).\nCustomer: ${p}\nRules: stay in character, ask realistic questions, raise objections, react to the salesperson. Keep replies under 3 sentences. Do NOT suggest cars yourself.\nCar data:\n${CAR_DATA}`;
+    sysRef.current = sys;
+    try {
+      const reply = await callGroq([{ role:"system",content:sys },{ role:"user",content:"Start the roleplay now. Greet the salesperson." }], 400, 0.85);
+      setMsgs([{ role:"customer", content:reply }]);
+    } catch(e) { setMsgs([{ role:"customer", content:"Error: "+e.message }]); }
+    setLoading(false);
+  }
+
+  async function send() {
+    const t = input.trim(); if (!t||loading) return;
+    setInput("");
+    const next = [...msgs, { role:"salesperson", content:t }];
+    setMsgs(next); setExchanges(x=>x+1); setLoading(true);
+    try {
+      const apiMsgs = [{ role:"system",content:sysRef.current }, ...next.map(m=>({ role:m.role==="salesperson"?"user":"assistant", content:m.content }))];
+      const reply = await callGroq(apiMsgs, 400, 0.85);
+      setMsgs(p=>[...p,{ role:"customer", content:reply }]);
+    } catch(e) { setMsgs(p=>[...p,{ role:"customer", content:"Error: "+e.message }]); }
+    setLoading(false);
+  }
+
+  async function getFeedback() {
+    setFbLoading(true);
+    const conv = msgs.map(m=>`${m.role==="salesperson"?"SALESPERSON":"CUSTOMER"}: ${m.content}`).join("\n\n");
+    const p = `Senior Maruti sales trainer evaluating this roleplay.\nCustomer: ${profile}\nConversation:\n${conv}\nCar Data:\n${CAR_DATA}\nReturn ONLY JSON:\n{"strengths":["..."],"missed":["..."],"probing_questions":["..."],"recommendation":{"car":"...","variant":"...","reason":"..."},"overall_score":7,"summary":"..."}`;
+    try {
+      const raw = await callGroq([{ role:"user",content:p }], 1500, 0.4);
+      const m = raw.match(/\{[\s\S]*\}/);
+      setFeedback(m?JSON.parse(m[0]):{error:"Could not parse feedback"});
+    } catch(e) { setFeedback({error:e.message}); }
+    setFbLoading(false); setStage("feedback");
+  }
+
+  if (stage==="feedback") return (
+    <div className="tab-content"><Header title="Session Feedback" />
+      <div style={{ flex:1, overflowY:"auto" }} className="px-4 py-4">
+        {feedback?.error ? <div className="bg-red-50 rounded-xl p-4 text-red-700 text-sm mb-4">{feedback.error}</div> : feedback && <>
+          <div className="rounded-2xl p-4 text-white mb-4" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
+            <div className="flex justify-between items-center mb-1"><span className="text-sm font-semibold">Overall Score</span><span className="text-3xl font-bold">{feedback.overall_score}<span className="text-lg text-blue-200">/10</span></span></div>
+            <p className="text-blue-100 text-xs">{feedback.summary}</p>
+          </div>
+          <div className="space-y-3">
+            <div className="bg-green-50 border border-green-200 rounded-2xl p-4"><p className="text-green-800 font-semibold text-sm mb-2">✅ What You Did Well</p>{feedback.strengths?.map((s,i)=><p key={i} className="text-green-700 text-xs mb-1">• {s}</p>)}</div>
+            <div className="bg-red-50 border border-red-200 rounded-2xl p-4"><p className="text-red-800 font-semibold text-sm mb-2">⚠️ What You Missed</p>{feedback.missed?.map((s,i)=><p key={i} className="text-red-700 text-xs mb-1">• {s}</p>)}</div>
+            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4"><p className="text-blue-800 font-semibold text-sm mb-2">💬 Questions You Should Have Asked</p>{feedback.probing_questions?.map((s,i)=><p key={i} className="text-blue-700 text-xs mb-1">{i+1}. "{s}"</p>)}</div>
+            {feedback.recommendation && <div className="rounded-2xl p-4 text-white" style={{ background:"#1B3A6B" }}><p className="font-semibold text-sm mb-1">🎯 Ideal Recommendation</p><p className="text-blue-200 text-sm">{feedback.recommendation.car} — {feedback.recommendation.variant}</p><p className="text-blue-100 text-xs mt-1">{feedback.recommendation.reason}</p></div>}
+          </div>
+        </>}
+        <button onClick={() => { setStage("select");setMsgs([]);setFeedback(null); }} className="w-full mt-4 text-white py-3 rounded-xl font-semibold text-sm" style={{ background:"#1B3A6B" }}>Try Another Roleplay</button>
+      </div>
+    </div>
+  );
+
+  if (stage==="chat") return (
+    <div className="tab-content"><Header title="Customer Roleplay" />
+      <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 flex items-center justify-between gap-2" style={{ flexShrink:0 }}>
+        <p className="text-xs text-amber-700 font-medium truncate flex-1">🎭 {profile?.substring(0,55)}{profile?.length>55?"…":""}</p>
+        <button onClick={getFeedback} disabled={fbLoading||exchanges<2} className="text-xs px-3 py-1.5 rounded-full font-semibold flex-shrink-0 flex items-center gap-1 disabled:opacity-40" style={{ background:exchanges>=2?"#1B3A6B":"#e5e7eb", color:exchanges>=2?"white":"#9ca3af" }}>
+          {fbLoading?<><Spinner small /><span>Analyzing…</span></>:"End & Feedback"}
+        </button>
+      </div>
+      <div style={{ flex:1, overflowY:"auto", background:"#f9fafb" }} className="px-4 py-3 space-y-3">
+        {msgs.map((m,i) => (
+          <div key={i} className={`flex ${m.role==="salesperson"?"justify-end":"justify-start"}`}>
+            <div className={m.role==="customer"?"flex gap-2 items-start":""} style={{ maxWidth:"85%" }}>
+              {m.role==="customer" && <span className="text-xl flex-shrink-0 mt-0.5">👤</span>}
+              <div className="rounded-2xl px-4 py-2.5 text-sm leading-relaxed" style={{ background:m.role==="salesperson"?"#1B3A6B":"white", color:m.role==="salesperson"?"white":"#1f2937", borderBottomRightRadius:m.role==="salesperson"?"4px":undefined, borderBottomLeftRadius:m.role==="customer"?"4px":undefined }}>{m.content}</div>
+            </div>
+          </div>
+        ))}
+        {loading && <TypingDots />}
+        <div ref={endRef} />
+      </div>
+      <div className="bg-white border-t border-gray-200 px-4 py-3" style={{ flexShrink:0 }}>
+        {exchanges>=6 && <p className="text-xs text-amber-600 text-center mb-2">💡 Good session — ready for feedback!</p>}
+        <div className="flex gap-2">
+          <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder="Your pitch or reply…" disabled={loading||fbLoading} className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none bg-gray-50" />
+          <button onClick={send} disabled={loading||!input.trim()} className="text-white rounded-xl px-4 py-2.5 text-sm font-medium disabled:opacity-40 flex items-center" style={{ background:"#1B3A6B" }}>{loading?<Spinner small />:"Send"}</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="tab-content"><Header title="Customer Roleplay" />
+      <div style={{ flex:1, overflowY:"auto" }} className="px-4 py-4">
+        <div className="text-center mb-5"><div className="text-3xl mb-1">🎭</div><h2 className="text-lg font-bold" style={{ color:"#1B3A6B" }}>Choose a Customer Profile</h2><p className="text-gray-500 text-xs mt-1">Practice your pitch in a realistic scenario</p></div>
+        <div className="space-y-2.5 mb-4">
+          {PROFILES.map(p=>(
+            <button key={p.title} onClick={()=>start(`${p.icon} ${p.title}: ${p.desc}`)} className="w-full bg-white border border-gray-200 rounded-2xl p-4 text-left hover:shadow-sm transition-all flex items-center gap-3">
+              <span className="text-2xl">{p.icon}</span>
+              <div><p className="font-semibold text-sm" style={{ color:"#1B3A6B" }}>{p.title}</p><p className="text-gray-500 text-xs">{p.desc}</p></div>
+              <span className="ml-auto text-gray-300 text-lg">›</span>
+            </button>
+          ))}
+        </div>
+        <div className="bg-white border border-gray-200 rounded-2xl p-4">
+          <p className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">Custom Profile</p>
+          <textarea value={custom} onChange={e=>setCustom(e.target.value)} rows={3} placeholder="e.g. Retired couple, budget ₹15L, wants comfortable sedan for long drives…" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none resize-none bg-gray-50" />
+          <button onClick={()=>custom.trim()&&start(custom.trim())} disabled={!custom.trim()} className="mt-2 w-full text-white py-2.5 rounded-xl text-sm font-semibold disabled:opacity-40" style={{ background:"#2E75B6" }}>Start with Custom Profile</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── TAB 4 — Match a Customer ──────────────────────────────────────────────────
+function MatchTab() {
+  const [form, setForm] = useState({ budget:"₹8–10L", family:"3–4", use:"City commute", fuel:"No preference", tx:"No preference", feature:"" });
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState(null);
+  const [err, setErr] = useState("");
+
+  const Chips = ({ label, field, opts }) => (
+    <div><p className="text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">{label}</p>
+      <div className="flex flex-wrap gap-1.5">
+        {opts.map(o=><button key={o} onClick={()=>setForm(f=>({...f,[field]:o}))} className="text-xs px-3 py-1.5 rounded-full border font-medium" style={form[field]===o?{background:"#1B3A6B",color:"white",borderColor:"#1B3A6B"}:{background:"#f9fafb",color:"#4b5563",borderColor:"#e5e7eb"}}>{o}</button>)}
+      </div>
+    </div>
+  );
+
+  async function find() {
+    setLoading(true); setErr(""); setResults(null);
+    const p = `Match best Maruti Suzuki Arena cars.\nCustomer: Budget ${form.budget}, Family ${form.family}, Use: ${form.use}, Fuel: ${form.fuel}, Transmission: ${form.tx}, Must-have: ${form.feature||"none"}\nCars:\n${CAR_DATA}\nReturn ONLY JSON:\n{"recommendations":[{"car":"...","variant":"...","reasons":["...","...","..."],"match_score":90,"price_range":"₹X–Y lakh approx"}],"alternative":{"car":"...","variant":"...","reason":"..."},"sales_tip":"..."}`;
+    try {
+      const raw = await callGroq([{ role:"user",content:p }], 1500, 0.4);
+      const m = raw.match(/\{[\s\S]*\}/);
+      if (!m) throw new Error("Could not parse — retry");
+      setResults(JSON.parse(m[0]));
+    } catch(e) { setErr(e.message); }
+    setLoading(false);
+  }
+
+  if (results) return (
+    <div className="tab-content"><Header title="Match a Customer" />
+      <div style={{ flex:1, overflowY:"auto" }} className="px-4 py-4">
+        <div className="flex items-center justify-between mb-3"><h2 className="text-base font-bold" style={{ color:"#1B3A6B" }}>Recommended Cars</h2><button onClick={()=>setResults(null)} className="text-xs font-medium" style={{ color:"#2E75B6" }}>← New Search</button></div>
+        <div className="space-y-3 mb-3">
+          {results.recommendations?.map((r,i)=>(
+            <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+              <div className="flex items-start justify-between mb-2">
+                <div><div className="flex items-center gap-2 mb-1"><span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background:i===0?"#1B3A6B":"#f3f4f6", color:i===0?"white":"#4b5563" }}>#{i+1} {i===0?"Best Match":"Good Fit"}</span>{r.match_score&&<span className="text-xs font-semibold text-green-600">{r.match_score}%</span>}</div>
+                  <h3 className="text-base font-bold" style={{ color:"#1B3A6B" }}>{r.car}</h3><p className="text-sm font-medium" style={{ color:"#2E75B6" }}>{r.variant}</p>
+                </div><span className="text-2xl">{i===0?"🥇":i===1?"🥈":"🥉"}</span>
+              </div>
+              {r.price_range&&<p className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-lg inline-block mb-2">{r.price_range}</p>}
+              <div className="space-y-1.5">{r.reasons?.map((rr,j)=><p key={j} className="text-xs text-gray-700 flex gap-2"><span className="text-green-500 font-bold">✓</span>{rr}</p>)}</div>
+            </div>
+          ))}
+        </div>
+        {results.alternative&&<div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-3"><p className="text-amber-800 font-semibold text-sm mb-1">💡 Alternative</p><p className="text-amber-700 text-sm font-medium">{results.alternative.car} — {results.alternative.variant}</p><p className="text-amber-600 text-xs mt-1">{results.alternative.reason}</p></div>}
+        {results.sales_tip&&<div className="rounded-2xl p-4 mb-4" style={{ background:"#1B3A6B" }}><p className="text-blue-200 text-xs font-semibold mb-1">🎯 SALES TIP</p><p className="text-white text-sm">{results.sales_tip}</p></div>}
+        <button onClick={()=>setResults(null)} className="w-full py-3 rounded-xl font-semibold text-sm border-2" style={{ borderColor:"#1B3A6B", color:"#1B3A6B", background:"transparent" }}>Search Again</button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="tab-content"><Header title="Match a Customer" />
+      <div style={{ flex:1, overflowY:"auto" }} className="px-4 py-4">
+        <div className="text-center mb-4"><div className="text-3xl mb-1">🎯</div><h2 className="text-lg font-bold" style={{ color:"#1B3A6B" }}>Find the Perfect Car</h2><p className="text-gray-500 text-xs mt-1">AI-matched recommendations in seconds</p></div>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-4 mb-4">
+          <Chips label="Budget Range" field="budget" opts={["Under ₹6L","₹6–8L","₹8–10L","₹10–12L","₹12–15L","Above ₹15L"]} />
+          <Chips label="Family Size" field="family" opts={["1–2","3–4","5+","Commercial use"]} />
+          <Chips label="Primary Use" field="use" opts={["City commute","Highway","Mixed","Off-road/hills"]} />
+          <Chips label="Fuel Preference" field="fuel" opts={["Petrol","CNG","No preference"]} />
+          <Chips label="Transmission" field="tx" opts={["Manual","Automatic","No preference"]} />
+          <div><p className="text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Must-Have Feature (optional)</p>
+            <input value={form.feature} onChange={e=>setForm(f=>({...f,feature:e.target.value}))} placeholder="e.g. sunroof, Apple CarPlay, 7 seats…" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none bg-gray-50" />
+          </div>
+        </div>
+        {err&&<div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-3 text-xs text-red-700">{err}</div>}
+        <button onClick={find} disabled={loading} className="w-full text-white py-4 rounded-xl font-bold text-base shadow-md flex items-center justify-center gap-2 disabled:opacity-60" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>{loading?<><Spinner />Finding Best Match…</>:"Find Best Match 🎯"}</button>
+      </div>
+    </div>
+  );
+}
+
+// ── TAB 5 — Side-by-Side Compare ──────────────────────────────────────────────
+const SPEC_ROWS = [
+  { label:"Body Type",       key:"body" },
+  { label:"Engine",          key:"engine" },
+  { label:"Power",           key:"power" },
+  { label:"Torque",          key:"torque" },
+  { label:"Mileage (MT)",    key:"petrolMT" },
+  { label:"Mileage (Auto)",  key:"petrolAuto" },
+  { label:"CNG Mileage",     key:"cng" },
+  { label:"Fuel Tank",       key:"tank" },
+  { label:"Boot Space",      key:"boot" },
+  { label:"Seating",         key:"seats" },
+  { label:"Airbags",         key:"airbags" },
+  { label:"Segment",         key:"segment" },
+  { label:"Top Variant",     key:"topVariant" },
+];
+
+function CompareTab() {
+  const [car1, setCar1] = useState("Swift");
+  const [car2, setCar2] = useState("Dzire");
+  const [showAI, setShowAI] = useState(false);
+  const [aiText, setAiText] = useState("");
+  const [loadingAI, setLoadingAI] = useState(false);
+
+  const c1 = CARS_STRUCTURED[car1];
+  const c2 = CARS_STRUCTURED[car2];
+
+  async function getAIAnalysis() {
+    setLoadingAI(true); setShowAI(true); setAiText("");
+    const p = `Compare ${car1} and ${car2} for a Maruti Suzuki Arena salesperson.\nCar data:\n${CAR_DATA}\nGive a concise comparison in 4-5 bullet points: who each car is best for, key differences, and which to recommend to which type of customer. Keep it practical for a sales floor conversation.`;
+    try {
+      const reply = await callGroq([{ role:"user", content:p }], 600, 0.6);
+      setAiText(reply);
+    } catch(e) { setAiText("Error: "+e.message); }
+    setLoadingAI(false);
+  }
+
+  const sameCarSelected = car1 === car2;
+
+  return (
+    <div className="tab-content">
+      <Header title="Side-by-Side Compare" />
+      <div style={{ flex:1, overflowY:"auto", background:"#f9fafb" }} className="px-4 py-4">
+
+        {/* Car selectors */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          {[[car1,setCar1,"Car 1"],[car2,setCar2,"Car 2"]].map(([val,setter,label])=>(
+            <div key={label}>
+              <p className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">{label}</p>
+              <select value={val} onChange={e=>{ setter(e.target.value); setShowAI(false); setAiText(""); }} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none font-semibold" style={{ color:"#1B3A6B" }}>
+                {CAR_NAMES.map(n=><option key={n}>{n}</option>)}
+              </select>
+            </div>
+          ))}
+        </div>
+
+        {sameCarSelected && (
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 text-xs text-amber-700 text-center">Please select two different cars to compare</div>
+        )}
+
+        {!sameCarSelected && (
+          <>
+            {/* Header row */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-3">
+              <div className="grid grid-cols-3 border-b border-gray-100">
+                <div className="p-3 bg-gray-50" />
+                <div className="p-3 text-center border-l border-gray-100" style={{ background:"#eef2f9" }}>
+                  <p className="text-xs font-bold" style={{ color:"#1B3A6B" }}>{car1}</p>
+                </div>
+                <div className="p-3 text-center border-l border-gray-100" style={{ background:"#eef2f9" }}>
+                  <p className="text-xs font-bold" style={{ color:"#1B3A6B" }}>{car2}</p>
+                </div>
+              </div>
+              <table className="cmp-table">
+                <tbody>
+                  {SPEC_ROWS.map(row => {
+                    const v1 = c1[row.key] || "—";
+                    const v2 = c2[row.key] || "—";
+                    const diff = v1 !== v2;
+                    return (
+                      <tr key={row.key}>
+                        <th>{row.label}</th>
+                        <td className={`cmp-cell ${diff?"cmp-diff":""}`} style={{ color:"#1f2937" }}>{v1}</td>
+                        <td className={`cmp-cell ${diff?"cmp-diff":""} border-l border-gray-50`} style={{ color:"#1f2937" }}>{v2}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <div className="px-3 pb-2 pt-1">
+                <p className="text-[10px] text-amber-600">🟡 Highlighted rows = values differ between the two cars</p>
+              </div>
+            </div>
+
+            {/* Key features */}
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {[{name:car1,data:c1},{name:car2,data:c2}].map(({name,data})=>(
+                <div key={name} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3">
+                  <p className="text-xs font-bold mb-2" style={{ color:"#1B3A6B" }}>⭐ {name} highlights</p>
+                  <p className="text-xs text-gray-600 leading-relaxed">{data.topFeatures}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* AI Analysis */}
+            {!showAI && (
+              <button onClick={getAIAnalysis} className="w-full text-white py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
+                🤖 Get AI Sales Analysis
+              </button>
+            )}
+            {showAI && (
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                <p className="text-xs font-bold mb-2" style={{ color:"#1B3A6B" }}>🤖 AI Sales Analysis — {car1} vs {car2}</p>
+                {loadingAI
+                  ? <div className="flex items-center gap-2 py-2"><Spinner small /><span className="text-xs text-gray-500">Analyzing…</span></div>
+                  : <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-wrap">{aiText}</p>
+                }
+                <button onClick={()=>{setShowAI(false);setAiText("");}} className="mt-3 text-xs text-gray-400 underline">Dismiss</button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── TAB 6 — Feature Flashcards ────────────────────────────────────────────────
+function FlashcardsTab() {
+  const [selectedCar, setSelectedCar] = useState("Swift");
+  const [cardIdx, setCardIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [known, setKnown] = useState(new Set());
+  const [review, setReview] = useState(new Set());
+  const [phase, setPhase] = useState("study"); // study | summary
+
+  const deck = FLASHCARD_DECKS[selectedCar] || [];
+  const card = deck[cardIdx];
+  const total = deck.length;
+  const knownCount = known.size;
+  const reviewCount = review.size;
+
+  function changeCar(c) {
+    setSelectedCar(c);
+    setCardIdx(0);
+    setFlipped(false);
+    setKnown(new Set());
+    setReview(new Set());
+    setPhase("study");
+  }
+
+  function markKnown() {
+    setKnown(s => new Set([...s, cardIdx]));
+    review.has(cardIdx) && setReview(s => { const n=new Set(s); n.delete(cardIdx); return n; });
+    advance();
+  }
+
+  function markReview() {
+    setReview(s => new Set([...s, cardIdx]));
+    known.has(cardIdx) && setKnown(s => { const n=new Set(s); n.delete(cardIdx); return n; });
+    advance();
+  }
+
+  function advance() {
+    setFlipped(false);
+    setTimeout(() => {
+      if (cardIdx + 1 >= total) { setPhase("summary"); }
+      else { setCardIdx(i => i+1); }
+    }, 200);
+  }
+
+  function restart(reviewOnly=false) {
+    if (reviewOnly && review.size > 0) {
+      // rebuild deck with only review cards — for simplicity, just go to first review card
+      const firstReview = [...review].sort((a,b)=>a-b)[0];
+      setCardIdx(firstReview);
+    } else {
+      setCardIdx(0);
+    }
+    setFlipped(false);
+    setKnown(new Set());
+    setReview(new Set());
+    setPhase("study");
+  }
+
+  if (phase==="summary") return (
+    <div className="tab-content"><Header title="Flashcards" />
+      <div style={{ flex:1, overflowY:"auto" }} className="px-4 py-6">
+        <div className="rounded-2xl p-5 text-white text-center mb-5" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
+          <div className="text-5xl mb-2">{knownCount===total?"🏆":knownCount>=total*0.7?"🎉":"📖"}</div>
+          <p className="text-blue-200 text-sm mb-1">{selectedCar} Flashcards</p>
+          <div className="flex justify-center gap-6 mt-3">
+            <div className="text-center"><p className="text-2xl font-bold text-green-300">{knownCount}</p><p className="text-xs text-blue-200">Got it ✓</p></div>
+            <div className="text-center"><p className="text-2xl font-bold text-amber-300">{reviewCount}</p><p className="text-xs text-blue-200">Review again</p></div>
+          </div>
+          <p className="text-blue-100 text-sm mt-3">{knownCount===total?"Perfect! You know this car cold 🔥":knownCount>=total*0.7?"Great progress! Review the remaining cards":"Keep practising — you'll get there!"}</p>
+        </div>
+        <div className="space-y-3 mb-5">
+          <button onClick={()=>restart(false)} className="w-full text-white py-3 rounded-xl font-semibold text-sm" style={{ background:"#1B3A6B" }}>Restart Deck</button>
+          {reviewCount > 0 && <button onClick={()=>restart(true)} className="w-full py-3 rounded-xl font-semibold text-sm border-2" style={{ borderColor:"#1B3A6B", color:"#1B3A6B" }}>Drill {reviewCount} Review Cards</button>}
+          <button onClick={()=>changeCar(selectedCar)} className="w-full py-3 rounded-xl font-semibold text-sm border border-gray-200 text-gray-500">Pick Another Car</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="tab-content">
+      <Header title="Feature Flashcards" />
+      <div style={{ flex:1, overflowY:"auto", background:"#f9fafb" }} className="px-4 py-4">
+
+        {/* Car picker */}
+        <div className="mb-4">
+          <select value={selectedCar} onChange={e=>changeCar(e.target.value)} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none font-semibold" style={{ color:"#1B3A6B" }}>
+            {CAR_NAMES.map(n=><option key={n}>{n}</option>)}
+          </select>
+        </div>
+
+        {/* Progress bar */}
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs text-gray-500 font-medium">Card {cardIdx+1} of {total}</span>
+          <div className="flex gap-2 text-xs">
+            <span className="text-green-600 font-semibold">✓ {knownCount}</span>
+            <span className="text-amber-500 font-semibold">↺ {reviewCount}</span>
+          </div>
+        </div>
+        <div className="h-2 bg-gray-200 rounded-full mb-4 overflow-hidden">
+          <div className="h-2 rounded-full transition-all" style={{ width:`${(cardIdx+1)/total*100}%`, background:"linear-gradient(to right, #22c55e, #2E75B6)" }} />
+        </div>
+
+        {/* Flip card */}
+        <div className="flip-scene mb-4" onClick={()=>setFlipped(f=>!f)}>
+          <div className={`flip-card ${flipped?"flipped":""}`}>
+            {/* Front */}
+            <div className="flip-face flip-front">
+              <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-widest mb-3">Tap to reveal answer</p>
+              <p className="text-gray-800 font-semibold text-base text-center leading-relaxed">{card?.q}</p>
+            </div>
+            {/* Back */}
+            <div className="flip-face flip-back">
+              <p className="text-[10px] text-blue-300 font-semibold uppercase tracking-widest mb-3">Answer</p>
+              <p className="text-white font-bold text-lg text-center leading-relaxed">{card?.a}</p>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-center text-xs text-gray-400 mb-4">{flipped?"How well did you know this?":"Tap the card to reveal the answer"}</p>
+
+        {/* Action buttons — only show after flip */}
+        {flipped && (
+          <div className="grid grid-cols-2 gap-3">
+            <button onClick={markReview} className="py-3 rounded-xl font-semibold text-sm border-2 flex items-center justify-center gap-2" style={{ borderColor:"#f59e0b", color:"#b45309", background:"#fffbeb" }}>
+              ↺ Review Again
+            </button>
+            <button onClick={markKnown} className="py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 text-white" style={{ background:"#16a34a" }}>
+              ✓ Got It!
+            </button>
+          </div>
+        )}
+
+        {/* Card dots navigator */}
+        <div className="flex justify-center gap-1 mt-4 flex-wrap">
+          {deck.map((_,i) => (
+            <div key={i} onClick={()=>{setCardIdx(i);setFlipped(false);}} className="w-2.5 h-2.5 rounded-full cursor-pointer transition-all"
+              style={{ background: known.has(i)?"#22c55e":review.has(i)?"#f59e0b":i===cardIdx?"#1B3A6B":"#d1d5db" }} />
+          ))}
+        </div>
+        <p className="text-center mt-1.5 text-[10px] text-gray-400">🟢 Known · 🟡 Review · 🔵 Current · ⚪ Unseen</p>
+      </div>
+    </div>
+  );
+}
+
+// ── Bottom Nav (6 tabs) ────────────────────────────────────────────────────────
+const TABS = [
+  { id:"ask",       icon:"🔍", label:"Ask" },
+  { id:"quiz",      icon:"🧠", label:"Quiz" },
+  { id:"roleplay",  icon:"🎭", label:"Roleplay" },
+  { id:"match",     icon:"🎯", label:"Match" },
+  { id:"compare",   icon:"⚖️", label:"Compare" },
+  { id:"flashcards",icon:"🃏", label:"Flashcards" },
+];
+
+function BottomNav({ active, onChange }) {
+  return (
+    <div className="bg-white border-t border-gray-200 flex" style={{ flexShrink:0 }}>
+      {TABS.map(t => (
+        <button key={t.id} onClick={()=>onChange(t.id)} className="flex-1 flex flex-col items-center py-2 gap-0.5 transition-colors" style={{ color:active===t.id?"#1B3A6B":"#9ca3af" }}>
+          <span style={{ fontSize:"18px" }}>{t.icon}</span>
+          <span style={{ fontSize:"9px", fontWeight:600 }}>{t.label}</span>
+          {active===t.id && <div className="w-1 h-1 rounded-full" style={{ background:"#1B3A6B" }} />}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ── Root ──────────────────────────────────────────────────────────────────────
+function App() {
+  const [started, setStarted] = useState(false);
+  const [tab, setTab] = useState("ask");
+  if (!started) return <SplashScreen onStart={()=>setStarted(true)} />;
+  return (
+    <div style={{ display:"flex", flexDirection:"column", height:"100vh", maxWidth:"480px", margin:"0 auto", background:"#f9fafb" }}>
+      <div style={{ flex:1, overflow:"hidden", display:"flex", flexDirection:"column" }}>
+        {tab==="ask"        && <AskTab />}
+        {tab==="quiz"       && <QuizTab />}
+        {tab==="roleplay"   && <RoleplayTab />}
+        {tab==="match"      && <MatchTab />}
+        {tab==="compare"    && <CompareTab />}
+        {tab==="flashcards" && <FlashcardsTab />}
+      </div>
+      <BottomNav active={tab} onChange={setTab} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

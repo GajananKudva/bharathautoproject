@@ -1,0 +1,18 @@
+{
+  "name": "Bharath Auto Trainer",
+  "short_name": "Auto Trainer",
+  "description": "Maruti Suzuki Arena Sales Trainer",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1B3A6B",
+  "theme_color": "#1B3A6B",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231B3A6B'/><text y='.9em' font-size='70' x='15'>🚗</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
