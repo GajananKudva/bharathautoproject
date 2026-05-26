@@ -16,31 +16,39 @@
   <style>
     * { -webkit-user-select: none; user-select: none; }
     input, textarea { -webkit-user-select: text; user-select: text; }
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f3f4f6; overflow: hidden; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #EEF3FA; overflow: hidden; }
     #root { height: 100vh; display: flex; flex-direction: column; }
     @keyframes bounce3 { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }
     .dot { animation: bounce3 1.2s infinite ease-in-out; }
     .dot:nth-child(2){animation-delay:.15s} .dot:nth-child(3){animation-delay:.3s}
     @keyframes spin360 { to{transform:rotate(360deg)} }
     .spin { animation: spin360 .7s linear infinite; }
-    ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+    @keyframes fadeUp { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up { animation: fadeUp 0.22s ease-out; }
+    ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:#C5D4E8;border-radius:4px}
     .tab-content { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    button { cursor:pointer; transition:transform 0.1s ease, opacity 0.15s; }
+    button:active:not(:disabled) { transform:scale(0.96); }
+    .card { background:white; border-radius:16px; border:1px solid rgba(27,58,107,0.08); box-shadow:0 2px 10px rgba(27,58,107,0.07); }
+    .section-label { font-size:11px; font-weight:600; color:#7A90AA; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+    .chip-on { background:#1B3A6B !important; color:white !important; border-color:#1B3A6B !important; }
+    .chip-off { background:white !important; color:#374151 !important; border-color:#DDE5EF !important; }
 
     /* Flip card */
     .flip-scene { perspective: 800px; width:100%; height:200px; cursor:pointer; }
     .flip-card { width:100%; height:100%; transition:transform 0.5s cubic-bezier(.4,.2,.2,1); transform-style:preserve-3d; position:relative; }
     .flip-card.flipped { transform:rotateY(180deg); }
     .flip-face { position:absolute; width:100%; height:100%; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; box-sizing:border-box; }
-    .flip-front { background:white; border:1.5px solid #e5e7eb; }
+    .flip-front { background:white; border:1.5px solid #E8EEF6; }
     .flip-back  { background:#1B3A6B; transform:rotateY(180deg); }
 
     /* Compare table */
     .cmp-table { width:100%; border-collapse:collapse; }
-    .cmp-table td, .cmp-table th { padding:8px 10px; font-size:12px; border-bottom:0.5px solid #f0f0f0; vertical-align:top; }
-    .cmp-table th { background:#f8f9fa; font-weight:600; color:#6b7280; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; width:32%; }
+    .cmp-table td, .cmp-table th { padding:8px 10px; font-size:12px; border-bottom:0.5px solid #EEF0F5; vertical-align:top; }
+    .cmp-table th { background:#F5F8FB; font-weight:600; color:#7A90AA; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; width:32%; }
     .cmp-cell { width:34%; }
-    .cmp-diff { background:#fffbeb !important; }
-    .cmp-better { background:#f0fdf4 !important; }
+    .cmp-diff { background:#FFFBEB !important; }
+    .cmp-better { background:#F0FDF4 !important; }
   </style>
 </head>
 <body>
@@ -248,19 +256,10 @@ const FLASHCARD_DECKS = {
 // ── Shared UI ─────────────────────────────────────────────────────────────────
 function Header({ title }) {
   return (
-    <div style={{ background:"#1B3A6B", flexShrink:0 }} className="text-white px-4 py-3 flex items-center gap-2 shadow-md">
-      <div style={{background:"white", borderRadius:"5px", padding:"2px 7px 2px 3px", display:"inline-flex", alignItems:"center", flexShrink:0}}>
-        <svg width="118" height="30" viewBox="0 0 316 80" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="40" cy="40" r="38" fill="#CC0000"/>
-          <text x="40" y="57" fontFamily="Arial Black,Arial,sans-serif" fontSize="54" fontWeight="900" fill="white" textAnchor="middle">B</text>
-          <text x="86" y="26" fontFamily="Arial Black,Arial,sans-serif" fontSize="24" fontWeight="900" fill="#1B3A6B">BHARATH</text>
-          <text x="86" y="42" fontFamily="Arial,sans-serif" fontSize="12" fontWeight="700" fill="#1B3A6B">AUTO CARS (P) LTD.</text>
-          <text x="86" y="55" fontFamily="Arial,sans-serif" fontSize="8" fontWeight="400" fill="#2E75B6" letterSpacing="2">DRIVEN BY EXCELLENCE</text>
-          <line x1="86" y1="60" x2="314" y2="60" stroke="#ccc" strokeWidth="0.5"/>
-          <text x="86" y="72" fontFamily="Arial,sans-serif" fontSize="6.5" fontWeight="700" fill="#444">AUTHORISED MARUTI SUZUKI DEALER &amp; SERVICES CENTER</text>
-        </svg>
-      </div>
-      <span className="text-blue-300 text-xs ml-1">· {title}</span>
+    <div style={{ background:"#1B3A6B", flexShrink:0, height:"54px", borderBottom:"1px solid rgba(46,117,182,0.4)", boxShadow:"0 2px 12px rgba(0,0,0,0.18)" }} className="px-4 flex items-center gap-3">
+      <img src="logo.png" alt="Bharath Auto Cars" style={{ height:"32px", borderRadius:"7px", background:"white", padding:"3px 8px", flexShrink:0 }}/>
+      <div style={{ width:"1px", height:"22px", background:"rgba(255,255,255,0.2)", flexShrink:0 }} />
+      <span style={{ color:"white", fontSize:"14px", fontWeight:600, letterSpacing:"0.01em" }}>{title}</span>
     </div>
   );
 }
@@ -270,10 +269,10 @@ function Spinner({ small }) {
 function TypingDots() {
   return (
     <div className="flex items-center gap-1 px-2 py-1">
-      <div className="bg-gray-100 rounded-2xl px-4 py-2.5 flex gap-1 items-center">
-        <span className="dot w-2 h-2 bg-gray-400 rounded-full inline-block" />
-        <span className="dot w-2 h-2 bg-gray-400 rounded-full inline-block" />
-        <span className="dot w-2 h-2 bg-gray-400 rounded-full inline-block" />
+      <div style={{ background:"white", borderRadius:"16px", padding:"10px 16px", display:"flex", gap:"4px", alignItems:"center", border:"1px solid rgba(27,58,107,0.07)", boxShadow:"0 1px 6px rgba(27,58,107,0.08)" }}>
+        <span className="dot w-2 h-2 rounded-full inline-block" style={{ background:"#94A3B8" }} />
+        <span className="dot w-2 h-2 rounded-full inline-block" style={{ background:"#94A3B8" }} />
+        <span className="dot w-2 h-2 rounded-full inline-block" style={{ background:"#94A3B8" }} />
       </div>
     </div>
   );
@@ -282,38 +281,26 @@ function TypingDots() {
 // ── Splash Screen ──────────────────────────────────────────────────────────────
 function SplashScreen({ onStart }) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
-      <div className="w-full max-w-sm text-center">
-        <div style={{background:"white", borderRadius:"14px", padding:"14px 20px", marginBottom:"10px", display:"inline-block", boxShadow:"0 4px 24px rgba(0,0,0,0.28)"}}>
-          <svg width="240" height="61" viewBox="0 0 316 80" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="40" cy="40" r="38" fill="#CC0000"/>
-            <text x="40" y="57" fontFamily="Arial Black,Arial,sans-serif" fontSize="54" fontWeight="900" fill="white" textAnchor="middle">B</text>
-            <text x="86" y="26" fontFamily="Arial Black,Arial,sans-serif" fontSize="24" fontWeight="900" fill="#1B3A6B">BHARATH</text>
-            <text x="86" y="42" fontFamily="Arial,sans-serif" fontSize="12" fontWeight="700" fill="#1B3A6B">AUTO CARS (P) LTD.</text>
-            <text x="86" y="55" fontFamily="Arial,sans-serif" fontSize="8" fontWeight="400" fill="#2E75B6" letterSpacing="2">DRIVEN BY EXCELLENCE</text>
-            <line x1="86" y1="60" x2="314" y2="60" stroke="#ccc" strokeWidth="0.5"/>
-            <text x="86" y="72" fontFamily="Arial,sans-serif" fontSize="6.5" fontWeight="700" fill="#444">AUTHORISED MARUTI SUZUKI DEALER &amp; SERVICES CENTER</text>
-          </svg>
+    <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"28px 20px", background:"linear-gradient(160deg,#0C1F3F 0%,#1B3A6B 55%,#2057A0 100%)" }}>
+      <div style={{ width:"100%", maxWidth:"360px" }}>
+        <div style={{ textAlign:"center", marginBottom:"22px" }}>
+          <img src="logo.png" alt="Bharath Auto Cars" style={{ width:"280px", display:"block", margin:"0 auto", borderRadius:"14px", background:"white", padding:"14px 20px", boxShadow:"0 12px 40px rgba(0,0,0,0.4)" }}/>
+          <p style={{ color:"white", fontSize:"21px", fontWeight:700, margin:"14px 0 4px" }}>Sales Trainer</p>
+          <p style={{ color:"rgba(255,255,255,0.45)", fontSize:"11px", margin:0, letterSpacing:"0.07em", textTransform:"uppercase" }}>AI-powered · Maruti Suzuki Arena</p>
         </div>
-        <p className="text-blue-200 text-xl font-medium mt-1">Sales Trainer</p>
-        <p className="text-blue-300 text-sm mt-3 mb-2">Your Smart Sales Companion</p>
-        <span className="inline-block bg-blue-500 bg-opacity-30 text-blue-100 text-xs px-4 py-1.5 rounded-full border border-blue-400 border-opacity-40 mb-8">Maruti Suzuki Arena</span>
-        <div className="bg-white bg-opacity-10 rounded-2xl p-5 mb-8 text-left space-y-3">
-          {[["🔍","Ask Anything","Full knowledge base chat"],
-            ["🧠","Quiz Me","Test your variant knowledge"],
-            ["🎭","Roleplay","Practice pitching to AI customers"],
-            ["🎯","Match","AI car recommendations"],
-            ["⚖️","Compare","Side-by-side spec comparison"],
-            ["🃏","Flashcards","Drill variant features fast"]
-          ].map(([ic,t,d]) => (
-            <div key={t} className="flex items-center gap-3">
-              <span className="text-xl">{ic}</span>
-              <div><p className="text-white text-sm font-semibold">{t}</p><p className="text-blue-200 text-xs">{d}</p></div>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"8px", marginBottom:"22px" }}>
+          {[["🔍","Ask"],["🧠","Quiz"],["🎭","Roleplay"],["🎯","Match"],["⚖️","Compare"],["🛡️","Rebuttals"]].map(([ic,t])=>(
+            <div key={t} style={{ background:"rgba(255,255,255,0.08)", borderRadius:"13px", padding:"13px 8px", textAlign:"center", border:"1px solid rgba(255,255,255,0.11)" }}>
+              <span style={{ fontSize:"22px" }}>{ic}</span>
+              <p style={{ color:"rgba(255,255,255,0.85)", fontSize:"11px", fontWeight:600, margin:"6px 0 0" }}>{t}</p>
             </div>
           ))}
         </div>
-        <button onClick={onStart} className="w-full bg-white font-bold py-4 rounded-2xl text-lg shadow-lg" style={{ color:"#1B3A6B" }}>Start Training 🚀</button>
-        <p className="text-blue-300 text-xs mt-5">Powered by Llama 3.3 · Groq AI</p>
+        <button onClick={onStart} style={{ width:"100%", background:"white", color:"#1B3A6B", fontWeight:700, fontSize:"16px", padding:"17px", borderRadius:"16px", border:"none", boxShadow:"0 4px 24px rgba(0,0,0,0.25)", letterSpacing:"0.02em" }}>
+          Start Training →
+        </button>
+        <p style={{ textAlign:"center", color:"rgba(255,255,255,0.22)", fontSize:"11px", marginTop:"14px" }}>Powered by Llama 3.3 · Groq AI</p>
+        <p style={{ textAlign:"center", color:"rgba(255,255,255,0.18)", fontSize:"10px", marginTop:"4px" }}>Made by Gajanan Kudva</p>
       </div>
     </div>
   );
@@ -324,8 +311,23 @@ function AskTab() {
   const [msgs, setMsgs] = useState([{ role:"assistant", content:"Hi! I'm your Maruti Suzuki Arena knowledge assistant 👋\n\nAsk me anything about our cars — variants, features, mileage, comparisons, or which car fits a customer best!" }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [listening, setListening] = useState(false);
   const endRef = useRef(null);
   useEffect(() => { endRef.current?.scrollIntoView({ behavior:"smooth" }); }, [msgs, loading]);
+
+  function startVoice() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { alert("Voice input not supported in this browser. Try Chrome."); return; }
+    const rec = new SR();
+    rec.lang = "en-IN";
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    setListening(true);
+    rec.start();
+    rec.onresult = (e) => { setInput(prev => (prev ? prev + " " : "") + e.results[0][0].transcript); setListening(false); };
+    rec.onerror = () => setListening(false);
+    rec.onend = () => setListening(false);
+  }
 
   async function send() {
     const t = input.trim(); if (!t || loading) return;
@@ -343,28 +345,29 @@ function AskTab() {
   return (
     <div className="tab-content">
       <Header title="Ask Anything" />
-      <div style={{ flex:1, overflowY:"auto", background:"#f9fafb" }}>
+      <div style={{ flex:1, overflowY:"auto", background:"#EEF3FA" }}>
         {msgs.length === 1 && (
           <div className="px-4 pt-3 pb-1">
-            <p className="text-xs text-gray-400 mb-2 font-semibold uppercase tracking-wide">Quick questions</p>
+            <p className="section-label mb-2">Quick questions</p>
             <div className="flex flex-wrap gap-2">
-              {chips.map(c => <button key={c} onClick={() => setInput(c)} className="text-xs rounded-full px-3 py-1.5 border" style={{ background:"white", borderColor:"#2E75B6", color:"#2E75B6" }}>{c}</button>)}
+              {chips.map(c => <button key={c} onClick={() => setInput(c)} style={{ fontSize:"12px", fontWeight:500, borderRadius:"100px", padding:"6px 13px", background:"white", border:"1.5px solid #D0DCF0", color:"#1B3A6B" }}>{c}</button>)}
             </div>
           </div>
         )}
         <div className="px-4 py-3 space-y-3">
           {msgs.map((m,i) => (
-            <div key={i} className={`flex ${m.role==="user"?"justify-end":"justify-start"}`}>
-              <div className="rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap" style={{ maxWidth:"85%", background:m.role==="user"?"#1B3A6B":"white", color:m.role==="user"?"white":"#1f2937", borderBottomRightRadius:m.role==="user"?"4px":undefined, borderBottomLeftRadius:m.role==="assistant"?"4px":undefined, boxShadow:m.role==="assistant"?"0 1px 4px rgba(0,0,0,0.07)":undefined, border:m.role==="assistant"?"1px solid #f0f0f0":undefined }}>{m.content}</div>
+            <div key={i} className={`flex ${m.role==="user"?"justify-end":"justify-start"} fade-up`}>
+              <div style={{ maxWidth:"85%", background:m.role==="user"?"linear-gradient(135deg,#1B3A6B,#2E75B6)":"white", color:m.role==="user"?"white":"#1C2B3A", borderRadius:"18px", borderBottomRightRadius:m.role==="user"?"4px":"18px", borderBottomLeftRadius:m.role==="assistant"?"4px":"18px", padding:"10px 14px", fontSize:"13.5px", lineHeight:"1.65", whiteSpace:"pre-wrap", boxShadow:m.role==="assistant"?"0 1px 8px rgba(27,58,107,0.09)":"0 2px 10px rgba(27,58,107,0.22)", border:m.role==="assistant"?"1px solid rgba(27,58,107,0.07)":undefined }}>{m.content}</div>
             </div>
           ))}
           {loading && <TypingDots />}
           <div ref={endRef} />
         </div>
       </div>
-      <div className="bg-white border-t border-gray-200 px-4 py-3 flex gap-2" style={{ flexShrink:0 }}>
-        <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==="Enter"&&send()} placeholder="Ask about any car or variant…" disabled={loading} className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none bg-gray-50" />
-        <button onClick={send} disabled={loading||!input.trim()} className="text-white rounded-xl px-4 py-2.5 text-sm font-medium disabled:opacity-40 flex items-center gap-1" style={{ background:"#1B3A6B" }}>{loading?<Spinner small />:"Send"}</button>
+      <div style={{ background:"white", borderTop:"1px solid #E4EBF5", padding:"10px 14px", flexShrink:0, display:"flex", gap:"8px", alignItems:"center" }}>
+        <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==="Enter"&&send()} placeholder="Ask about any car or variant…" disabled={loading} style={{ flex:1, border:"1.5px solid #DDE6F2", borderRadius:"12px", padding:"10px 14px", fontSize:"13px", outline:"none", background:"#F5F8FD", color:"#1C2B3A" }} />
+        <button onClick={startVoice} disabled={loading} title={listening?"Listening…":"Tap to speak"} style={{ background:listening?"#FEE2E2":"#F0F4FA", border:"1.5px solid #DDE6F2", borderRadius:"12px", padding:"10px 12px", fontSize:"18px", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, minWidth:"44px" }}>{listening?"🔴":"🎤"}</button>
+        <button onClick={send} disabled={loading||!input.trim()} style={{ background:"#1B3A6B", color:"white", borderRadius:"12px", padding:"10px 16px", fontSize:"13px", fontWeight:600, border:"none", display:"flex", alignItems:"center", gap:"4px", opacity:loading||!input.trim()?0.4:1 }}>{loading?<Spinner small />:"Send"}</button>
       </div>
     </div>
   );
@@ -385,9 +388,11 @@ function QuizTab() {
   async function gen() {
     setPhase("loading"); setErrMsg("");
     const scope = car==="All Cars"?"all the Maruti Suzuki Arena cars":`the ${car}`;
-    const p = `Generate exactly 5 multiple choice quiz questions for a car salesperson training about ${scope}.\nDifficulty: ${diff}\nSource:\n${CAR_DATA}\nRules: test variant features, mileage figures, engine specs. 4 options (A B C D), one correct.\nReturn ONLY JSON array:\n[{"question":"...","options":{"A":"...","B":"...","C":"...","D":"..."},"answer":"A","explanation":"..."}]`;
+    const categories = ["engine specs","mileage/fuel efficiency","variant upgrades & features","safety features & airbags","technology & infotainment","boot space & dimensions","transmission options","CNG availability & range","unique selling points","practical customer scenarios"];
+    const picked = categories.sort(()=>Math.random()-0.5).slice(0,5);
+    const p = `Generate exactly 5 multiple choice quiz questions for a car salesperson training about ${scope}.\nDifficulty: ${diff}\nEach question MUST cover a different topic from this list (one per question): ${picked.join(", ")}.\nSource:\n${CAR_DATA}\nRules:\n- Each of the 5 questions tests a DIFFERENT aspect listed above\n- No two questions should feel similar or overlap\n- Use specific numbers, variant names, and features from the source data\n- 4 options (A B C D), exactly one correct, plausible wrong answers\nReturn ONLY a valid JSON array (no extra text):\n[{"question":"...","options":{"A":"...","B":"...","C":"...","D":"..."},"answer":"A","explanation":"..."}]`;
     try {
-      const raw = await callGroq([{ role:"user", content:p }], 2048, 0.5);
+      const raw = await callGroq([{ role:"user", content:p }], 2048, 0.9);
       const m = raw.match(/\[[\s\S]*\]/);
       if (!m) throw new Error("No JSON — please try again");
       const parsed = JSON.parse(m[0]);
@@ -563,23 +568,23 @@ function RoleplayTab() {
           {fbLoading?<><Spinner small /><span>Analyzing…</span></>:"End & Feedback"}
         </button>
       </div>
-      <div style={{ flex:1, overflowY:"auto", background:"#f9fafb" }} className="px-4 py-3 space-y-3">
+      <div style={{ flex:1, overflowY:"auto", background:"#EEF3FA" }} className="px-4 py-3 space-y-3">
         {msgs.map((m,i) => (
-          <div key={i} className={`flex ${m.role==="salesperson"?"justify-end":"justify-start"}`}>
+          <div key={i} className={`flex ${m.role==="salesperson"?"justify-end":"justify-start"} fade-up`}>
             <div className={m.role==="customer"?"flex gap-2 items-start":""} style={{ maxWidth:"85%" }}>
               {m.role==="customer" && <span className="text-xl flex-shrink-0 mt-0.5">👤</span>}
-              <div className="rounded-2xl px-4 py-2.5 text-sm leading-relaxed" style={{ background:m.role==="salesperson"?"#1B3A6B":"white", color:m.role==="salesperson"?"white":"#1f2937", borderBottomRightRadius:m.role==="salesperson"?"4px":undefined, borderBottomLeftRadius:m.role==="customer"?"4px":undefined }}>{m.content}</div>
+              <div style={{ background:m.role==="salesperson"?"linear-gradient(135deg,#1B3A6B,#2E75B6)":"white", color:m.role==="salesperson"?"white":"#1C2B3A", borderRadius:"18px", borderBottomRightRadius:m.role==="salesperson"?"4px":"18px", borderBottomLeftRadius:m.role==="customer"?"4px":"18px", padding:"10px 14px", fontSize:"13.5px", lineHeight:"1.65", boxShadow:m.role==="customer"?"0 1px 8px rgba(27,58,107,0.09)":"0 2px 10px rgba(27,58,107,0.22)", border:m.role==="customer"?"1px solid rgba(27,58,107,0.07)":undefined }}>{m.content}</div>
             </div>
           </div>
         ))}
         {loading && <TypingDots />}
         <div ref={endRef} />
       </div>
-      <div className="bg-white border-t border-gray-200 px-4 py-3" style={{ flexShrink:0 }}>
-        {exchanges>=6 && <p className="text-xs text-amber-600 text-center mb-2">💡 Good session — ready for feedback!</p>}
+      <div style={{ background:"white", borderTop:"1px solid #E4EBF5", padding:"10px 14px", flexShrink:0 }}>
+        {exchanges>=6 && <p style={{ fontSize:"12px", color:"#D97706", textAlign:"center", marginBottom:"8px" }}>💡 Good session — ready for feedback!</p>}
         <div className="flex gap-2">
-          <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder="Your pitch or reply…" disabled={loading||fbLoading} className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none bg-gray-50" />
-          <button onClick={send} disabled={loading||!input.trim()} className="text-white rounded-xl px-4 py-2.5 text-sm font-medium disabled:opacity-40 flex items-center" style={{ background:"#1B3A6B" }}>{loading?<Spinner small />:"Send"}</button>
+          <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder="Your pitch or reply…" disabled={loading||fbLoading} style={{ flex:1, border:"1.5px solid #DDE6F2", borderRadius:"12px", padding:"10px 14px", fontSize:"13px", outline:"none", background:"#F5F8FD", color:"#1C2B3A" }} />
+          <button onClick={send} disabled={loading||!input.trim()} style={{ background:"#1B3A6B", color:"white", borderRadius:"12px", padding:"10px 16px", fontSize:"13px", fontWeight:600, border:"none", display:"flex", alignItems:"center", opacity:loading||!input.trim()?0.4:1 }}>{loading?<Spinner small />:"Send"}</button>
         </div>
       </div>
     </div>
@@ -588,20 +593,20 @@ function RoleplayTab() {
   return (
     <div className="tab-content"><Header title="Customer Roleplay" />
       <div style={{ flex:1, overflowY:"auto" }} className="px-4 py-4">
-        <div className="text-center mb-5"><div className="text-3xl mb-1">🎭</div><h2 className="text-lg font-bold" style={{ color:"#1B3A6B" }}>Choose a Customer Profile</h2><p className="text-gray-500 text-xs mt-1">Practice your pitch in a realistic scenario</p></div>
+        <div style={{ textAlign:"center", marginBottom:"20px" }}><div style={{ fontSize:"32px", marginBottom:"6px" }}>🎭</div><h2 style={{ fontSize:"17px", fontWeight:700, color:"#1B3A6B", margin:"0 0 4px" }}>Choose a Customer</h2><p style={{ fontSize:"12px", color:"#7A90AA", margin:0 }}>Practice your pitch in a realistic scenario</p></div>
         <div className="space-y-2.5 mb-4">
           {PROFILES.map(p=>(
-            <button key={p.title} onClick={()=>start(`${p.icon} ${p.title}: ${p.desc}`)} className="w-full bg-white border border-gray-200 rounded-2xl p-4 text-left hover:shadow-sm transition-all flex items-center gap-3">
-              <span className="text-2xl">{p.icon}</span>
-              <div><p className="font-semibold text-sm" style={{ color:"#1B3A6B" }}>{p.title}</p><p className="text-gray-500 text-xs">{p.desc}</p></div>
-              <span className="ml-auto text-gray-300 text-lg">›</span>
+            <button key={p.title} onClick={()=>start(`${p.icon} ${p.title}: ${p.desc}`)} style={{ width:"100%", background:"white", border:"1px solid rgba(27,58,107,0.1)", borderRadius:"16px", padding:"14px 16px", textAlign:"left", display:"flex", alignItems:"center", gap:"12px", boxShadow:"0 1px 6px rgba(27,58,107,0.06)" }}>
+              <span style={{ fontSize:"26px", flexShrink:0 }}>{p.icon}</span>
+              <div style={{ flex:1 }}><p style={{ fontWeight:600, fontSize:"14px", color:"#1B3A6B", margin:"0 0 2px" }}>{p.title}</p><p style={{ fontSize:"12px", color:"#7A90AA", margin:0 }}>{p.desc}</p></div>
+              <span style={{ color:"#CBD5E1", fontSize:"18px", flexShrink:0 }}>›</span>
             </button>
           ))}
         </div>
-        <div className="bg-white border border-gray-200 rounded-2xl p-4">
-          <p className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">Custom Profile</p>
-          <textarea value={custom} onChange={e=>setCustom(e.target.value)} rows={3} placeholder="e.g. Retired couple, budget ₹15L, wants comfortable sedan for long drives…" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none resize-none bg-gray-50" />
-          <button onClick={()=>custom.trim()&&start(custom.trim())} disabled={!custom.trim()} className="mt-2 w-full text-white py-2.5 rounded-xl text-sm font-semibold disabled:opacity-40" style={{ background:"#2E75B6" }}>Start with Custom Profile</button>
+        <div style={{ background:"white", border:"1px solid rgba(27,58,107,0.1)", borderRadius:"16px", padding:"16px", boxShadow:"0 1px 6px rgba(27,58,107,0.06)" }}>
+          <p className="section-label">Custom Profile</p>
+          <textarea value={custom} onChange={e=>setCustom(e.target.value)} rows={3} placeholder="e.g. Retired couple, budget ₹15L, wants comfortable sedan for long drives…" style={{ width:"100%", border:"1.5px solid #DDE6F2", borderRadius:"12px", padding:"10px 14px", fontSize:"13px", outline:"none", background:"#F5F8FD", resize:"none", color:"#1C2B3A", boxSizing:"border-box" }} />
+          <button onClick={()=>custom.trim()&&start(custom.trim())} disabled={!custom.trim()} style={{ marginTop:"10px", width:"100%", background:"#2E75B6", color:"white", padding:"11px", borderRadius:"12px", fontSize:"13px", fontWeight:600, border:"none", opacity:!custom.trim()?0.4:1 }}>Start with Custom Profile</button>
         </div>
       </div>
     </div>
@@ -616,9 +621,10 @@ function MatchTab() {
   const [err, setErr] = useState("");
 
   const Chips = ({ label, field, opts }) => (
-    <div><p className="text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">{label}</p>
+    <div>
+      <p className="section-label">{label}</p>
       <div className="flex flex-wrap gap-1.5">
-        {opts.map(o=><button key={o} onClick={()=>setForm(f=>({...f,[field]:o}))} className="text-xs px-3 py-1.5 rounded-full border font-medium" style={form[field]===o?{background:"#1B3A6B",color:"white",borderColor:"#1B3A6B"}:{background:"#f9fafb",color:"#4b5563",borderColor:"#e5e7eb"}}>{o}</button>)}
+        {opts.map(o=><button key={o} onClick={()=>setForm(f=>({...f,[field]:o}))} style={form[field]===o?{fontSize:"12px",fontWeight:600,borderRadius:"100px",padding:"5px 14px",background:"#1B3A6B",color:"white",border:"1.5px solid #1B3A6B"}:{fontSize:"12px",fontWeight:500,borderRadius:"100px",padding:"5px 14px",background:"white",color:"#374151",border:"1.5px solid #DDE5EF"}}>{o}</button>)}
       </div>
     </div>
   );
@@ -953,51 +959,130 @@ function FlashcardsTab() {
   );
 }
 
-// ── Bottom Nav (6 tabs) ────────────────────────────────────────────────────────
+// ── TAB 7 — Objection Handler ─────────────────────────────────────────────
+function ObjectionTab() {
+  const [custom, setCustom] = useState("");
+  const [reply, setReply] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [active, setActive] = useState("");
+
+  const OBJECTIONS = [
+    "It's too expensive",
+    "I want a diesel car",
+    "Hyundai has more features",
+    "Tata cars are safer",
+    "Can you give more discount?",
+    "The mileage figures seem fake",
+    "Boot space is too small",
+    "I need a 7-seater",
+    "The design looks too plain",
+    "Maruti service is expensive",
+    "Automatic is too costly",
+    "I'll wait for the new model",
+  ];
+
+  async function handle(obj) {
+    setActive(obj); setReply(""); setLoading(true);
+    const p = `You are a senior Maruti Suzuki Arena sales trainer coaching a salesperson.\nA customer just said: "${obj}"\n\nUsing this real product data:\n${CAR_DATA}\n\nWrite a confident, natural rebuttal the salesperson can say immediately. Structure:\n1. One sentence acknowledging the concern (don't be defensive)\n2. Two or three factual counter-points using specific data from the car specs above\n3. One sentence redirecting to a specific Maruti model/variant that best addresses the concern\n\nKeep it concise (under 120 words), conversational, and persuasive. No bullet points — write as flowing speech.`;
+    try {
+      const r = await callGroq([{ role:"user", content:p }], 600, 0.75);
+      setReply(r);
+    } catch(e) { setReply("❌ " + e.message); }
+    finally { setLoading(false); }
+  }
+
+  return (
+    <div className="tab-content">
+      <Header title="Objection Handler" />
+      <div style={{ flex:1, overflowY:"auto" }} className="px-4 py-4">
+        <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-3">Tap an objection — get your rebuttal instantly</p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {OBJECTIONS.map(o => (
+            <button key={o} onClick={() => handle(o)}
+              className="text-xs rounded-full px-3 py-1.5 border font-medium"
+              style={{ background:active===o?"#1B3A6B":"white", color:active===o?"white":"#1B3A6B", borderColor:"#1B3A6B" }}>
+              {o}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-2 mb-5">
+          <input value={custom} onChange={e=>setCustom(e.target.value)} onKeyDown={e=>e.key==="Enter"&&custom.trim()&&handle(custom.trim())} placeholder="Or type a custom objection…" className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none bg-gray-50" />
+          <button onClick={()=>custom.trim()&&handle(custom.trim())} disabled={!custom.trim()||loading} className="text-white rounded-xl px-4 py-2.5 text-sm font-medium disabled:opacity-40" style={{ background:"#1B3A6B" }}>Go</button>
+        </div>
+        {loading && (
+          <div className="flex items-center gap-3 py-8 justify-center">
+            <div className="spin w-6 h-6 border-2 rounded-full" style={{ borderColor:"#2E75B6", borderTopColor:"transparent" }} />
+            <p className="text-sm text-gray-500">Crafting your rebuttal…</p>
+          </div>
+        )}
+        {reply && !loading && (
+          <div className="bg-white rounded-2xl p-4 border border-gray-100" style={{ boxShadow:"0 1px 6px rgba(0,0,0,0.07)" }}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-xl">🛡️</span>
+              <p className="text-xs font-bold uppercase tracking-wide" style={{ color:"#1B3A6B" }}>Rebuttal for: "{active}"</p>
+            </div>
+            <p className="text-sm text-gray-700 leading-relaxed">{reply}</p>
+            <button onClick={()=>handle(active)} className="mt-3 text-xs font-medium" style={{ color:"#2E75B6", background:"none", border:"none", cursor:"pointer", padding:0 }}>↻ Regenerate</button>
+          </div>
+        )}
+        {!loading && !reply && (
+          <div className="text-center py-10">
+            <div className="text-5xl mb-3">🛡️</div>
+            <p className="text-gray-500 text-sm font-medium">Tap any objection above</p>
+            <p className="text-gray-400 text-xs mt-1">Get a data-backed, natural rebuttal in seconds</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Bottom Nav (7 tabs) ────────────────────────────────────────────────────
 const TABS = [
-  { id:"ask",       icon:"🔍", label:"Ask" },
-  { id:"quiz",      icon:"🧠", label:"Quiz" },
-  { id:"roleplay",  icon:"🎭", label:"Roleplay" },
-  { id:"match",     icon:"🎯", label:"Match" },
-  { id:"compare",   icon:"⚖️", label:"Compare" },
-  { id:"flashcards",icon:"🃏", label:"Flashcards" },
+  { id:"ask",        icon:"🔍", label:"Ask"        },
+  { id:"quiz",       icon:"🧠", label:"Quiz"       },
+  { id:"roleplay",   icon:"🎭", label:"Roleplay"   },
+  { id:"match",      icon:"🎯", label:"Match"      },
+  { id:"compare",    icon:"⚖️",  label:"Compare"    },
+  { id:"flashcards", icon:"🃏", label:"Cards"      },
+  { id:"objections", icon:"🛡️", label:"Rebuttals"  },
 ];
 
-function BottomNav({ active, onChange }) {
+function BottomNav({ tab, setTab }) {
   return (
-    <div className="bg-white border-t border-gray-200 flex" style={{ flexShrink:0 }}>
+    <div style={{ background:"white", borderTop:"1px solid #E4EBF5", flexShrink:0, boxShadow:"0 -2px 10px rgba(27,58,107,0.06)" }} className="flex">
       {TABS.map(t => (
-        <button key={t.id} onClick={()=>onChange(t.id)} className="flex-1 flex flex-col items-center py-2 gap-0.5 transition-colors" style={{ color:active===t.id?"#1B3A6B":"#9ca3af" }}>
-          <span style={{ fontSize:"18px" }}>{t.icon}</span>
-          <span style={{ fontSize:"9px", fontWeight:600 }}>{t.label}</span>
-          {active===t.id && <div className="w-1 h-1 rounded-full" style={{ background:"#1B3A6B" }} />}
+        <button key={t.id} onClick={()=>setTab(t.id)}
+          style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", paddingTop:"8px", paddingBottom:"8px", gap:"2px", border:"none", background:"none", cursor:"pointer" }}>
+          <span style={{ fontSize:"18px", lineHeight:1, opacity: tab===t.id ? 1 : 0.35 }}>{t.icon}</span>
+          <span style={{ fontSize:"9px", fontWeight: tab===t.id ? 700 : 500, color: tab===t.id ? "#1B3A6B" : "#94A3B8" }}>{t.label}</span>
+          <div style={{ height:"2.5px", width: tab===t.id ? "20px" : "0px", background:"#1B3A6B", borderRadius:"2px", transition:"width 0.2s ease", marginTop:"1px" }} />
         </button>
       ))}
     </div>
   );
 }
 
-// ── Root ──────────────────────────────────────────────────────────────────────
+// ── App ────────────────────────────────────────────────────────────────────
 function App() {
   const [started, setStarted] = useState(false);
   const [tab, setTab] = useState("ask");
-  if (!started) return <SplashScreen onStart={()=>setStarted(true)} />;
+  if (!started) return <SplashScreen onStart={() => setStarted(true)} />;
   return (
-    <div style={{ display:"flex", flexDirection:"column", height:"100vh", maxWidth:"480px", margin:"0 auto", background:"#f9fafb" }}>
-      <div style={{ flex:1, overflow:"hidden", display:"flex", flexDirection:"column" }}>
-        {tab==="ask"        && <AskTab />}
-        {tab==="quiz"       && <QuizTab />}
-        {tab==="roleplay"   && <RoleplayTab />}
-        {tab==="match"      && <MatchTab />}
-        {tab==="compare"    && <CompareTab />}
-        {tab==="flashcards" && <FlashcardsTab />}
-      </div>
-      <BottomNav active={tab} onChange={setTab} />
+    <div style={{ height:"100vh", display:"flex", flexDirection:"column", background:"#f3f4f6" }}>
+      {tab === "ask"        && <AskTab />}
+      {tab === "quiz"       && <QuizTab />}
+      {tab === "roleplay"   && <RoleplayTab />}
+      {tab === "match"      && <MatchTab />}
+      {tab === "compare"    && <CompareTab />}
+      {tab === "flashcards" && <FlashcardsTab />}
+      {tab === "objections" && <ObjectionTab />}
+      <BottomNav tab={tab} setTab={setTab} />
     </div>
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
 </body>
 </html>
