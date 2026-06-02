@@ -703,12 +703,267 @@ const SPEC_ROWS = [
   { label:"Top Variant",     key:"topVariant" },
 ];
 
+// ── Competition comparison data (from official training PPTX) ─────────────────
+const COMPETITION_MATCHUPS = {
+  "Alto K10 VXi+ vs Kwid RXT": {
+    marutiCar:"Alto K10", marutiVariant:"VXi+ (AGS)",
+    rivalCar:"Renault Kwid", rivalVariant:"RXT",
+    rows:[
+      { feature:"Overall Height",               maruti:"1520 mm",         rival:"1490 mm (-30)",   marutiBetter:true  },
+      { feature:"Speakers",                     maruti:"4 (Front+Rear)",  rival:"2 Front only",    marutiBetter:true  },
+      { feature:"Steering Audio & Voice Ctrl",  maruti:true,              rival:false              },
+      { feature:"SmartPlay Studio Touchscreen", maruti:true,              rival:false              },
+      { feature:"Vehicle Alerts",               maruti:true,              rival:false              },
+      { feature:"Auto Gear Shift (AGS)",        maruti:true,              rival:false              },
+      { feature:"Digital Clock",                maruti:true,              rival:false              },
+      { feature:"2 Front Wipers & Washer",      maruti:true,              rival:"Only 1 Wiper",    marutiBetter:true  },
+      { feature:"Wheel Lug Nuts",               maruti:"4",               rival:"3",               marutiBetter:true  },
+      { feature:"Layered Modern Dashboard",     maruti:true,              rival:false              },
+      { feature:"Dual-Tone Interiors",          maruti:true,              rival:false              },
+      { feature:"Body-Coloured Door Handles",   maruti:true,              rival:false              },
+      { feature:"Silver Accent on Centre Garnish", maruti:true,           rival:"Black Centre Fascia", marutiBetter:true },
+    ],
+    salesPitch:"Alto K10 VXi+ AGS wins on interior quality, 4-speaker audio, SmartPlay Studio touchscreen and AGS automatic — all at a competitive price point."
+  },
+  "Celerio ZXi+ vs Tiago XZ+": {
+    marutiCar:"Celerio", marutiVariant:"ZXi+ MT",
+    rivalCar:"Tata Tiago", rivalVariant:"XZ+ MT",
+    rows:[
+      { feature:"Overall Length",         maruti:"3695 mm",    rival:"3765 mm",       marutiBetter:false },
+      { feature:"Overall Width",          maruti:"1655 mm",    rival:"1677 mm",       marutiBetter:false },
+      { feature:"Overall Height",         maruti:"1555 mm",    rival:"1535 mm (-20)", marutiBetter:true  },
+      { feature:"Wheelbase",              maruti:"2435 mm",    rival:"2400 mm (-35)", marutiBetter:true  },
+      { feature:"Fuel Efficiency",        maruti:"24.97 kmpl", rival:"19.8 kmpl*",    marutiBetter:true  },
+      { feature:"Luggage Capacity",       maruti:"313 L",      rival:"242 L (-71L)",  marutiBetter:true  },
+      { feature:"Tyre Size",              maruti:"175/60 R15", rival:"175/60 R15",    marutiBetter:false },
+      { feature:"Colour Options",         maruti:"6",          rival:"5",             marutiBetter:true  },
+      { feature:"Black B Pillars",        maruti:true,         rival:true             },
+      { feature:"15\" Alloy Wheels",      maruti:true,         rival:true             },
+      { feature:"Driver Seat Height Adj", maruti:true,         rival:true             },
+    ],
+    salesPitch:"Celerio ZXi+ has significantly better fuel efficiency (25 vs 19.8 kmpl), a bigger boot (313 vs 242L), and taller cabin — better value for the money."
+  },
+  "Swift ZXi+ vs i20 Sportz(O)": {
+    marutiCar:"Swift", marutiVariant:"ZXi+",
+    rivalCar:"Hyundai i20", rivalVariant:"Sportz (O)",
+    rows:[
+      { feature:"Keyless Entry + Push Start", maruti:true, rival:false },
+      { feature:"Rear Wiper & Washer",        maruti:true, rival:false },
+      { feature:"60:40 Rear Seat Split",      maruti:true, rival:false },
+      { feature:"Auto Up/Down Window (Driver) with Pinch Guard", maruti:true, rival:false },
+      { feature:"Chrome Inside Door Handles", maruti:true, rival:false },
+      { feature:"Wireless Charger",           maruti:true, rival:false },
+      { feature:"Rear AC Vents",              maruti:true, rival:false },
+      { feature:"ARKAMYS Surround Sound",     maruti:true, rival:false },
+    ],
+    salesPitch:"Swift ZXi+ beats i20 Sportz(O) on keyless entry, rear wiper, 60:40 split seat and wireless charger — offering more convenience features at a lower price."
+  },
+  "Swift ZXi vs Exter SX (CNG)": {
+    marutiCar:"Swift", marutiVariant:"ZXi CNG",
+    rivalCar:"Hyundai Exter", rivalVariant:"SX CNG",
+    rows:[
+      { feature:"CNG Fuel Efficiency",   maruti:"32.85 km/kg",   rival:"27.1 km/kg",    marutiBetter:true  },
+      { feature:"Length",                maruti:"3860 mm (+45)", rival:"3815 mm",        marutiBetter:true  },
+      { feature:"Width",                 maruti:"1735 mm (+25)", rival:"1710 mm",        marutiBetter:true  },
+      { feature:"Power",                 maruti:"51.3 kW@5700",  rival:"50.5 kW@6000",  marutiBetter:true  },
+      { feature:"Torque",                maruti:"101.8 Nm@2900", rival:"95.2 Nm@4000",  marutiBetter:true  },
+      { feature:"Wireless Charger",      maruti:true,            rival:false            },
+      { feature:"Auto Headlamps",        maruti:true,            rival:false            },
+      { feature:"Auto Up/Down + Anti-Pinch (Driver)", maruti:true, rival:false          },
+      { feature:"Rear Wiper & Washer",   maruti:true,            rival:false            },
+    ],
+    salesPitch:"Swift ZXi CNG saves ₹44,522+ on fuel over Exter SX CNG (5yr/90,000km), and is a bigger car with more power, better CNG range and more features."
+  },
+  "Dzire ZXi+ vs Aura SX(O)": {
+    marutiCar:"Dzire", marutiVariant:"ZXi+",
+    rivalCar:"Hyundai Aura", rivalVariant:"SX(O)",
+    rows:[
+      { feature:"Width × Height",        maruti:"1735×1525 mm",  rival:"1680×1520 mm",  marutiBetter:true  },
+      { feature:"Electric Sunroof",      maruti:true,            rival:false            },
+      { feature:"360° HD View Camera",   maruti:true,            rival:false            },
+      { feature:"Infotainment Size",     maruti:"22.86 cm",      rival:"20.25 cm",      marutiBetter:true  },
+      { feature:"Advanced Telematics (Suzuki Connect)", maruti:true, rival:false        },
+      { feature:"Fuel Efficiency (AT)",  maruti:"25.71 kmpl",    rival:"20.30 kmpl",    marutiBetter:true  },
+    ],
+    salesPitch:"Dzire ZXi+ wins on fuel efficiency (saves ₹88,365 over 5yr/90,000km vs Aura), plus adds sunroof, 360° camera and bigger touchscreen — Aura SX(O) doesn't offer any of these."
+  },
+};
+
+const COMPETITION_KEYS = Object.keys(COMPETITION_MATCHUPS);
+
+// ── Variant feature data ───────────────────────────────────────────────────────
+const VARIANT_FEATURES = {
+  "Alto K10": {
+    variants: ["STD MT","LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+    features: {
+      "Dual Airbags":                  ["STD MT","LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "ABS with EBD":                  ["STD MT","LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Reverse Parking Sensor":        ["STD MT","LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Speed Alert System":            ["STD MT","LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Air Conditioner with Heater":   ["LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Power Steering":                ["LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Front Power Windows":           ["VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Central Door Locking":          ["VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Body-Coloured Outside Handles": ["VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "SmartPlay Dock + BT + 2 Spkrs": ["VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Speed Sensing Auto Door Lock":  ["VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Remote Keyless Entry":          ["VXi+(O) MT","VXi+(O) AGS"],
+      "SmartPlay Studio (17.78cm)":    ["VXi+(O) MT","VXi+(O) AGS"],
+      "Android Auto & Apple CarPlay":  ["VXi+(O) MT","VXi+(O) AGS"],
+      "4 Speakers (F+R)":              ["VXi+(O) MT","VXi+(O) AGS"],
+      "Steering Audio & Voice Ctrl":   ["VXi+(O) MT","VXi+(O) AGS"],
+      "Silver Accents (Handles/Wheel)":["VXi+(O) MT","VXi+(O) AGS"],
+      "Auto Gear Shift (AGS)":         ["VXi+(O) AGS"],
+      "CNG Factory Fitted":            ["LXi CNG","VXi(O) CNG"],
+    }
+  },
+  "S-Presso": {
+    variants: ["Std MT","LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+    features: {
+      "Dual Airbags":                  ["Std MT","LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "ABS with EBD":                  ["Std MT","LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Air Conditioner with Heater":   ["LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Power Steering":                ["LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Body-Coloured Bumpers & ORVMs": ["LXi MT","LXi CNG","VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Front Power Windows":           ["VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "Central Door Locking":          ["VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "SmartPlay Dock + BT + 2 Spkrs": ["VXi(O) MT","VXi(O) CNG","VXi+(O) MT","VXi+(O) AGS"],
+      "SmartPlay Studio (17.78cm)":    ["VXi+(O) MT","VXi+(O) AGS"],
+      "Android Auto & Apple CarPlay":  ["VXi+(O) MT","VXi+(O) AGS"],
+      "4 Speakers (F+R)":              ["VXi+(O) MT","VXi+(O) AGS"],
+      "Steering Audio & Voice Ctrl":   ["VXi+(O) MT","VXi+(O) AGS"],
+      "ESP (Electronic Stability Prog)":["VXi+(O) AGS"],
+      "Remote Keyless Entry":          ["VXi+(O) MT","VXi+(O) AGS"],
+      "Auto Gear Shift (AGS)":         ["VXi+(O) AGS"],
+      "CNG Factory Fitted":            ["LXi CNG","VXi(O) CNG"],
+    }
+  },
+  "Celerio": {
+    variants: ["LXi MT","VXi MT","VXi CNG","ZXi MT","ZXi+ MT","VXi AGS","ZXi AGS","ZXi+ AGS"],
+    features: {
+      "AC + Heater + Power Steering":  ["LXi MT","VXi MT","VXi CNG","ZXi MT","ZXi+ MT","VXi AGS","ZXi AGS","ZXi+ AGS"],
+      "Dual Airbags + ABS":            ["LXi MT","VXi MT","VXi CNG","ZXi MT","ZXi+ MT","VXi AGS","ZXi AGS","ZXi+ AGS"],
+      "Front Power Windows":           ["VXi MT","VXi CNG","ZXi MT","ZXi+ MT","VXi AGS","ZXi AGS","ZXi+ AGS"],
+      "Central Door Locking":          ["VXi MT","VXi CNG","ZXi MT","ZXi+ MT","VXi AGS","ZXi AGS","ZXi+ AGS"],
+      "Bluetooth + 2 Speakers":        ["VXi MT","VXi CNG","ZXi MT","ZXi+ MT","VXi AGS","ZXi AGS","ZXi+ AGS"],
+      "SmartPlay Studio Touchscreen":  ["ZXi MT","ZXi+ MT","ZXi AGS","ZXi+ AGS"],
+      "Android Auto & Apple CarPlay":  ["ZXi MT","ZXi+ MT","ZXi AGS","ZXi+ AGS"],
+      "Fog Lamps":                     ["ZXi MT","ZXi+ MT","ZXi AGS","ZXi+ AGS"],
+      "ESP":                           ["ZXi MT","ZXi+ MT","ZXi AGS","ZXi+ AGS"],
+      "Alloy Wheels (15\")":           ["ZXi+ MT","ZXi+ AGS"],
+      "Push Start / Smart Key":        ["ZXi+ MT","ZXi+ AGS"],
+      "Foldable ORVMs":                ["ZXi+ MT","ZXi+ AGS"],
+      "Gear Position Indicator":       ["VXi AGS","ZXi AGS","ZXi+ AGS"],
+      "Auto Gear Shift (AGS)":         ["VXi AGS","ZXi AGS","ZXi+ AGS"],
+      "CNG Factory Fitted":            ["VXi CNG"],
+    }
+  },
+  "WagonR": {
+    variants: ["LXi 1.0 MT","LXi 1.0 CNG","VXi 1.0 AGS","VXi 1.0 CNG","ZXi 1.0 AGS","ZXi+ 1.0 AGS","ZXi 1.2 MT","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+    features: {
+      "AC + Heater + Power Steering":  ["LXi 1.0 MT","LXi 1.0 CNG","VXi 1.0 AGS","VXi 1.0 CNG","ZXi 1.0 AGS","ZXi+ 1.0 AGS","ZXi 1.2 MT","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "Dual Airbags + ABS":            ["LXi 1.0 MT","LXi 1.0 CNG","VXi 1.0 AGS","VXi 1.0 CNG","ZXi 1.0 AGS","ZXi+ 1.0 AGS","ZXi 1.2 MT","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "Front Power Windows":           ["VXi 1.0 AGS","VXi 1.0 CNG","ZXi 1.0 AGS","ZXi+ 1.0 AGS","ZXi 1.2 MT","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "Central Door Locking":          ["VXi 1.0 AGS","VXi 1.0 CNG","ZXi 1.0 AGS","ZXi+ 1.0 AGS","ZXi 1.2 MT","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "1.2L Bigger Engine (90.9 PS)":  ["ZXi 1.2 MT","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "SmartPlay Studio Touchscreen":  ["ZXi+ 1.0 AGS","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "Android Auto & Apple CarPlay":  ["ZXi+ 1.0 AGS","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "4 Speakers (F+R)":              ["ZXi+ 1.0 AGS","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "Steering Audio Controls":       ["ZXi+ 1.0 AGS","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "Retractable ORVMs":             ["ZXi+ 1.0 AGS","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "Rear Wiper & Washer":           ["ZXi+ 1.0 AGS","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "White Instrument Cluster":      ["ZXi+ 1.0 AGS","ZXi+ 1.2 MT","ZXi+ 1.2 AGS"],
+      "Auto Gear Shift (AGS)":         ["VXi 1.0 AGS","ZXi 1.0 AGS","ZXi+ 1.0 AGS","ZXi+ 1.2 AGS"],
+      "CNG Factory Fitted":            ["LXi 1.0 CNG","VXi 1.0 CNG"],
+    }
+  },
+  "Swift": {
+    variants: ["LXi MT","VXi MT","VXi AMT","VXi(O) MT","VXi(O) AMT","VXi CNG","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+    features: {
+      "AC + Power Steering + Airbags":   ["LXi MT","VXi MT","VXi AMT","VXi(O) MT","VXi(O) AMT","VXi CNG","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "SmartPlay Pro (17.78cm) + Android Auto": ["VXi MT","VXi AMT","VXi(O) MT","VXi(O) AMT","VXi CNG","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "4 Speakers":                      ["VXi MT","VXi AMT","VXi(O) MT","VXi(O) AMT","VXi CNG","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Suzuki Connect (Telematics)":     ["VXi(O) MT","VXi(O) AMT","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Push Start / Smart Key":          ["VXi(O) MT","VXi(O) AMT","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "LED Headlamps":                   ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Alloy Wheels (15\")":             ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Wireless Charger":                ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Rear AC Vents":                   ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Auto AC":                         ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "60:40 Rear Seat Split":           ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "SmartPlay Pro+ (22.86cm)":        ["ZXi+ MT","ZXi+ AMT"],
+      "ARKAMYS Surround Sound":          ["ZXi+ MT","ZXi+ AMT"],
+      "Cruise Control":                  ["ZXi+ MT","ZXi+ AMT"],
+      "LED Fog Lamps":                   ["ZXi+ MT","ZXi+ AMT"],
+      "Precision-Cut Alloys":            ["ZXi+ MT","ZXi+ AMT"],
+      "Auto Gear (AMT)":                 ["VXi AMT","VXi(O) AMT","ZXi AMT","ZXi+ AMT"],
+      "CNG Factory Fitted":              ["VXi CNG","ZXi CNG"],
+    }
+  },
+  "Dzire": {
+    variants: ["LXi MT","VXi MT","VXi AMT","VXi CNG","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+    features: {
+      "AC + Power Steering + Airbags":     ["LXi MT","VXi MT","VXi AMT","VXi CNG","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "SmartPlay Pro (17.78cm)":           ["VXi MT","VXi AMT","VXi CNG","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Rear AC Vents":                     ["VXi MT","VXi AMT","VXi CNG","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Electrically Foldable ORVMs":       ["VXi MT","VXi AMT","VXi CNG","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Height Adj. Driver Seat":           ["VXi MT","VXi AMT","VXi CNG","ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "LED Crystal Vision Headlamps":      ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Painted Alloy Wheels":              ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Reverse Camera":                    ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Push Start / Smart Key":            ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Wireless Charger":                  ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "Suzuki Connect (Telematics)":       ["ZXi MT","ZXi AMT","ZXi CNG","ZXi+ MT","ZXi+ AMT"],
+      "SmartPlay Pro+ (22.86cm)":          ["ZXi+ MT","ZXi+ AMT"],
+      "Electric Sunroof":                  ["ZXi+ MT","ZXi+ AMT"],
+      "360° HD View Camera":               ["ZXi+ MT","ZXi+ AMT"],
+      "Cruise Control":                    ["ZXi+ MT","ZXi+ AMT"],
+      "ARKAMYS Surround Sound":            ["ZXi+ MT","ZXi+ AMT"],
+      "Precision-Cut Alloys":              ["ZXi+ MT","ZXi+ AMT"],
+      "Auto Gear (AMT)":                   ["VXi AMT","ZXi AMT","ZXi+ AMT"],
+      "CNG Factory Fitted":                ["VXi CNG","ZXi CNG"],
+    }
+  },
+  "Brezza": {
+    variants: ["LXi MT","LXi CNG","VXi MT","VXi AT","VXi CNG","ZXi MT","ZXi AT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+    features: {
+      "AC + Power Steering + 6 Airbags":   ["LXi MT","LXi CNG","VXi MT","VXi AT","VXi CNG","ZXi MT","ZXi AT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "SmartPlay Studio + Android Auto":   ["VXi MT","VXi AT","VXi CNG","ZXi MT","ZXi AT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Rear Defogger":                     ["VXi MT","VXi AT","VXi CNG","ZXi MT","ZXi AT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Smart Hybrid (SHVS)":               ["ZXi MT","ZXi AT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "LED Headlamps + Floating DRL":      ["ZXi MT","ZXi AT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Painted Alloy Wheels":              ["ZXi MT","ZXi AT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Rear Camera":                       ["ZXi MT","ZXi AT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Auto AC":                           ["ZXi MT","ZXi AT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Suzuki Connect":                    ["ZXi MT","ZXi AT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Rear Wiper & Washer":               ["ZXi MT","ZXi AT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "SmartPlay Pro+ (22.86cm)":          ["ZXi+ MT","ZXi+ AT"],
+      "ARKAMYS 8-Speaker + Subwoofer":     ["ZXi+ MT","ZXi+ AT"],
+      "360° Camera (11 views)":            ["ZXi+ MT","ZXi+ AT"],
+      "Electric Sunroof":                  ["ZXi+ MT","ZXi+ AT"],
+      "Head-Up Display (HUD)":             ["ZXi+ MT","ZXi+ AT"],
+      "Wireless Charger":                  ["ZXi+ MT","ZXi+ AT"],
+      "Cruise Control":                    ["ZXi+ MT","ZXi+ AT"],
+      "Auto Transmission (AT)":            ["VXi AT","ZXi AT","ZXi+ AT"],
+      "CNG Factory Fitted":                ["LXi CNG","VXi CNG","ZXi CNG"],
+    }
+  },
+};
+
 function CompareTab() {
+  const [mode, setMode] = useState("own"); // "own" | "vs" | "variant"
+  // own mode
   const [car1, setCar1] = useState("Swift");
   const [car2, setCar2] = useState("Dzire");
   const [showAI, setShowAI] = useState(false);
   const [aiText, setAiText] = useState("");
   const [loadingAI, setLoadingAI] = useState(false);
+  // competition mode
+  const [matchup, setMatchup] = useState(COMPETITION_KEYS[0]);
+  // variant mode
+  const [varCar, setVarCar] = useState("Swift");
+  const [var1, setVar1] = useState(0);
+  const [var2, setVar2] = useState(1);
 
   const c1 = CARS_STRUCTURED[car1];
   const c2 = CARS_STRUCTURED[car2];
@@ -724,90 +979,229 @@ function CompareTab() {
   }
 
   const sameCarSelected = car1 === car2;
+  const currentMatchup = COMPETITION_MATCHUPS[matchup];
+  const variantData = VARIANT_FEATURES[varCar];
+  const variantNames = variantData ? variantData.variants : [];
+  const v1name = variantNames[var1] || "";
+  const v2name = variantNames[var2] || "";
+
+  const MODE_TABS = [
+    { id:"own",     label:"Maruti vs Maruti" },
+    { id:"vs",      label:"vs Competition"   },
+    { id:"variant", label:"Variant Compare"  },
+  ];
 
   return (
     <div className="tab-content">
-      <Header title="Side-by-Side Compare" />
-      <div style={{ flex:1, overflowY:"auto", background:"#f9fafb" }} className="px-4 py-4">
+      <Header title="Compare" />
+      <div style={{ flex:1, overflowY:"auto", background:"#EEF3FA" }} className="px-3 py-3">
 
-        {/* Car selectors */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          {[[car1,setCar1,"Car 1"],[car2,setCar2,"Car 2"]].map(([val,setter,label])=>(
-            <div key={label}>
-              <p className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">{label}</p>
-              <select value={val} onChange={e=>{ setter(e.target.value); setShowAI(false); setAiText(""); }} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none font-semibold" style={{ color:"#1B3A6B" }}>
-                {CAR_NAMES.map(n=><option key={n}>{n}</option>)}
-              </select>
-            </div>
+        {/* Mode tabs */}
+        <div className="flex rounded-xl overflow-hidden border border-gray-200 mb-4" style={{ background:"white" }}>
+          {MODE_TABS.map(m=>(
+            <button key={m.id} onClick={()=>setMode(m.id)}
+              className="flex-1 text-xs font-semibold py-2.5 transition-all"
+              style={{ background: mode===m.id ? "#1B3A6B" : "white", color: mode===m.id ? "white" : "#6B7280" }}>
+              {m.label}
+            </button>
           ))}
         </div>
 
-        {sameCarSelected && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 text-xs text-amber-700 text-center">Please select two different cars to compare</div>
-        )}
-
-        {!sameCarSelected && (
+        {/* ── OWN MODE ── */}
+        {mode==="own" && (
           <>
-            {/* Header row */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-3">
-              <div className="grid grid-cols-3 border-b border-gray-100">
-                <div className="p-3 bg-gray-50" />
-                <div className="p-3 text-center border-l border-gray-100" style={{ background:"#eef2f9" }}>
-                  <p className="text-xs font-bold" style={{ color:"#1B3A6B" }}>{car1}</p>
-                </div>
-                <div className="p-3 text-center border-l border-gray-100" style={{ background:"#eef2f9" }}>
-                  <p className="text-xs font-bold" style={{ color:"#1B3A6B" }}>{car2}</p>
-                </div>
-              </div>
-              <table className="cmp-table">
-                <tbody>
-                  {SPEC_ROWS.map(row => {
-                    const v1 = c1[row.key] || "—";
-                    const v2 = c2[row.key] || "—";
-                    const diff = v1 !== v2;
-                    return (
-                      <tr key={row.key}>
-                        <th>{row.label}</th>
-                        <td className={`cmp-cell ${diff?"cmp-diff":""}`} style={{ color:"#1f2937" }}>{v1}</td>
-                        <td className={`cmp-cell ${diff?"cmp-diff":""} border-l border-gray-50`} style={{ color:"#1f2937" }}>{v2}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              <div className="px-3 pb-2 pt-1">
-                <p className="text-[10px] text-amber-600">🟡 Highlighted rows = values differ between the two cars</p>
-              </div>
-            </div>
-
-            {/* Key features */}
             <div className="grid grid-cols-2 gap-3 mb-4">
-              {[{name:car1,data:c1},{name:car2,data:c2}].map(({name,data})=>(
-                <div key={name} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3">
-                  <p className="text-xs font-bold mb-2" style={{ color:"#1B3A6B" }}>⭐ {name} highlights</p>
-                  <p className="text-xs text-gray-600 leading-relaxed">{data.topFeatures}</p>
+              {[[car1,setCar1,"Car 1"],[car2,setCar2,"Car 2"]].map(([val,setter,label])=>(
+                <div key={label}>
+                  <p className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">{label}</p>
+                  <select value={val} onChange={e=>{ setter(e.target.value); setShowAI(false); setAiText(""); }}
+                    className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none font-semibold" style={{ color:"#1B3A6B" }}>
+                    {CAR_NAMES.map(n=><option key={n}>{n}</option>)}
+                  </select>
                 </div>
               ))}
             </div>
 
-            {/* AI Analysis */}
-            {!showAI && (
-              <button onClick={getAIAnalysis} className="w-full text-white py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
-                🤖 Get AI Sales Analysis
-              </button>
+            {sameCarSelected && (
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 text-xs text-amber-700 text-center">Select two different cars to compare</div>
             )}
-            {showAI && (
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-                <p className="text-xs font-bold mb-2" style={{ color:"#1B3A6B" }}>🤖 AI Sales Analysis — {car1} vs {car2}</p>
-                {loadingAI
-                  ? <div className="flex items-center gap-2 py-2"><Spinner small /><span className="text-xs text-gray-500">Analyzing…</span></div>
-                  : <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-wrap">{aiText}</p>
-                }
-                <button onClick={()=>{setShowAI(false);setAiText("");}} className="mt-3 text-xs text-gray-400 underline">Dismiss</button>
-              </div>
+
+            {!sameCarSelected && (
+              <>
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-3">
+                  <div className="grid grid-cols-3 border-b border-gray-100">
+                    <div className="p-3 bg-gray-50" />
+                    {[{name:car1},{name:car2}].map(({name})=>(
+                      <div key={name} className="p-3 text-center border-l border-gray-100" style={{ background:"#eef2f9" }}>
+                        <p className="text-xs font-bold" style={{ color:"#1B3A6B" }}>{name}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <table className="cmp-table">
+                    <tbody>
+                      {SPEC_ROWS.map(row => {
+                        const v1 = c1[row.key] || "—";
+                        const v2 = c2[row.key] || "—";
+                        const diff = v1 !== v2;
+                        return (
+                          <tr key={row.key}>
+                            <th>{row.label}</th>
+                            <td className={`cmp-cell ${diff?"cmp-diff":""}`} style={{ color:"#1f2937" }}>{v1}</td>
+                            <td className={`cmp-cell ${diff?"cmp-diff":""} border-l border-gray-50`} style={{ color:"#1f2937" }}>{v2}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  <div className="px-3 pb-2 pt-1">
+                    <p className="text-[10px] text-amber-600">🟡 Highlighted rows = values differ</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  {[{name:car1,data:c1},{name:car2,data:c2}].map(({name,data})=>(
+                    <div key={name} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3">
+                      <p className="text-xs font-bold mb-2" style={{ color:"#1B3A6B" }}>⭐ {name}</p>
+                      <p className="text-xs text-gray-600 leading-relaxed">{data.topFeatures}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {!showAI ? (
+                  <button onClick={getAIAnalysis} className="w-full text-white py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
+                    🤖 Get AI Sales Analysis
+                  </button>
+                ) : (
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+                    <p className="text-xs font-bold mb-2" style={{ color:"#1B3A6B" }}>🤖 AI Analysis — {car1} vs {car2}</p>
+                    {loadingAI
+                      ? <div className="flex items-center gap-2 py-2"><Spinner small /><span className="text-xs text-gray-500">Analyzing…</span></div>
+                      : <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-wrap">{aiText}</p>
+                    }
+                    <button onClick={()=>{setShowAI(false);setAiText("");}} className="mt-3 text-xs text-gray-400 underline">Dismiss</button>
+                  </div>
+                )}
+              </>
             )}
           </>
         )}
+
+        {/* ── COMPETITION MODE ── */}
+        {mode==="vs" && (
+          <>
+            <div className="mb-4">
+              <p className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Select Matchup</p>
+              <select value={matchup} onChange={e=>setMatchup(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none font-semibold" style={{ color:"#1B3A6B" }}>
+                {COMPETITION_KEYS.map(k=><option key={k}>{k}</option>)}
+              </select>
+            </div>
+
+            {/* Header badges */}
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <div className="rounded-2xl p-3 text-center" style={{ background:"#1B3A6B" }}>
+                <p className="text-white text-xs font-bold">{currentMatchup.marutiCar}</p>
+                <p className="text-blue-200 text-[10px] mt-0.5">{currentMatchup.marutiVariant}</p>
+              </div>
+              <div className="rounded-2xl p-3 text-center" style={{ background:"#6B7280" }}>
+                <p className="text-white text-xs font-bold">{currentMatchup.rivalCar}</p>
+                <p className="text-gray-300 text-[10px] mt-0.5">{currentMatchup.rivalVariant}</p>
+              </div>
+            </div>
+
+            {/* Comparison table */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-3">
+              <div className="grid grid-cols-3 border-b border-gray-100 bg-gray-50">
+                <div className="p-2"><p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Feature</p></div>
+                <div className="p-2 text-center border-l border-gray-100"><p className="text-[10px] font-bold uppercase tracking-wide" style={{ color:"#1B3A6B" }}>{currentMatchup.marutiCar}</p></div>
+                <div className="p-2 text-center border-l border-gray-100"><p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">{currentMatchup.rivalCar}</p></div>
+              </div>
+              {currentMatchup.rows.map((row,i)=>{
+                const marutiVal = row.maruti === true ? "✅" : row.maruti === false ? "—" : row.maruti;
+                const rivalVal  = row.rival  === true ? "✅" : row.rival  === false ? "❌" : row.rival;
+                const marutiWins = row.maruti===true && row.rival===false || row.marutiBetter;
+                return (
+                  <div key={i} className={`grid grid-cols-3 border-b border-gray-50 ${marutiWins?"":"opacity-90"}`}>
+                    <div className="p-2 bg-gray-50"><p className="text-[11px] text-gray-700 leading-tight">{row.feature}</p></div>
+                    <div className={`p-2 text-center border-l border-gray-100 ${marutiWins ? "bg-green-50":""}`}>
+                      <p className={`text-xs font-semibold ${marutiWins?"text-green-700":"text-gray-600"}`}>{marutiVal}</p>
+                    </div>
+                    <div className="p-2 text-center border-l border-gray-100">
+                      <p className={`text-xs ${!marutiWins && row.rival!==false?"font-semibold text-gray-700":"text-red-400"}`}>{rivalVal}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Sales pitch banner */}
+            <div className="rounded-2xl p-3 mb-2" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
+              <p className="text-white text-xs font-bold mb-1">💡 Sales Pitch</p>
+              <p className="text-blue-100 text-xs leading-relaxed">{currentMatchup.salesPitch}</p>
+            </div>
+          </>
+        )}
+
+        {/* ── VARIANT MODE ── */}
+        {mode==="variant" && (
+          <>
+            <div className="mb-3">
+              <p className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Choose Car</p>
+              <select value={varCar} onChange={e=>{ setVarCar(e.target.value); setVar1(0); setVar2(1); }}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none font-semibold" style={{ color:"#1B3A6B" }}>
+                {Object.keys(VARIANT_FEATURES).map(n=><option key={n}>{n}</option>)}
+              </select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {[[var1,setVar1,"Variant 1"],[var2,setVar2,"Variant 2"]].map(([val,setter,label])=>(
+                <div key={label}>
+                  <p className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">{label}</p>
+                  <select value={val} onChange={e=>setter(Number(e.target.value))}
+                    className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none font-semibold" style={{ color:"#1B3A6B" }}>
+                    {variantNames.map((n,i)=><option key={n} value={i}>{n}</option>)}
+                  </select>
+                </div>
+              ))}
+            </div>
+
+            {var1===var2 && (
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 text-xs text-amber-700 text-center">Select two different variants to compare</div>
+            )}
+
+            {var1!==var2 && variantData && (
+              <>
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-3">
+                  <div className="grid grid-cols-3 border-b border-gray-100 bg-gray-50">
+                    <div className="p-2"><p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Feature</p></div>
+                    <div className="p-2 text-center border-l border-gray-100"><p className="text-[10px] font-bold uppercase" style={{ color:"#1B3A6B" }}>{v1name}</p></div>
+                    <div className="p-2 text-center border-l border-gray-100"><p className="text-[10px] font-bold uppercase" style={{ color:"#1B3A6B" }}>{v2name}</p></div>
+                  </div>
+                  {Object.entries(variantData.features).map(([feat,hasVariants])=>{
+                    const has1 = hasVariants.includes(v1name);
+                    const has2 = hasVariants.includes(v2name);
+                    const rowColor = has1!==has2 ? "#FFFBEB" : "white";
+                    return (
+                      <div key={feat} className="grid grid-cols-3 border-b border-gray-50" style={{ background:rowColor }}>
+                        <div className="p-2 bg-gray-50"><p className="text-[11px] text-gray-700 leading-tight">{feat}</p></div>
+                        <div className="p-2 text-center border-l border-gray-100">
+                          <span className={`text-sm ${has1?"text-green-600":"text-gray-300"}`}>{has1?"✅":"—"}</span>
+                        </div>
+                        <div className="p-2 text-center border-l border-gray-100">
+                          <span className={`text-sm ${has2?"text-green-600":"text-gray-300"}`}>{has2?"✅":"—"}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-[10px] text-blue-700">
+                  🟡 Yellow rows = features that differ between the two variants. Use this to explain upgrade value to customers.
+                </div>
+              </>
+            )}
+          </>
+        )}
+
       </div>
     </div>
   );
