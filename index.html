@@ -98,7 +98,149 @@ EECO | Van/MPV | 1197cc K12N | 60.5 PS | 105.5 Nm | Petrol: 19.71 km/l | CNG: 26
 
 VICTORIS | Premium SUV | 1462cc K15C (Petrol/CNG) or 1490cc M15D (Strong Hybrid) | Petrol: 103.06 PS / CNG: 92.45 PS / Hybrid: 68+80 PS | Mileage: 21.18 MT / 21.06 AT / 27.02 CNG / 19.07 ALLGRIP / 28.65 eCVT | Tank: 45L | Variants: Lxi, Vxi, Zxi, Zxi(O), Zxi+, Zxi+(O) | Lxi: SmartPlay Pro 17.78cm, 6 airbags | Vxi: leatherette seats, 2 tweeters, Suzuki Connect | Zxi: LED headlamps, painted alloys, 360° camera (11 views), smart powered tailgate, wireless charger, PM2.5 filter | Zxi(O): adds panoramic sunroof | Zxi+: 25.65cm SmartPlay Pro X, Infinity 8-speaker + subwoofer, Dolby Atmos, Alexa Auto, 64-colour ambient lighting, ventilated seats, 8-way powered driver seat, HUD, Level 2 ADAS | Zxi+(O): adds panoramic sunroof + ALLGRIP AWD
 `;
-const SYS = `You are an expert Maruti Suzuki Arena sales trainer AI for Bharath Auto dealership. Use this car data:\n${CAR_DATA}\nBe helpful, accurate, concise. Use ₹ symbols. Suggest visiting showroom for exact on-road prices.`;
+
+// ── Victoris Palm Cue Card (sales training guide) ──────────────────────────────
+const VICTORIS_PALM_CUE = `
+=== VICTORIS SALES TRAINING — PALM CUE CARD ===
+
+TAGLINE: VICTORIS — GOT IT ALL
+
+--- ELEVATOR PITCH ---
+Greeting: "Good Morning, Welcome to Maruti Suzuki Arena. My name is [Name]."
+Vehicle Introduction: "Let me present to you, the VICTORIS, the sleek and vibrant SUV that matches your drive."
+Engagement Hook features to mention:
+- Dolby Atmos Surround Sound Experience
+- 64-Color Custom Ambient Light
+- Smart Powered Tailgate with Gesture Control
+- All-New Underbody S-CNG — first in segment
+- Level 2 ADAS safety features — must be experienced
+Demo Invitation: "Would you like to do a quick demo?"
+
+--- SAFETY RATINGS ---
+5-Star GNCAP Safety Rating (Adult Occupant Protection + Child Occupant Protection)
+5-Star BNCAP Safety Rating (Adult Occupant Protection + Child Occupant Protection)
+
+--- DEMO SCRIPT — FIRSTT FRAMEWORK ---
+F = FRONT:
+1. Wrap Around Design
+2. Dynamic Hood Profile & Stretched Beltline
+3. Aero Vents and Aero Edges
+4. Bold-Cut LED DRL and Headlamps
+5. LED Front Fog Lamps with Extended Lighting
+6. Front Parking Sensors with Auto 360° Camera Activation
+7. Aero Cut Alloy Wheels
+8. All Wheel Disc Brakes
+
+I = INTERIOR:
+1. SmartPlay Pro X 25.65 cm HD Touchscreen with Alexa Auto Voice AI, 35+ Apps
+2. Infinity Premium Sound 8-Speaker System
+3. Dolby Atmos Surround Sound Experience & 64-Color Custom Ambient Light (demo: open Dolby Atmos from Apps menu, play Amazon Music — Nature/Leaf preset to showcase immersive sound)
+4. Connected Services powered by New Gen Suzuki Connect (60+ features)
+5. Auto-Poly with PM 2.5 Display
+6. 360° View HD Camera with 11 Views
+7. 26.03 cm Multi-Information Digital Cluster
+8. Synthetic 3-layered Stitched Dashboard
+9. Wireless Charger with Active Cooling
+10. Ventilated Front Seats
+11. 8-Way Powered Driver Seat
+12. Electronic Parking Brake (EPB) with Brake Hold
+13. Panoramic Sunroof
+14. Head Up Display (HUD)
+15. Tyre Pressure Monitoring System (TPMS)
+16. Paddle Shifters
+17. Adjustable Tilt & Telescopic Power Steering
+
+R = REAR:
+1. Rear Cabin Angle
+2. Dynamic Connected LED Tail Lamps
+3. Smart Powered Tailgate with Gesture Control
+4. Tyre Repair Kit
+5. Rear Parking Sensors
+
+S = SEAT (Rear):
+1. Rear AC vents
+2. USB Charger Rear Type C+C — Available: 45W + 45W (total 80W)
+3. 60:40 Folding Rear Seats
+4. ISOFIX Child Seat Anchorages
+5. Rear Centre Armrest With Cup Holder
+
+S = SAFETY:
+1. Level 2 ADAS with 10 Features: FPCW, AEB, LKA, LDP, LDW, Vehicle Sway Warning, ACC with Curve Speed Reduction, HBA, BSM with LCA, RCTA
+2. Smart Powered Tailgate (AllGrip only)
+3. Arena Safety Shield — 8 features
+
+T = TECHNOLOGY:
+1. Strong Hybrid (eCVT) — 28.65 km/l, highest in segment
+2. K15C Smart Hybrid Petrol Engine
+3. All-Terrain AllGrip Select (4 modes: Auto, Sport, Snow, Lock)
+4. All-New Underbody S-CNG — first in segment
+
+--- SWITCHES & CAR CONTROLS ---
+Right Side Lower Console Panel:
+1. Smart Powered Tailgate Open
+2. Hill Descent Control
+3. Lane Departure Warning / Lane Departure Prevention OFF
+4. Electronic Stability Program (ESP) ON/OFF
+5. 360° View HD Camera with 11 Views
+6. Turn OFF Powered Door Opening
+7. Forward Collision Warning / Automatic Emergency Braking OFF
+8. Parking Sensors ON/OFF
+9. Auto Start-Stop ON/OFF
+10. Headlamp Leveling
+11. Dual Sensor Brake Support (DSBS)
+12. Adjust Lane Departure Prevention (LDP)
+13. Set preferences for ACC with Curve Speed Reduction
+14. Configure Blind Spot Monitor (BSM) with LCA / RCTA & High Beam Assist (HBA)
+
+ACC Steering Controls (right side):
+1. Adaptive Cruise Control (ACC) with Curve Speed Reduction ON/OFF
+2. EV Mode
+3. Cancel ACC with Curve Speed Reduction
+4. Adjust following distance of ACC with Curve Speed Reduction
+5. Lane Keep Assist ON/OFF
+6. High Beam Assist ON/OFF
+
+Centre Console Switches:
+- All-Terrain AllGrip Select: Auto, Sport, Snow, Lock
+- Electronic Parking Brake: Engage/Disengage
+- Brake Hold: Activate/Deactivate
+- EV Mode: Run only on electric motor
+- Drive Mode: Toggle between different drive modes
+- Ventilated Seats with Fan Controller: 3 speed modes
+
+Strong Hybrid Simulator Switches (for demo):
+1. Ready ON  2. EV Mode  3. Engine Starting  4. Cruising
+5. Acceleration  6. Braking  7. Reverse  8. Turn Off
+
+--- TEST DRIVE SCRIPT (Customer as Co-Driver) ---
+INITIATION: Show 64-Color Custom Ambient Light, Ventilated Front Seats
+STRAIGHT & LANE MARKED ROAD:
+- Head Up Display (HUD)
+- 4 Drive Modes: Auto, Sport, Snow, Lock
+- AT Operation: Park-Reverse-Neutral-Drive, Paddle Shifters
+- Infinity 8-Speaker + Dolby Atmos demo
+- ACC with Curve Speed Reduction ON/OFF
+- LKA, LDP, LDW, BSM with LCA, FCW, AEB, HBA, Vehicle Sway Warning
+SIGNAL STOP: Low NVH, ABS, EBD, Brake Assist (BA)
+UPHILL: Hill Hold Control, Smooth 1.5L Engine, Smart Hybrid Technology
+AT THE TURN: Low Turning Radius, Low Body Roll, Electronic Stability Program (ESP)
+DOWNHILL: Hill Descent Control
+
+--- TEST DRIVE SCRIPT (Customer as Driver) ---
+INITIATION:
+- 8-Way Powered Driver Seat
+- Adjustable Tilt & Telescopic Power Steering
+- Height Adjustable Seat Belts
+- 64-Color Custom Ambient Light & Play track
+STRAIGHT ROAD: Alexa Auto Voice AI demo
+UNEVEN TERRAIN: Ground Clearance, Suspension
+
+Customer in Rear Seat:
+STRAIGHT ROAD: Ample Leg-Room, Shoulder-Room & Headroom; AC effectiveness at rear; Low Cabin NVH
+PARKING: ADAS-RCTA while reversing, 360° Camera (11 views), MID Distance Travelled, Fuel Efficiency, Suzuki Connect Trip Detail, Driving Behavior
+`;
+
+const SYS = `You are an expert Maruti Suzuki Arena sales trainer AI for Bharath Auto dealership. Use this car data:\n${CAR_DATA}\n\nFor VICTORIS specifically, use this detailed sales training guide:\n${VICTORIS_PALM_CUE}\n\nBe helpful, accurate, concise. Use ₹ symbols. Suggest visiting showroom for exact on-road prices.`;
 
 // ── Structured car data for Compare (no API needed) ───────────────────────────
 const CARS_STRUCTURED = {
@@ -948,6 +1090,102 @@ const VARIANT_FEATURES = {
       "CNG Factory Fitted":                ["LXi CNG","VXi CNG","ZXi CNG"],
     }
   },
+  "Victoris": {
+    variants: ["Lxi MT","Vxi MT","Vxi CNG","Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+    features: {
+      "SmartPlay Pro (17.78cm) + Android Auto": ["Lxi MT","Vxi MT","Vxi CNG","Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "6 Airbags Standard":                     ["Lxi MT","Vxi MT","Vxi CNG","Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Leatherette Seats":                      ["Vxi MT","Vxi CNG","Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Suzuki Connect (Telematics)":            ["Vxi MT","Vxi CNG","Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "LED Headlamps":                          ["Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Painted Alloy Wheels":                   ["Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "360° Camera (11 Views)":                 ["Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Smart Powered Tailgate":                 ["Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Wireless Charger":                       ["Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "PM2.5 Cabin Air Filter":                 ["Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Auto AC":                                ["Zxi MT","Zxi AT","Zxi(O) MT","Zxi(O) AT","Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Panoramic Sunroof":                      ["Zxi(O) MT","Zxi(O) AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "SmartPlay Pro X (25.65cm)":              ["Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Infinity 8-Speaker + Subwoofer (Dolby Atmos)": ["Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Alexa Auto Built-in":                    ["Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "64-Colour Ambient Lighting":             ["Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Ventilated Front Seats":                 ["Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "8-Way Power Driver Seat":                ["Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Head-Up Display (HUD)":                  ["Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Level 2 ADAS":                           ["Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "Cruise Control":                         ["Zxi+ MT","Zxi+ AT","Zxi+(O) MT","Zxi+(O) AT"],
+      "ALLGRIP AWD":                            ["Zxi+(O) MT","Zxi+(O) AT"],
+      "Auto Transmission (AT)":                 ["Zxi AT","Zxi(O) AT","Zxi+ AT","Zxi+(O) AT"],
+      "CNG Factory Fitted":                     ["Vxi CNG"],
+    }
+  },
+  "Ertiga": {
+    variants: ["LXi MT","VXi MT","VXi CNG","ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+    features: {
+      "AC + Power Steering + 6 Airbags":  ["LXi MT","VXi MT","VXi CNG","ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Rear AC Vents + USB Charging":     ["VXi MT","VXi CNG","ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Body-Coloured ORVMs":              ["VXi MT","VXi CNG","ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Smart Hybrid (SHVS)":              ["ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "SmartPlay Pro Touchscreen":        ["ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Android Auto & Apple CarPlay":     ["ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Alloy Wheels":                     ["ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Push Start / Smart Key":           ["ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Auto AC":                          ["ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Reverse Camera":                   ["ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "Suzuki Connect":                   ["ZXi MT","ZXi CNG","ZXi+ MT","ZXi+ AT"],
+      "SmartPlay Pro+ (22.86cm)":         ["ZXi+ MT","ZXi+ AT"],
+      "ARKAMYS Surround Sound":           ["ZXi+ MT","ZXi+ AT"],
+      "Cruise Control":                   ["ZXi+ MT","ZXi+ AT"],
+      "Paddle Shifters (AT only)":        ["ZXi+ AT"],
+      "TFT Colour MID":                   ["ZXi+ MT","ZXi+ AT"],
+      "Auto Transmission (AT)":           ["ZXi+ AT"],
+      "CNG Factory Fitted":               ["VXi CNG","ZXi CNG"],
+    }
+  },
+};
+
+// ── Per-car competitor lists (from official training material) ────────────────
+const COMPETITORS_DATA = {
+  "Alto K10": {
+    main: ["Renault Kwid","Hyundai Santro","Tata Tiago"],
+    all:  ["Renault Kwid","Hyundai Santro","Datsun Redi-GO","Tata Tiago"]
+  },
+  "S-Presso": {
+    main: ["Renault Kwid","Hyundai Santro","Mahindra KUV100"],
+    all:  ["Renault Kwid","Hyundai Santro","Mahindra KUV100","Ford Figo"]
+  },
+  "Celerio": {
+    main: ["Tata Tiago","Hyundai Grand i10","Ford Figo"],
+    all:  ["Tata Tiago","Hyundai Grand i10","Ford Figo","Volkswagen Polo"]
+  },
+  "WagonR": {
+    main: ["Tata Tiago","Hyundai Grand i10","Honda Jazz"],
+    all:  ["Tata Tiago","Hyundai Grand i10","Honda Jazz","Ford Figo"]
+  },
+  "Swift": {
+    main: ["Hyundai Grand i10 Nios","Toyota Glanza","Volkswagen Polo"],
+    all:  ["Hyundai Grand i10 Nios","Toyota Glanza","Ford Figo","Volkswagen Polo","Honda Jazz","Hyundai i20"]
+  },
+  "Dzire": {
+    main: ["Honda Amaze","Hyundai Aura","Ford Aspire"],
+    all:  ["Honda Amaze","Hyundai Aura","Ford Aspire","Volkswagen Ameo","Toyota Glanza"]
+  },
+  "Brezza": {
+    main: ["Hyundai Venue","Tata Nexon","Kia Sonet"],
+    all:  ["Hyundai Venue","Tata Nexon","Kia Sonet","Mahindra XUV300","Ford EcoSport","Hyundai Exter"]
+  },
+  "Ertiga": {
+    main: ["Kia Carens","Renault Triber","Mahindra Marazzo"],
+    all:  ["Kia Carens","Renault Triber","Mahindra Marazzo","Toyota Innova Crysta"]
+  },
+  "EECO": {
+    main: ["Mahindra Supro","Tata Magic"],
+    all:  ["Mahindra Supro","Tata Magic","Force Trump"]
+  },
+  "Victoris": {
+    main: ["Hyundai Creta","Kia Seltos","Tata Harrier"],
+    all:  ["Hyundai Creta","Kia Seltos","Tata Harrier","Skoda Kushaq","Volkswagen Taigun","Nissan Kicks"]
+  },
 };
 
 function CompareTab() {
@@ -959,7 +1197,12 @@ function CompareTab() {
   const [aiText, setAiText] = useState("");
   const [loadingAI, setLoadingAI] = useState(false);
   // competition mode
-  const [matchup, setMatchup] = useState(COMPETITION_KEYS[0]);
+  const [vsMarutiCar, setVsMarutiCar] = useState("");
+  const [vsCompetitors, setVsCompetitors] = useState([]);
+  const [vsResult, setVsResult] = useState("");
+  const [vsLoading, setVsLoading] = useState(false);
+  const [vsShowHardcoded, setVsShowHardcoded] = useState(false);
+  const [vsData, setVsData] = useState(null);
   // variant mode
   const [varCar, setVarCar] = useState("Swift");
   const [var1, setVar1] = useState(0);
@@ -978,8 +1221,56 @@ function CompareTab() {
     setLoadingAI(false);
   }
 
+  // competition helpers
+  const vsCompData = vsMarutiCar ? COMPETITORS_DATA[vsMarutiCar] : null;
+  function findHardcoded(rivalCar) {
+    return Object.values(COMPETITION_MATCHUPS).find(m => m.marutiCar===vsMarutiCar && m.rivalCar===rivalCar) || null;
+  }
+  const singleHardcoded = vsCompetitors.length===1 ? findHardcoded(vsCompetitors[0]) : null;
+
+  function toggleCompetitor(comp) {
+    setVsCompetitors(prev => {
+      if (prev.includes(comp)) return prev.filter(x=>x!==comp);
+      if (prev.length >= 3) return prev;
+      return [...prev, comp];
+    });
+    setVsResult(""); setVsData(null); setVsShowHardcoded(false);
+  }
+
+  async function runVsComparison() {
+    if (singleHardcoded) { setVsShowHardcoded(true); return; }
+    setVsLoading(true); setVsResult(""); setVsData(null); setVsShowHardcoded(false);
+    const compList = vsCompetitors.join(" and ");
+    const p = `Return ONLY valid JSON, no markdown, no explanation. Compare the TOP FLAGSHIP variant of Maruti Suzuki ${vsMarutiCar} against the TOP FLAGSHIP variant of ${compList} for Indian buyers in 2024. Always pick the highest fully-loaded variant of every car so the comparison is fair at the top-spec level.
+
+JSON format — Maruti car MUST be first in the array:
+{"cars":[{"name":"Car Name TopVariantName","isMaruti":true,"price":"₹X.X–Y.Y Lakh","engine":"XXXcc, Fuel Type","power":"XX PS","torque":"XX Nm","mileage":"XX.X kmpl","annualFuelCost":"₹XX,000","dimensions":"LxWxH mm","bootSpace":"XXX L","safetyRating":"X★ Global NCAP or NA","keyFeatures":["feature 1","feature 2","feature 3","feature 4"],"comfort":"2-3 key comfort/convenience features","soundSystem":"Speaker system name","whyBuy":"2 strong sentences on why to buy this car","whyCaution":"1 honest sentence on a real limitation"}]}
+
+Rules:
+- "name" must include the specific top variant name (e.g. "Swift ZXi+ AMT", "Hyundai i20 Asta(O) Turbo DCT")
+- Use real ARAI mileage figures for India
+- Annual fuel cost = 15,000 km/year at ₹104/L petrol or ₹90/kg CNG
+- keyFeatures: exactly 4 short phrases (under 5 words each), highlight the most premium features
+- whyBuy and whyCaution: each under 30 words
+- dimensions in format "LxWxH mm"
+- bootSpace: number + " L" (use "—" if MPV/no boot)
+- safetyRating: include star count and org (Global NCAP, Bharat NCAP, etc.)
+- Include all ${vsCompetitors.length+1} cars`;
+    try {
+      const raw = await callGroq([{ role:"user", content:p }], 2800, 0.2);
+      const m = raw.match(/\{[\s\S]*\}/);
+      if (m) {
+        try {
+          const parsed = JSON.parse(m[0]);
+          if (parsed.cars && parsed.cars.length >= 2) { setVsData(parsed.cars); }
+          else { setVsResult(raw); }
+        } catch(_) { setVsResult(raw); }
+      } else { setVsResult(raw); }
+    } catch(e) { setVsResult("Error: "+e.message); }
+    setVsLoading(false);
+  }
+
   const sameCarSelected = car1 === car2;
-  const currentMatchup = COMPETITION_MATCHUPS[matchup];
   const variantData = VARIANT_FEATURES[varCar];
   const variantNames = variantData ? variantData.variants : [];
   const v1name = variantNames[var1] || "";
@@ -1089,56 +1380,226 @@ function CompareTab() {
         {/* ── COMPETITION MODE ── */}
         {mode==="vs" && (
           <>
+            {/* Step 1: Maruti car */}
             <div className="mb-4">
-              <p className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Select Matchup</p>
-              <select value={matchup} onChange={e=>setMatchup(e.target.value)}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none font-semibold" style={{ color:"#1B3A6B" }}>
-                {COMPETITION_KEYS.map(k=><option key={k}>{k}</option>)}
+              <p className="section-label">Your Maruti Car</p>
+              <select value={vsMarutiCar}
+                onChange={e=>{ setVsMarutiCar(e.target.value); setVsCompetitors([]); setVsResult(""); setVsData(null); setVsShowHardcoded(false); }}
+                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none font-semibold"
+                style={{ color: vsMarutiCar ? "#1B3A6B" : "#9CA3AF" }}>
+                <option value="">— Select a Maruti car —</option>
+                {Object.keys(COMPETITORS_DATA).map(n=><option key={n} value={n}>{n}</option>)}
               </select>
             </div>
 
-            {/* Header badges */}
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              <div className="rounded-2xl p-3 text-center" style={{ background:"#1B3A6B" }}>
-                <p className="text-white text-xs font-bold">{currentMatchup.marutiCar}</p>
-                <p className="text-blue-200 text-[10px] mt-0.5">{currentMatchup.marutiVariant}</p>
+            {/* Empty state */}
+            {!vsMarutiCar && (
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-center">
+                <p className="text-3xl mb-2">⚔️</p>
+                <p className="text-sm font-semibold text-gray-600 mb-1">Pick your Maruti car above</p>
+                <p className="text-xs text-gray-400 leading-relaxed">Then select 1–3 competitors to compare.<br/>Mix and match for multi-car comparisons.</p>
               </div>
-              <div className="rounded-2xl p-3 text-center" style={{ background:"#6B7280" }}>
-                <p className="text-white text-xs font-bold">{currentMatchup.rivalCar}</p>
-                <p className="text-gray-300 text-[10px] mt-0.5">{currentMatchup.rivalVariant}</p>
-              </div>
-            </div>
+            )}
 
-            {/* Comparison table */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-3">
-              <div className="grid grid-cols-3 border-b border-gray-100 bg-gray-50">
-                <div className="p-2"><p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">Feature</p></div>
-                <div className="p-2 text-center border-l border-gray-100"><p className="text-[10px] font-bold uppercase tracking-wide" style={{ color:"#1B3A6B" }}>{currentMatchup.marutiCar}</p></div>
-                <div className="p-2 text-center border-l border-gray-100"><p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">{currentMatchup.rivalCar}</p></div>
-              </div>
-              {currentMatchup.rows.map((row,i)=>{
-                const marutiVal = row.maruti === true ? "✅" : row.maruti === false ? "—" : row.maruti;
-                const rivalVal  = row.rival  === true ? "✅" : row.rival  === false ? "❌" : row.rival;
-                const marutiWins = row.maruti===true && row.rival===false || row.marutiBetter;
-                return (
-                  <div key={i} className={`grid grid-cols-3 border-b border-gray-50 ${marutiWins?"":"opacity-90"}`}>
-                    <div className="p-2 bg-gray-50"><p className="text-[11px] text-gray-700 leading-tight">{row.feature}</p></div>
-                    <div className={`p-2 text-center border-l border-gray-100 ${marutiWins ? "bg-green-50":""}`}>
-                      <p className={`text-xs font-semibold ${marutiWins?"text-green-700":"text-gray-600"}`}>{marutiVal}</p>
-                    </div>
-                    <div className="p-2 text-center border-l border-gray-100">
-                      <p className={`text-xs ${!marutiWins && row.rival!==false?"font-semibold text-gray-700":"text-red-400"}`}>{rivalVal}</p>
-                    </div>
+            {/* Step 2: Competitor chips */}
+            {vsCompData && (
+              <>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="section-label mb-0">Choose Competitors</p>
+                  <span className="text-[10px] text-gray-400">{vsCompetitors.length}/3 selected</span>
+                </div>
+                <p className="text-[10px] text-amber-600 mb-2.5">★ = key competitors in similar price range</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {vsCompData.all.map(comp => {
+                    const isMain = vsCompData.main.includes(comp);
+                    const selected = vsCompetitors.includes(comp);
+                    const disabled = !selected && vsCompetitors.length >= 3;
+                    return (
+                      <button key={comp} onClick={()=>!disabled && toggleCompetitor(comp)}
+                        className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-all ${disabled?"opacity-40":""}`}
+                        style={selected
+                          ? { background:"#1B3A6B", color:"white", borderColor:"#1B3A6B" }
+                          : isMain
+                          ? { background:"#EEF3FA", color:"#1B3A6B", borderColor:"#2E75B6" }
+                          : { background:"white", color:"#374151", borderColor:"#DDE5EF" }}>
+                        {isMain && !selected ? "★ " : ""}{comp}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Compare button */}
+                {vsCompetitors.length > 0 && !vsResult && !vsData && !vsLoading && !vsShowHardcoded && (
+                  <button onClick={runVsComparison}
+                    className="w-full text-white py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 mb-3"
+                    style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
+                    ⚔️ Compare {vsMarutiCar} vs {vsCompetitors.length===1 ? vsCompetitors[0] : vsCompetitors.join(" & ")}
+                  </button>
+                )}
+
+                {/* Loading */}
+                {vsLoading && (
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+                    <Spinner small /><span className="text-xs text-gray-500">Generating comparison…</span>
                   </div>
-                );
-              })}
-            </div>
+                )}
 
-            {/* Sales pitch banner */}
-            <div className="rounded-2xl p-3 mb-2" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
-              <p className="text-white text-xs font-bold mb-1">💡 Sales Pitch</p>
-              <p className="text-blue-100 text-xs leading-relaxed">{currentMatchup.salesPitch}</p>
-            </div>
+                {/* Hardcoded PPTX table for verified matchups */}
+                {vsShowHardcoded && singleHardcoded && (
+                  <>
+                    <div className="grid grid-cols-2 gap-3 mb-3">
+                      <div className="rounded-2xl p-3 text-center" style={{ background:"#1B3A6B" }}>
+                        <p className="text-white text-xs font-bold">{singleHardcoded.marutiCar}</p>
+                        <p className="text-blue-200 text-[10px] mt-0.5">{singleHardcoded.marutiVariant}</p>
+                      </div>
+                      <div className="rounded-2xl p-3 text-center" style={{ background:"#6B7280" }}>
+                        <p className="text-white text-xs font-bold">{singleHardcoded.rivalCar}</p>
+                        <p className="text-gray-300 text-[10px] mt-0.5">{singleHardcoded.rivalVariant}</p>
+                      </div>
+                    </div>
+                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-3">
+                      <div className="grid grid-cols-3 border-b border-gray-100 bg-gray-50">
+                        <div className="p-2"><p className="text-[10px] font-bold text-gray-500 uppercase">Feature</p></div>
+                        <div className="p-2 text-center border-l border-gray-100"><p className="text-[10px] font-bold uppercase" style={{ color:"#1B3A6B" }}>{singleHardcoded.marutiCar}</p></div>
+                        <div className="p-2 text-center border-l border-gray-100"><p className="text-[10px] font-bold text-gray-500 uppercase">{singleHardcoded.rivalCar}</p></div>
+                      </div>
+                      {singleHardcoded.rows.map((row,i)=>{
+                        const marutiVal = row.maruti===true?"✅":row.maruti===false?"—":row.maruti;
+                        const rivalVal  = row.rival===true?"✅":row.rival===false?"❌":row.rival;
+                        const marutiWins = (row.maruti===true && row.rival===false)||row.marutiBetter;
+                        return (
+                          <div key={i} className="grid grid-cols-3 border-b border-gray-50">
+                            <div className="p-2 bg-gray-50"><p className="text-[11px] text-gray-700 leading-tight">{row.feature}</p></div>
+                            <div className={`p-2 text-center border-l border-gray-100 ${marutiWins?"bg-green-50":""}`}>
+                              <p className={`text-xs font-semibold ${marutiWins?"text-green-700":"text-gray-600"}`}>{marutiVal}</p>
+                            </div>
+                            <div className="p-2 text-center border-l border-gray-100">
+                              <p className={`text-xs ${!marutiWins&&row.rival!==false?"font-semibold text-gray-700":"text-red-400"}`}>{rivalVal}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div className="rounded-2xl p-3 mb-3" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
+                      <p className="text-white text-xs font-bold mb-1">💡 Sales Pitch</p>
+                      <p className="text-blue-100 text-xs leading-relaxed">{singleHardcoded.salesPitch}</p>
+                    </div>
+                    <button onClick={()=>{ setVsShowHardcoded(false); setVsResult(""); }}
+                      className="w-full text-sm text-gray-400 py-2 underline">← Change Selection</button>
+                  </>
+                )}
+
+                {/* Infographic table result */}
+                {!vsLoading && vsData && (
+                  <>
+                    <p className="text-xs font-bold mb-2" style={{ color:"#1B3A6B" }}>
+                      ⚔️ {vsMarutiCar} vs {vsCompetitors.join(" & ")}
+                    </p>
+                    {/* Scrollable infographic table */}
+                    <div style={{ overflowX:"auto", marginBottom:"12px", borderRadius:"16px", border:"1px solid #E4EBF5", boxShadow:"0 2px 12px rgba(27,58,107,0.08)" }}>
+                      <table style={{ minWidth:"1100px", borderCollapse:"collapse", width:"100%", fontSize:"11px" }}>
+                        <thead>
+                          <tr style={{ background:"#1B3A6B" }}>
+                            <th style={{ padding:"10px 8px", color:"white", fontSize:"10px", fontWeight:700, textAlign:"left", minWidth:"110px", position:"sticky", left:0, background:"#1B3A6B", borderRight:"1px solid rgba(255,255,255,0.15)", zIndex:2 }}>CAR</th>
+                            <th style={{ padding:"10px 8px", color:"#A8C4E0", fontSize:"10px", fontWeight:600, textAlign:"center", minWidth:"75px" }}>PRICE</th>
+                            <th style={{ padding:"10px 8px", color:"#A8C4E0", fontSize:"10px", fontWeight:600, textAlign:"center", minWidth:"85px" }}>ENGINE</th>
+                            <th style={{ padding:"10px 8px", color:"#A8C4E0", fontSize:"10px", fontWeight:600, textAlign:"center", minWidth:"70px" }}>POWER /<br/>TORQUE</th>
+                            <th style={{ padding:"10px 8px", color:"#A8C4E0", fontSize:"10px", fontWeight:600, textAlign:"center", minWidth:"65px" }}>MILEAGE</th>
+                            <th style={{ padding:"10px 8px", color:"#A8C4E0", fontSize:"10px", fontWeight:600, textAlign:"center", minWidth:"70px" }}>ANNUAL<br/>FUEL COST</th>
+                            <th style={{ padding:"10px 8px", color:"#A8C4E0", fontSize:"10px", fontWeight:600, textAlign:"center", minWidth:"90px" }}>DIMENSIONS<br/>(L×W×H)</th>
+                            <th style={{ padding:"10px 8px", color:"#A8C4E0", fontSize:"10px", fontWeight:600, textAlign:"center", minWidth:"60px" }}>BOOT<br/>SPACE</th>
+                            <th style={{ padding:"10px 8px", color:"#A8C4E0", fontSize:"10px", fontWeight:600, textAlign:"center", minWidth:"70px" }}>SAFETY<br/>RATING</th>
+                            <th style={{ padding:"10px 8px", color:"#A8C4E0", fontSize:"10px", fontWeight:600, textAlign:"center", minWidth:"130px" }}>KEY FEATURES</th>
+                            <th style={{ padding:"10px 8px", color:"#A8C4E0", fontSize:"10px", fontWeight:600, textAlign:"center", minWidth:"110px" }}>COMFORT &<br/>CONVENIENCE</th>
+                            <th style={{ padding:"10px 8px", color:"#A8C4E0", fontSize:"10px", fontWeight:600, textAlign:"center", minWidth:"85px" }}>SOUND<br/>SYSTEM</th>
+                            <th style={{ padding:"10px 8px", color:"#86efac", fontSize:"10px", fontWeight:700, textAlign:"center", minWidth:"130px" }}>✅ WHY BUY</th>
+                            <th style={{ padding:"10px 8px", color:"#fcd34d", fontSize:"10px", fontWeight:700, textAlign:"center", minWidth:"110px" }}>⚠️ CONSIDER</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {vsData.map((car, i) => {
+                            const bg = car.isMaruti ? "#EEF3FA" : i%2===0 ? "white" : "#F8FAFC";
+                            const stickyBg = car.isMaruti ? "#EEF3FA" : i%2===0 ? "white" : "#F8FAFC";
+                            return (
+                              <tr key={i} style={{ background:bg, borderBottom:"1px solid #EEF0F5" }}>
+                                {/* CAR — sticky */}
+                                <td style={{ padding:"10px 8px", fontWeight: car.isMaruti?700:500, color: car.isMaruti?"#1B3A6B":"#374151", position:"sticky", left:0, background:stickyBg, borderRight:"1px solid #EEF0F5", zIndex:1 }}>
+                                  {car.isMaruti && (
+                                    <span style={{ display:"inline-block", background:"#1B3A6B", color:"white", fontSize:"8px", fontWeight:700, padding:"1px 5px", borderRadius:"4px", marginBottom:"3px", letterSpacing:"0.04em" }}>MARUTI</span>
+                                  )}
+                                  <p style={{ margin:0, lineHeight:1.3, fontSize:"11px" }}>{car.name}</p>
+                                </td>
+                                {/* PRICE */}
+                                <td style={{ padding:"10px 8px", textAlign:"center", color:"#374151", fontSize:"10px" }}>{car.price}</td>
+                                {/* ENGINE */}
+                                <td style={{ padding:"10px 8px", textAlign:"center", color:"#374151", fontSize:"10px" }}>{car.engine||"—"}</td>
+                                {/* POWER / TORQUE */}
+                                <td style={{ padding:"10px 8px", textAlign:"center", fontSize:"10px" }}>
+                                  <span style={{ fontWeight:600, color: car.isMaruti?"#1B3A6B":"#374151", display:"block" }}>{car.power||"—"}</span>
+                                  <span style={{ color:"#6B7280", fontSize:"9px" }}>{car.torque||""}</span>
+                                </td>
+                                {/* MILEAGE */}
+                                <td style={{ padding:"10px 8px", textAlign:"center" }}>
+                                  <span style={{ fontWeight:700, color: car.isMaruti?"#16a34a":"#374151" }}>{car.mileage}</span>
+                                  {car.isMaruti && <div style={{ height:"3px", background:"#22c55e", borderRadius:"2px", marginTop:"3px", width:"80%", margin:"3px auto 0" }} />}
+                                </td>
+                                {/* ANNUAL FUEL COST */}
+                                <td style={{ padding:"10px 8px", textAlign:"center", fontWeight: car.isMaruti?700:400, color: car.isMaruti?"#16a34a":"#374151", fontSize:"10px" }}>
+                                  {car.annualFuelCost}
+                                  {car.isMaruti && <div style={{ height:"3px", background:"#22c55e", borderRadius:"2px", marginTop:"3px", width:"80%", margin:"3px auto 0" }} />}
+                                </td>
+                                {/* DIMENSIONS */}
+                                <td style={{ padding:"10px 8px", textAlign:"center", color:"#374151", fontSize:"9px" }}>{car.dimensions||"—"}</td>
+                                {/* BOOT SPACE */}
+                                <td style={{ padding:"10px 8px", textAlign:"center", color:"#374151", fontSize:"10px", fontWeight:600 }}>{car.bootSpace||"—"}</td>
+                                {/* SAFETY */}
+                                <td style={{ padding:"10px 8px", textAlign:"center", fontSize:"10px" }}>
+                                  {car.safetyRating && car.safetyRating !== "NA" ? (
+                                    <span style={{ color: car.isMaruti?"#1B3A6B":"#374151", fontWeight:600 }}>{car.safetyRating}</span>
+                                  ) : <span style={{ color:"#9CA3AF" }}>Not tested</span>}
+                                </td>
+                                {/* KEY FEATURES */}
+                                <td style={{ padding:"10px 8px", fontSize:"9px", color:"#374151", verticalAlign:"top" }}>
+                                  {Array.isArray(car.keyFeatures) ? (
+                                    <ul style={{ margin:0, paddingLeft:"12px", lineHeight:1.6 }}>
+                                      {car.keyFeatures.map((f,fi)=>(
+                                        <li key={fi} style={{ color: car.isMaruti&&fi===0?"#1B3A6B":"#374151", fontWeight: car.isMaruti&&fi===0?600:400 }}>{f}</li>
+                                      ))}
+                                    </ul>
+                                  ) : <span>{car.keyFeatures||"—"}</span>}
+                                </td>
+                                {/* COMFORT */}
+                                <td style={{ padding:"10px 8px", color:"#374151", fontSize:"9px", lineHeight:1.5 }}>{car.comfort||"—"}</td>
+                                {/* SOUND */}
+                                <td style={{ padding:"10px 8px", textAlign:"center", color: car.isMaruti?"#1B3A6B":"#374151", fontSize:"10px", fontWeight: car.isMaruti?600:400 }}>{car.soundSystem||"—"}</td>
+                                {/* WHY BUY */}
+                                <td style={{ padding:"10px 8px", color:"#374151", fontSize:"10px", lineHeight:1.4, background: car.isMaruti?"#f0fdf4":"transparent" }}>{car.whyBuy}</td>
+                                {/* CONSIDER */}
+                                <td style={{ padding:"10px 8px", color:"#374151", fontSize:"10px", lineHeight:1.4 }}>{car.whyCaution}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                    <p className="text-[10px] text-gray-400 mb-3 text-center">← Scroll right for full comparison · Annual fuel cost at ₹104/L, 15,000 km/yr</p>
+                    <button onClick={()=>{ setVsData(null); setVsResult(""); }}
+                      className="w-full text-sm text-gray-400 py-2 underline">← New Comparison</button>
+                  </>
+                )}
+
+                {/* Fallback plain text if JSON parse failed */}
+                {!vsLoading && vsResult && !vsData && (
+                  <>
+                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 mb-3">
+                      <p className="text-xs font-bold mb-3" style={{ color:"#1B3A6B" }}>⚔️ {vsMarutiCar} vs {vsCompetitors.join(" & ")}</p>
+                      <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-wrap">{vsResult}</p>
+                    </div>
+                    <button onClick={()=>setVsResult("")} className="w-full text-sm text-gray-400 py-2 underline">← New Comparison</button>
+                  </>
+                )}
+              </>
+            )}
           </>
         )}
 
@@ -1344,16 +1805,16 @@ function FlashcardsTab() {
         <div className="flex justify-center gap-1 mt-4 flex-wrap">
           {deck.map((_,i) => (
             <div key={i} onClick={()=>{setCardIdx(i);setFlipped(false);}} className="w-2.5 h-2.5 rounded-full cursor-pointer transition-all"
-              style={{ background: known.has(i)?"#22c55e":review.has(i)?"#f59e0b":i===cardIdx?"#1B3A6B":"#d1d5db" }} />
+              style={{ background: known.has(i)?"#22c55e":review.has(i)?"#f59e0b":"#d1d5db" }} />
           ))}
         </div>
-        <p className="text-center mt-1.5 text-[10px] text-gray-400">🟢 Known · 🟡 Review · 🔵 Current · ⚪ Unseen</p>
+
       </div>
     </div>
   );
 }
 
-// ── TAB 7 — Objection Handler ─────────────────────────────────────────────
+// ── TAB 7 — Objection Handler ─────────────────────────────────────────────────
 function ObjectionTab() {
   const [custom, setCustom] = useState("");
   const [reply, setReply] = useState("");
@@ -1377,53 +1838,51 @@ function ObjectionTab() {
 
   async function handle(obj) {
     setActive(obj); setReply(""); setLoading(true);
-    const p = `You are a senior Maruti Suzuki Arena sales trainer coaching a salesperson.\nA customer just said: "${obj}"\n\nUsing this real product data:\n${CAR_DATA}\n\nWrite a confident, natural rebuttal the salesperson can say immediately. Structure:\n1. One sentence acknowledging the concern (don't be defensive)\n2. Two or three factual counter-points using specific data from the car specs above\n3. One sentence redirecting to a specific Maruti model/variant that best addresses the concern\n\nKeep it concise (under 120 words), conversational, and persuasive. No bullet points — write as flowing speech.`;
+    const p = `You are a senior Maruti Suzuki Arena sales trainer coaching a salesperson.\nA customer just said: "${obj}"\n\nUsing this real product data:\n${CAR_DATA}\n\nWrite a confident, natural rebuttal the salesperson can say immediately. Structure:\n1. One sentence acknowledging the concern (don't be defensive)\n2. Two or three factual counter-points using specific data from the car specs above\n3. One sentence redirecting to a specific Maruti model/variant that best addresses this concern.\n\nKeep it conversational, under 100 words. Do not use bullet points in output.`;
     try {
-      const r = await callGroq([{ role:"user", content:p }], 600, 0.75);
+      const r = await callGroq([{role:"user",content:p}], 300, 0.7);
       setReply(r);
-    } catch(e) { setReply("❌ " + e.message); }
-    finally { setLoading(false); }
+    } catch(e) { setReply("Error: "+e.message); }
+    setLoading(false);
   }
 
   return (
     <div className="tab-content">
       <Header title="Objection Handler" />
-      <div style={{ flex:1, overflowY:"auto" }} className="px-4 py-4">
-        <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide mb-3">Tap an objection — get your rebuttal instantly</p>
+      <div style={{ flex:1, overflowY:"auto", background:"#EEF3FA" }} className="px-3 py-3">
+        <p className="text-xs text-gray-500 mb-3 leading-relaxed">Tap a common objection to get an instant AI-powered rebuttal you can use with the customer.</p>
         <div className="flex flex-wrap gap-2 mb-4">
-          {OBJECTIONS.map(o => (
-            <button key={o} onClick={() => handle(o)}
-              className="text-xs rounded-full px-3 py-1.5 border font-medium"
-              style={{ background:active===o?"#1B3A6B":"white", color:active===o?"white":"#1B3A6B", borderColor:"#1B3A6B" }}>
-              {o}
+          {OBJECTIONS.map(obj=>(
+            <button key={obj} onClick={()=>handle(obj)}
+              className="px-3 py-1.5 rounded-full border text-xs font-medium transition-all"
+              style={ active===obj
+                ? { background:"#1B3A6B", color:"white", borderColor:"#1B3A6B" }
+                : { background:"white", color:"#374151", borderColor:"#DDE5EF" }}>
+              {obj}
             </button>
           ))}
         </div>
-        <div className="flex gap-2 mb-5">
-          <input value={custom} onChange={e=>setCustom(e.target.value)} onKeyDown={e=>e.key==="Enter"&&custom.trim()&&handle(custom.trim())} placeholder="Or type a custom objection…" className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none bg-gray-50" />
-          <button onClick={()=>custom.trim()&&handle(custom.trim())} disabled={!custom.trim()||loading} className="text-white rounded-xl px-4 py-2.5 text-sm font-medium disabled:opacity-40" style={{ background:"#1B3A6B" }}>Go</button>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 mb-3">
+          <p className="text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Custom Objection</p>
+          <div className="flex gap-2">
+            <input value={custom} onChange={e=>setCustom(e.target.value)}
+              onKeyDown={e=>{ if(e.key==="Enter"&&custom.trim()) handle(custom.trim()); }}
+              placeholder="Type any objection…"
+              className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none" />
+            <button onClick={()=>custom.trim()&&handle(custom.trim())}
+              className="px-3 py-2 rounded-xl text-white text-xs font-semibold"
+              style={{ background:"#1B3A6B" }}>Go</button>
+          </div>
         </div>
         {loading && (
-          <div className="flex items-center gap-3 py-8 justify-center">
-            <div className="spin w-6 h-6 border-2 rounded-full" style={{ borderColor:"#2E75B6", borderTopColor:"transparent" }} />
-            <p className="text-sm text-gray-500">Crafting your rebuttal…</p>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+            <Spinner small /><span className="text-xs text-gray-500">Crafting rebuttal…</span>
           </div>
         )}
-        {reply && !loading && (
-          <div className="bg-white rounded-2xl p-4 border border-gray-100" style={{ boxShadow:"0 1px 6px rgba(0,0,0,0.07)" }}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-xl">🛡️</span>
-              <p className="text-xs font-bold uppercase tracking-wide" style={{ color:"#1B3A6B" }}>Rebuttal for: "{active}"</p>
-            </div>
-            <p className="text-sm text-gray-700 leading-relaxed">{reply}</p>
-            <button onClick={()=>handle(active)} className="mt-3 text-xs font-medium" style={{ color:"#2E75B6", background:"none", border:"none", cursor:"pointer", padding:0 }}>↻ Regenerate</button>
-          </div>
-        )}
-        {!loading && !reply && (
-          <div className="text-center py-10">
-            <div className="text-5xl mb-3">🛡️</div>
-            <p className="text-gray-500 text-sm font-medium">Tap any objection above</p>
-            <p className="text-gray-400 text-xs mt-1">Get a data-backed, natural rebuttal in seconds</p>
+        {!loading && reply && (
+          <div className="rounded-2xl p-4 mb-3" style={{ background:"linear-gradient(135deg,#1B3A6B,#2E75B6)" }}>
+            <p className="text-white text-xs font-bold mb-2">💬 Suggested Rebuttal</p>
+            <p className="text-blue-100 text-xs leading-relaxed">{reply}</p>
           </div>
         )}
       </div>
@@ -1431,52 +1890,45 @@ function ObjectionTab() {
   );
 }
 
-// ── Bottom Nav (7 tabs) ────────────────────────────────────────────────────
-const TABS = [
-  { id:"ask",        icon:"🔍", label:"Ask"        },
-  { id:"quiz",       icon:"🧠", label:"Quiz"       },
-  { id:"roleplay",   icon:"🎭", label:"Roleplay"   },
-  { id:"match",      icon:"🎯", label:"Match"      },
-  { id:"compare",    icon:"⚖️",  label:"Compare"    },
-  { id:"flashcards", icon:"🃏", label:"Cards"      },
-  { id:"objections", icon:"🛡️", label:"Rebuttals"  },
-];
-
-function BottomNav({ tab, setTab }) {
-  return (
-    <div style={{ background:"white", borderTop:"1px solid #E4EBF5", flexShrink:0, boxShadow:"0 -2px 10px rgba(27,58,107,0.06)" }} className="flex">
-      {TABS.map(t => (
-        <button key={t.id} onClick={()=>setTab(t.id)}
-          style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", paddingTop:"8px", paddingBottom:"8px", gap:"2px", border:"none", background:"none", cursor:"pointer" }}>
-          <span style={{ fontSize:"18px", lineHeight:1, opacity: tab===t.id ? 1 : 0.35 }}>{t.icon}</span>
-          <span style={{ fontSize:"9px", fontWeight: tab===t.id ? 700 : 500, color: tab===t.id ? "#1B3A6B" : "#94A3B8" }}>{t.label}</span>
-          <div style={{ height:"2.5px", width: tab===t.id ? "20px" : "0px", background:"#1B3A6B", borderRadius:"2px", transition:"width 0.2s ease", marginTop:"1px" }} />
-        </button>
-      ))}
-    </div>
-  );
-}
-
-// ── App ────────────────────────────────────────────────────────────────────
+// ── APP SHELL ─────────────────────────────────────────────────────────────────────────────────
 function App() {
   const [started, setStarted] = useState(false);
   const [tab, setTab] = useState("ask");
-  if (!started) return <SplashScreen onStart={() => setStarted(true)} />;
+  const TABS = [
+    { id:"ask",       icon:"🔍", label:"Ask"       },
+    { id:"quiz",      icon:"🧠", label:"Quiz"      },
+    { id:"roleplay",  icon:"🎭", label:"Roleplay"  },
+    { id:"match",     icon:"🎯", label:"Match"     },
+    { id:"compare",   icon:"⚖️",  label:"Compare"  },
+    { id:"flashcard", icon:"⚡", label:"Flash"     },
+    { id:"objection", icon:"🛡️",  label:"Rebuttals"},
+  ];
+  if (!started) return <SplashScreen onStart={()=>setStarted(true)} />;
   return (
-    <div style={{ height:"100vh", display:"flex", flexDirection:"column", background:"#f3f4f6" }}>
-      {tab === "ask"        && <AskTab />}
-      {tab === "quiz"       && <QuizTab />}
-      {tab === "roleplay"   && <RoleplayTab />}
-      {tab === "match"      && <MatchTab />}
-      {tab === "compare"    && <CompareTab />}
-      {tab === "flashcards" && <FlashcardsTab />}
-      {tab === "objections" && <ObjectionTab />}
-      <BottomNav tab={tab} setTab={setTab} />
+    <div className="app-shell">
+      <div className="tab-pane">
+        {tab==="ask"       && <AskTab       />}
+        {tab==="quiz"      && <QuizTab      />}
+        {tab==="roleplay"  && <RoleplayTab  />}
+        {tab==="match"     && <MatchTab     />}
+        {tab==="compare"   && <CompareTab   />}
+        {tab==="flashcard" && <FlashcardsTab />}
+        {tab==="objection" && <ObjectionTab />}
+      </div>
+      <nav className="bottom-nav">
+        {TABS.map(t=>(
+          <button key={t.id} onClick={()=>setTab(t.id)}
+            className={`nav-btn ${tab===t.id?"active":""}`}>
+            <span className="nav-icon">{t.icon}</span>
+            <span className="nav-label">{t.label}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 </script>
 </body>
 </html>
