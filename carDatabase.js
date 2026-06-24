@@ -1833,7 +1833,37 @@ for (const k in CAR_DATABASE) {
   if (CAR_DATABASE[k].summary) CAR_SUMMARIES[CAR_DATABASE[k].name] = CAR_DATABASE[k].summary;
 }
 
+// ─── Comparison feature data — used by the vs-Competition tab ──────────────────
+// Holds the feature/spec fields the comparison table needs that aren't already
+// in `summary`. Attached onto each CAR_DATABASE entry as car.compare so the
+// Maruti side of every comparison comes from this single data source.
+// fuel + eff drive the Annual Fuel Cost calculation (15,000 km/yr).
+const MARUTI_COMPARE = {
+  "Alto K10":     { ncap:"Not tested", ts:"7 inch (VXi+)", wireless:false, sunroof:false, vent:false, sound:"4 speakers", cruise:false, adas:false, auto:true, fuel:"Petrol", eff:24.39, unique:"6 airbags standard + lowest running cost" },
+  "S-Presso":     { ncap:"Not tested", ts:"7 inch", wireless:false, sunroof:false, vent:false, sound:"4 speakers", cruise:false, adas:false, auto:true, fuel:"Petrol", eff:24.76, unique:"180mm GC SUV stance + voice controls" },
+  "Celerio":      { ncap:"Not tested", ts:"7 inch", wireless:false, sunroof:false, vent:false, sound:"4 speakers", cruise:false, adas:false, auto:true, fuel:"Petrol", eff:25.24, unique:"India's most fuel-efficient petrol car (26 km/l)" },
+  "WagonR":       { ncap:"Not tested", ts:"9 inch", wireless:false, sunroof:false, vent:false, sound:"4 speakers", cruise:false, adas:false, auto:true, fuel:"Petrol", eff:24.43, unique:"335L boot (largest in class), tallest cabin" },
+  "Swift":        { ncap:"Not tested", ts:"9 inch SmartPlay Pro", wireless:true, sunroof:false, vent:false, sound:"ARKAMYS 6-spk", cruise:true, adas:false, auto:true, fuel:"Petrol", eff:24.80, unique:"ESP + Hill Hold all variants, ARKAMYS, sporty" },
+  "Dzire":        { ncap:"5 Star (G-NCAP)", ts:"9 inch SmartPlay Pro", wireless:true, sunroof:true, vent:false, sound:"ARKAMYS 6-spk", cruise:true, adas:false, auto:true, fuel:"Petrol", eff:24.79, unique:"5-star sedan, 382L boot, sunroof, most fuel-efficient sedan" },
+  "Brezza":       { ncap:"Not tested", ts:"9 inch SmartPlay Pro", wireless:true, sunroof:true, vent:false, sound:"ARKAMYS 6-spk", cruise:true, adas:false, auto:true, fuel:"Petrol", eff:19.89, unique:"HUD, 360 camera, electric sunroof, 198mm GC" },
+  "Ertiga":       { ncap:"Not tested", ts:"9 inch (ZXi+)", wireless:true, sunroof:false, vent:false, sound:"ARKAMYS 6-spk", cruise:true, adas:false, auto:true, fuel:"Petrol", eff:20.30, unique:"True 7-seat 2+3+2, Smart Hybrid, best MPV mileage" },
+  "EECO":         { ncap:"Not tested", ts:"None", wireless:false, sunroof:false, vent:false, sound:"Basic", cruise:false, adas:false, auto:false, fuel:"Petrol", eff:19.71, unique:"ESP + 6 airbags every variant, factory CNG" },
+  "Victoris":     { ncap:"Not tested", ts:"25.65 cm (10.1 inch)", wireless:true, sunroof:true, vent:true, sound:"Infinity Dolby Atmos", cruise:true, adas:true, auto:true, fuel:"Hybrid", eff:28.65, unique:"Level 2 ADAS, ALLGRIP AWD, Strong Hybrid, exclusive to Bharath Auto" },
+  "Baleno":       { ncap:"Not tested", ts:"9 inch SmartPlay Pro+", wireless:true, sunroof:false, vent:false, sound:"ARKAMYS Surround", cruise:true, adas:false, auto:true, fuel:"Petrol", eff:22.35, unique:"Head-Up Display + 360 View Camera in a hatch" },
+  "Fronx":        { ncap:"Not tested", ts:"9 inch SmartPlay Pro", wireless:true, sunroof:false, vent:false, sound:"ARKAMYS Surround", cruise:true, adas:false, auto:true, fuel:"Petrol", eff:21.5, unique:"1.0 Turbo Boosterjet + 6AT paddle shifters + HUD" },
+  "XL6":          { ncap:"Not tested", ts:"17.78 cm (7 inch)", wireless:true, sunroof:false, vent:true, sound:"ARKAMYS Surround", cruise:true, adas:false, auto:true, fuel:"Petrol", eff:20.90, unique:"6 captain seats with recline/slide, ventilated seats" },
+  "Jimny":        { ncap:"Not tested", ts:"9 inch SmartPlay Pro", wireless:true, sunroof:false, vent:false, sound:"6 speakers", cruise:true, adas:false, auto:true, fuel:"Petrol", eff:16.94, unique:"ALLGRIP PRO 4WD low-range, 210mm GC, ladder-frame" },
+  "Grand Vitara": { ncap:"Not tested", ts:"9 inch SmartPlay Pro", wireless:true, sunroof:true, vent:true, sound:"Clarion Premium", cruise:true, adas:false, auto:true, fuel:"Hybrid", eff:27.97, unique:"Strong Hybrid 27.97 km/l + ALLGRIP 4x4 + panoramic sunroof" },
+  "Invicto":      { ncap:"Not tested", ts:"10.1 inch", wireless:true, sunroof:true, vent:true, sound:"Premium audio", cruise:true, adas:false, auto:true, fuel:"Hybrid", eff:22.16, unique:"Strong Hybrid flagship MPV, Ottoman captain seats, EV mode" },
+  "e-Vitara":     { ncap:"Not tested", ts:"25.65 cm (10.1 inch)", wireless:true, sunroof:true, vent:false, sound:"Infinity 8-spk", cruise:true, adas:true, auto:true, fuel:"EV", eff:8.9, unique:"543 km range, 7 airbags incl. knee + Level 2 ADAS" }
+};
+
+for (const displayName in MARUTI_COMPARE) {
+  const key = Object.keys(CAR_DATABASE).find(k => CAR_DATABASE[k].name === displayName);
+  if (key) CAR_DATABASE[key].compare = MARUTI_COMPARE[displayName];
+}
+
 // Export for use in the app
 if (typeof module !== 'undefined') {
-  module.exports = { CAR_DATABASE, CAR_KEYWORDS, CAR_SUMMARIES, ALL_CARS_OVERVIEW, detectCars, buildCarContext, buildSystemPrompt };
+  module.exports = { CAR_DATABASE, CAR_KEYWORDS, CAR_SUMMARIES, MARUTI_COMPARE, ALL_CARS_OVERVIEW, detectCars, buildCarContext, buildSystemPrompt };
 }
