@@ -1333,6 +1333,319 @@ const CAR_DATABASE = {
       "645L boot space — largest in Arena lineup",
       "Ideal for: premium SUV buyers, tech-savvy customers, safety-focused families"
     ]
+  },
+
+  // ══════════════════════════ NEXA LINEUP ══════════════════════════════════
+  // ── BALENO ──────────────────────────────────────────────────────────────
+  "baleno": {
+    name: "Baleno",
+    channel: "NEXA",
+    keywords: ["baleno"],
+    bodyType: "Premium Hatchback",
+    tagline: "Crafted Futurism",
+    specs: {
+      engine: "1197cc K12N Dual Jet, Dual VVT with ISS (4-cylinder)",
+      power: "89.7 PS @ 6000 rpm (66 kW)",
+      torque: "113 Nm @ 4400 rpm",
+      cngPower: "77.5 PS (CNG mode)",
+      cngTorque: "98.5 Nm @ 4300 rpm (CNG mode)",
+      transmission: "5-speed MT / 5-speed AMT",
+      fuelEfficiency: { petrolMT: "22.35 km/l", petrolAMT: "22.94 km/l", cng: "30.61 km/kg" },
+      fuelTank: "37L petrol (CNG: 55L water-equivalent)",
+      dimensions: { length: "3990 mm", width: "1745 mm", height: "1500 mm", wheelbase: "2520 mm" },
+      bootSpace: "318L",
+      tyres: "185/65 R15 (Steel) / 195/55 R16 (Alloy)",
+      seating: "5",
+      brakes: { front: "Disc", rear: "Drum" },
+      emissionStandard: "BS VI"
+    },
+    variants: ["Sigma MT", "Delta MT/AMT", "Zeta MT/AMT", "Alpha MT/AMT", "Delta CNG", "Zeta CNG"],
+    colors: ["Nexa Blue", "Grandeur Grey", "Arctic White", "Splendid Silver", "Opulent Red", "Bluish Black", "Pearl Midnight Black"],
+    safety: {
+      airbags: "6 Airbags (Front, Side, Curtain) — standard",
+      abs: "ABS with EBD",
+      esp: "Electronic Stability Program (ESP)",
+      hillHoldAssist: "Available",
+      isofix: "ISOFIX child seat mounts",
+      reverseParking: "Rear Parking Sensors + Camera",
+      tpms: "Available"
+    },
+    keyHighlights: [
+      "Head-Up Display (HUD) — first-in-segment premium feature",
+      "360° View Camera (Alpha)",
+      "22.86cm (9-inch) SmartPlay Pro+ touchscreen with wireless Android Auto & Apple CarPlay",
+      "Surround Sense audio powered by ARKAMYS",
+      "NEXA signature LED projector headlamps with NEXtré LED DRLs",
+      "6 airbags standard, ESP, Hill Hold across the range",
+      "Ideal for: young buyers wanting a feature-rich premium hatchback"
+    ],
+    summary: { body: "Premium Hatchback", engine: "1197cc K12N Dual Jet 4-cyl", power: "89.7 PS", torque: "113 Nm", petrolMT: "22.35 km/l", petrolAuto: "22.94 km/l (AMT)", cng: "30.61 km/kg", tank: "37 L", boot: "318 L", seats: "5", airbags: "6 (all variants)", gc: "170 mm", segment: "Premium hatchback", topVariant: "Alpha", topFeatures: "Head-Up Display, 360° View Camera, 9-inch SmartPlay Pro+ wireless, ARKAMYS surround, LED projectors, 6 airbags" }
+  },
+
+  // ── FRONX ───────────────────────────────────────────────────────────────
+  "fronx": {
+    name: "Fronx",
+    channel: "NEXA",
+    keywords: ["fronx", "fronks"],
+    bodyType: "Compact SUV / Crossover",
+    tagline: "Sport Meets SUV",
+    specs: {
+      engine: "1.0L Turbo Boosterjet (998cc) / 1.2L K-Series Dual Jet Dual VVT (1197cc)",
+      power: "Turbo: 100.06 PS @ 5500 rpm (73.6 kW) | 1.2L: 89.73 PS @ 6000 rpm (66 kW)",
+      torque: "Turbo: 147.6 Nm @ 2000-4500 rpm | 1.2L: 113 Nm @ 4400 rpm",
+      cngPower: "77.5 PS (1.2L CNG mode)",
+      cngTorque: "98.5 Nm @ 4300 rpm (CNG mode)",
+      transmission: "Turbo: 5MT / 6AT with Paddle Shifters | 1.2L: 5MT / 5AMT",
+      fuelEfficiency: { petrolMT: "1.2L 21.79 km/l | Turbo 21.5 km/l", petrolAuto: "1.2L 22.89 (AMT) | Turbo 20.01 (6AT)", cng: "28.51 km/kg" },
+      fuelTank: "37L petrol (CNG: 55L water-equivalent)",
+      dimensions: { length: "3995 mm", width: "1765 mm", height: "1550 mm", wheelbase: "2520 mm" },
+      bootSpace: "308L",
+      turningRadius: "4.9 m",
+      seating: "5",
+      brakes: { front: "Disc", rear: "Drum" },
+      emissionStandard: "BS VI"
+    },
+    variants: ["Sigma", "Delta", "Delta+", "Zeta", "Alpha (Turbo)"],
+    colors: ["Nexa Blue (Celestial)", "Arctic White", "Grandeur Grey", "Opulent Red", "Splendid Silver", "Earthen Brown", "Bluish Black", "Red + Black Roof (DT)", "Bluish Black Roof options"],
+    safety: {
+      airbags: "6 Airbags (Front, Side, Curtain) — standard",
+      abs: "ABS with EBD",
+      esp: "ESP — standard",
+      hillHoldAssist: "Standard",
+      seatBelt: "3-point ELR seat belts all seats",
+      tpms: "Available"
+    },
+    keyHighlights: [
+      "1.0L Turbo Boosterjet — sportiest engine in its class (100 PS, quick 0-60)",
+      "6-speed Automatic with Paddle Shifters (Turbo)",
+      "Head-Up Display + 360° View Camera (Alpha)",
+      "22.86cm SmartPlay Pro with wireless connectivity",
+      "NEXWave grille + NEXA signature connected LED rear lamps",
+      "6 airbags + ESP + Hill Hold standard",
+      "Ideal for: buyers wanting SUV styling with turbo performance"
+    ],
+    summary: { body: "Compact SUV", engine: "1.0L Turbo Boosterjet / 1.2L Dual Jet", power: "100 PS (Turbo)", torque: "147.6 Nm (Turbo)", petrolMT: "21.5 km/l (Turbo)", petrolAuto: "22.89 km/l (1.2 AMT)", cng: "28.51 km/kg", tank: "37 L", boot: "308 L", seats: "5", airbags: "6 (all variants)", gc: "190 mm", segment: "Compact SUV", topVariant: "Alpha Turbo", topFeatures: "1.0 Turbo + 6AT Paddle Shifters, Head-Up Display, 360° View, SmartPlay Pro wireless, connected LED tail lamps, 6 airbags + ESP" }
+  },
+
+  // ── XL6 ─────────────────────────────────────────────────────────────────
+  "xl6": {
+    name: "XL6",
+    channel: "NEXA",
+    keywords: ["xl6", "xl 6"],
+    bodyType: "Premium MPV (6-Seater)",
+    tagline: "Premium Adventure",
+    specs: {
+      engine: "1462cc K15C Smart Hybrid, Dual VVT (4-cylinder)",
+      power: "103 PS @ 6000 rpm (75.8 kW)",
+      torque: "139 Nm @ 4300 rpm",
+      transmission: "5-speed MT / 6-speed AT",
+      fuelEfficiency: { petrolMT: "20.90 km/l", petrolAT: "20.27 km/l", cng: "26.23 km/kg" },
+      fuelTank: "45L petrol (CNG: 60L water-equivalent)",
+      dimensions: { length: "4485 mm", width: "1775 mm", height: "1745 mm", wheelbase: "2740 mm" },
+      seating: "6 (Captain seats 2+2+2)",
+      weight: "1220–1295 kg",
+      brakes: { front: "Disc", rear: "Drum" },
+      emissionStandard: "BS VI"
+    },
+    variants: ["Zeta MT/AT", "Alpha MT/AT", "Alpha+ MT/AT", "Zeta CNG", "Alpha CNG"],
+    colors: ["Nexa Blue", "Arctic White", "Grandeur Grey", "Splendid Silver", "Brave Khaki (Zeta/Alpha)", "Opulent Red (Zeta/Alpha)", "Bluish Black", "Brave Khaki + Bluish Black (Alpha+)", "Opulent Red + Bluish Black (Alpha+)"],
+    safety: {
+      airbags: "6 Airbags (Front, Side, Curtain)",
+      abs: "ABS with EBD",
+      esp: "ESP with Hill Hold Assist",
+      isofix: "ISOFIX (2nd row)",
+      tpms: "Tyre Pressure Monitoring System",
+      seatBelt: "Pre-tensioners + Force Limiters (Dr+Co-Dr)"
+    },
+    keyHighlights: [
+      "6-seater with 2nd-row Plush Captain Seats — one-touch recline & slide",
+      "Quad Chamber LED Reflector Headlamps + Integrated LED DRLs",
+      "K15C Smart Hybrid with brake energy regeneration",
+      "17.78cm SmartPlay Pro touchscreen + ARKAMYS Surround Sense",
+      "Ventilated front seats (Alpha+), Cruise Control, Engine Push Start",
+      "3rd row 50:50 split + recline, 2nd & 3rd row AC vents",
+      "Ideal for: families wanting premium captain-seat MPV comfort"
+    ],
+    summary: { body: "MPV 6-Seater", engine: "1462cc K15C Smart Hybrid 4-cyl", power: "103 PS", torque: "139 Nm", petrolMT: "20.90 km/l", petrolAuto: "20.27 km/l (AT)", cng: "26.23 km/kg", tank: "45 L", boot: "—", seats: "6", airbags: "6 (all variants)", gc: "180 mm", segment: "MPV", topVariant: "Alpha+ AT", topFeatures: "Captain seats with recline/slide, Quad Chamber LED headlamps, Ventilated seats, SmartPlay Pro, ARKAMYS, Smart Hybrid, cruise control" }
+  },
+
+  // ── JIMNY ───────────────────────────────────────────────────────────────
+  "jimny": {
+    name: "Jimny",
+    channel: "NEXA",
+    keywords: ["jimny", "jimmy"],
+    bodyType: "Off-Road SUV (5-Door)",
+    tagline: "The Original 4x4",
+    specs: {
+      engine: "1462cc K15B with Idle Start Stop (4-cylinder, petrol)",
+      power: "104.8 PS @ 6000 rpm (77.1 kW)",
+      torque: "134.2 Nm @ 4000 rpm",
+      transmission: "5-speed MT / 4-speed AT",
+      driveType: "ALLGRIP PRO — part-time 4WD with low-range transfer gear (2H/4H/4L)",
+      fuelEfficiency: { petrolMT: "16.94 km/l", petrolAT: "16.39 km/l" },
+      fuelTank: "40L",
+      dimensions: { length: "3985 mm (with spare wheel)", width: "1645 mm", height: "1720 mm", wheelbase: "2590 mm", groundClearance: "210 mm" },
+      bootSpace: "211L (seats up) / 332L (seats folded)",
+      turningRadius: "5.7 m",
+      tyres: "195/80 R15 (Alloy & Steel)",
+      seating: "4",
+      weight: "1195–1200 kg",
+      emissionStandard: "BS VI"
+    },
+    variants: ["Zeta MT/AT", "Alpha MT/AT"],
+    colors: ["Kinetic Yellow", "Bluish Black", "Granite Gray", "Sizzling Red", "Pearl Arctic White", "Nexa Blue", "Kinetic Yellow + Bluish Black Roof (DT)"],
+    safety: {
+      airbags: "6 Airbags — standard across all variants",
+      abs: "ABS with EBD",
+      esp: "ESP with Hill Hold + Hill Descent Control",
+      brakeLSD: "Brake LSD Traction Control (for diagonal wheel slip)",
+      tpms: "Available"
+    },
+    keyHighlights: [
+      "ALLGRIP PRO 4WD with low-range transfer gear — true off-roader",
+      "Ladder-frame chassis with rigid axles front & rear",
+      "210mm ground clearance, 36° approach / 24° breakover angles",
+      "LED Headlamps with Washer (Alpha)",
+      "22.86cm SmartPlay Pro touchscreen",
+      "6 airbags + ESP + Hill Descent Control standard",
+      "Ideal for: off-road enthusiasts, adventure & lifestyle buyers"
+    ],
+    summary: { body: "Off-Road SUV", engine: "1462cc K15B 4-cyl petrol", power: "104.8 PS", torque: "134.2 Nm", petrolMT: "16.94 km/l", petrolAuto: "16.39 km/l (AT)", cng: "—", tank: "40 L", boot: "211 L / 332 L folded", seats: "4", airbags: "6 (all variants)", gc: "210 mm", segment: "Off-Road SUV", topVariant: "Alpha", topFeatures: "ALLGRIP PRO 4WD low-range, ladder-frame, 210mm GC, LED headlamps with washer, SmartPlay Pro, Hill Descent Control, 6 airbags" }
+  },
+
+  // ── GRAND VITARA ──────────────────────────────────────────────────────────
+  "grand vitara": {
+    name: "Grand Vitara",
+    channel: "NEXA",
+    keywords: ["grand vitara", "grandvitara", "gv", "grand-vitara"],
+    bodyType: "Mid-Size SUV",
+    tagline: "The Mighty Hybrid SUV",
+    specs: {
+      engine: "1462cc K15C Smart Hybrid (Petrol) / 1490cc Intelligent Strong Hybrid (e-CVT)",
+      power: "Petrol: 103.06 PS @ 6000 rpm (75.8 kW) | Strong Hybrid total system: 115.56 PS (85 kW)",
+      torque: "Petrol: 139 Nm @ 4300 rpm | Strong Hybrid: 122 Nm (engine) + 141 Nm (motor)",
+      transmission: "5MT / 6AT (Petrol) | e-CVT (Strong Hybrid)",
+      driveType: "ALLGRIP SELECT 4x4 (available on petrol)",
+      fuelEfficiency: { petrolMT: "21.11 km/l", petrolAuto: "20.58 km/l (AT) | 19.20 (ALLGRIP)", strongHybrid: "27.97 km/l (e-CVT)" },
+      fuelTank: "45L",
+      dimensions: { length: "4345 mm", width: "1795 mm", height: "1645 mm", wheelbase: "2600 mm", groundClearance: "210 mm" },
+      seating: "5",
+      weight: "1140–1285 kg",
+      brakes: { front: "Disc", rear: "Disc" },
+      emissionStandard: "BS VI"
+    },
+    variants: ["Sigma", "Delta", "Delta+", "Zeta", "Zeta+", "Alpha", "Alpha+ (Petrol & Strong Hybrid)"],
+    colors: ["Nexa Blue", "Splendid Silver", "Grandeur Grey", "Arctic White", "Midnight Black", "Opulent Red", "Dark Grey", "Arctic White + Black Roof (DT)", "Splendid Silver + Black (DT)"],
+    safety: {
+      airbags: "6 Airbags (Front, Side, Curtain) — standard",
+      abs: "ABS with EBD",
+      esp: "ESP with Hill Hold + Hill Descent (ALLGRIP)",
+      epb: "Electronic Parking Brake (AT)",
+      tpms: "Tyre Pressure Monitoring System",
+      seatBelt: "3-point ELR all seats"
+    },
+    keyHighlights: [
+      "Intelligent Strong Hybrid — 27.97 km/l, true self-charging electric drive",
+      "ALLGRIP SELECT 4x4 with multiple terrain modes (petrol)",
+      "Panoramic Sunroof (Alpha+)",
+      "Head-Up Display + 360° View Camera",
+      "22.86cm SmartPlay Pro + Premium Sound by Clarion",
+      "Ventilated front seats, Electronic Parking Brake, 6 airbags",
+      "Ideal for: buyers wanting a hybrid/4x4 mid-size SUV with best-in-class mileage"
+    ],
+    summary: { body: "Mid-Size SUV", engine: "1.5L Smart Hybrid / Strong Hybrid", power: "103 PS / 115.6 PS (hybrid)", torque: "139 Nm", petrolMT: "21.11 km/l", petrolAuto: "20.58 km/l (AT) / 27.97 (Strong Hybrid)", cng: "—", tank: "45 L", boot: "373 L", seats: "5", airbags: "6 (all variants)", gc: "210 mm", segment: "Mid-Size SUV", topVariant: "Alpha+ Strong Hybrid", topFeatures: "Strong Hybrid 27.97 km/l, ALLGRIP 4x4, Panoramic Sunroof, HUD, 360° View, SmartPlay Pro, Clarion sound, ventilated seats" }
+  },
+
+  // ── INVICTO ───────────────────────────────────────────────────────────────
+  "invicto": {
+    name: "Invicto",
+    channel: "NEXA",
+    keywords: ["invicto", "invecto"],
+    bodyType: "Premium MPV (Flagship)",
+    tagline: "Magnificence Personified",
+    specs: {
+      engine: "1987cc 2.0L Atkinson-cycle petrol with Intelligent Strong Hybrid (TNGA)",
+      power: "Total system: 188.9 PS (139 kW)",
+      torque: "Motor: 206 Nm",
+      motor: "AC Synchronous Motor — 83.73 kW @ 4000 rpm",
+      battery: "Ni-MH (168 cells), 201.6 V",
+      transmission: "e-CVT (electronic CVT)",
+      driveType: "2WD (FWD)",
+      fuelEfficiency: { strongHybrid: "22.16 km/l (ARAI)" },
+      fuelTank: "52L",
+      dimensions: { length: "4755 mm", width: "1845 mm", height: "1795 mm", wheelbase: "2850 mm" },
+      seating: "7 / 8",
+      weight: "1620–1630 kg (Kerb), GVW 2300 kg",
+      tyres: "215/60 R17 Precision Cut Alloy Wheels",
+      brakes: { front: "Ventilated Disc", rear: "Solid Disc" },
+      suspension: { front: "MacPherson Strut", rear: "Torsion Beam" },
+      emissionStandard: "BS VI"
+    },
+    variants: ["Zeta+ (7-seater)", "Alpha+ (7-seater)"],
+    colors: ["Nexa Blue", "Stellar Bronze", "Majestic Silver", "Cafe White (Dual Tone)", "Mystic Black"],
+    safety: {
+      airbags: "6 Airbags",
+      abs: "ABS with EBD",
+      esp: "ESP / Vehicle Stability Control",
+      driveModes: "ECO / Normal / Power + EV mode",
+      tpms: "Available",
+      camera: "360° Panoramic View Monitor"
+    },
+    keyHighlights: [
+      "Maruti's flagship — Intelligent Strong Hybrid with EV drive mode",
+      "188.9 PS total system power, 22.16 km/l mileage in a large MPV",
+      "Captain seats with Ottoman function + premium ambient lighting",
+      "Panoramic sunroof, large infotainment, premium audio",
+      "e-CVT smooth automatic, ECO/Normal/Power + EV modes",
+      "Ventilated seats, powered tailgate, 360° camera",
+      "Ideal for: premium/luxury MPV buyers, chauffeur-driven executives"
+    ],
+    summary: { body: "Premium MPV", engine: "2.0L Atkinson Strong Hybrid", power: "188.9 PS (system)", torque: "206 Nm (motor)", petrolMT: "—", petrolAuto: "22.16 km/l (e-CVT Hybrid)", cng: "—", tank: "52 L", boot: "—", seats: "7/8", airbags: "6 (all variants)", gc: "185 mm", segment: "Premium MPV", topVariant: "Alpha+", topFeatures: "Strong Hybrid + EV mode, Ottoman captain seats, panoramic sunroof, premium audio, ventilated seats, powered tailgate, 360° camera" }
+  },
+
+  // ── e-VITARA ──────────────────────────────────────────────────────────────
+  "e-vitara": {
+    name: "e-Vitara",
+    channel: "NEXA",
+    keywords: ["e-vitara", "evitara", "e vitara", "electric vitara"],
+    bodyType: "Electric SUV",
+    tagline: "Born Electric",
+    specs: {
+      engine: "Electric eAxle (HEARTECT-e platform) — 49 kWh / 61 kWh LFP battery",
+      power: "49 kWh: 144 PS (105.8 kW) | 61 kWh: 174 PS (128 kW)",
+      torque: "193 Nm",
+      battery: "49 kWh / 61 kWh Lithium-Iron-Phosphate (LFP, 120 cells)",
+      range: "49 kWh: 440 km | 61 kWh: 543 km (ARAI certified)",
+      charging: "AC 7.4kW: ~6.5h (49 kWh) / ~9h (61 kWh) 10-100%; DC fast charging supported",
+      batteryWarranty: "8 Years / 1,60,000 km",
+      transmission: "Single-speed (automatic)",
+      driveModes: "Eco / Normal / Sport + Snow Mode",
+      dimensions: { length: "4275 mm", width: "1800 mm", height: "1640 mm", wheelbase: "2700 mm" },
+      seating: "5",
+      tyres: "R18 Alloy Wheels with Aero Garnish",
+      brakes: { front: "Disc", rear: "Disc (All-Wheel Disc)" },
+      emissionStandard: "Zero Emission (EV)"
+    },
+    variants: ["Delta", "Zeta", "Alpha (49 kWh / 61 kWh)"],
+    colors: ["Nexa Blue", "Arctic White", "Grandeur Grey", "Bluish Black", "Opulent Red + Bluish Black Roof", "Land Breeze Green + Bluish Black Roof", "Arctic White + Bluish Black Roof"],
+    safety: {
+      airbags: "7 Airbags (incl. Driver Knee Airbag)",
+      abs: "ABS with EBD",
+      esp: "ESP + Active Cornering Control + Multi-Collision Braking",
+      adas: "Level 2 ADAS (Suzuki Safety Support)",
+      brakes: "All-Wheel Disc Brakes",
+      tpms: "Tyre Pressure Monitoring System"
+    },
+    keyHighlights: [
+      "Maruti's first electric SUV — 543 km range (61 kWh)",
+      "7 airbags including driver knee airbag — segment-leading safety",
+      "Level 2 ADAS with Active Cornering Control & Multi-Collision Braking",
+      "25.65cm (10.1-inch) infotainment + Infinity 8-speaker premium sound",
+      "R18 alloy wheels with aero garnish, NEXtré 3-Point Matrix LED DRLs",
+      "Eco/Normal/Sport + Snow drive modes, single-pedal driving",
+      "Ideal for: EV-first buyers, tech enthusiasts, urban premium families"
+    ],
+    summary: { body: "Electric SUV", engine: "eAxle EV - 49/61 kWh LFP battery", power: "144-174 PS", torque: "193 Nm", petrolMT: "—", petrolAuto: "Range: 440-543 km", cng: "—", tank: "61 kWh battery", boot: "—", seats: "5", airbags: "7 (incl. knee airbag)", gc: "180 mm", segment: "Electric SUV", topVariant: "Alpha 61 kWh", topFeatures: "543 km range, 7 airbags + ADAS, 10.1-inch infotainment, Infinity 8-speaker, R18 alloys, matrix LED DRLs, Snow mode" }
   }
 };
 
@@ -1347,104 +1660,109 @@ const CAR_KEYWORDS = {
   "brezza": ["brezza"],
   "ertiga": ["ertiga"],
   "eeco": ["eeco"],
-  "victoris": ["victoris"]
+  "victoris": ["victoris"],
+  "baleno": ["baleno"],
+  "fronx": ["fronx", "fronks"],
+  "xl6": ["xl6", "xl 6"],
+  "jimny": ["jimny", "jimmy"],
+  "grand vitara": ["grand vitara", "grandvitara", "grand-vitara"],
+  "invicto": ["invicto", "invecto"],
+  "e-vitara": ["e-vitara", "evitara", "e vitara", "electric vitara"]
 };
 
 // ─── Quick overview for multi-car/general queries ─────────────────────────────
-const ALL_CARS_OVERVIEW = `
-MARUTI SUZUKI ARENA LINEUP — QUICK OVERVIEW:
+const ALL_CARS_OVERVIEW = `MARUTI SUZUKI — BHARATH AUTO LINEUP (ARENA + NEXA) — QUICK REFERENCE:
 
-ALTO K10 | Entry Hatchback | 998cc | 68.5PS | MT/AGS/CNG | 24.39-33.40 | 6 airbags all variants | Headlamps: Halogen Projector Headlamps | DRL: LED DRLs (VXi+) | Best entry-level value
-S-PRESSO | Mini SUV | 998cc | 68.5PS | MT/AGS/CNG | 24.12-32.73 | 180mm GC | Headlamps: LED Headlamps (VXi+) / Halogen (lower) | DRL: LED DRLs | Taillamps: LED Taillamps | SUV look on hatchback budget
-CELERIO | Hatchback | 998cc | 68.5PS | MT/AGS/CNG | 26.00-34.43 | Headlamps: Projector Headlamps | DRL: LED DRLs | Taillamps: LED Taillamps | India's most fuel-efficient car | 292L boot
-WAGONR | Tall Hatchback | 998/1197cc | 68.5/90.9PS | MT/AGS/CNG | 24.35-33.47 | Headlamps: LED Headlamps (VXi+) | DRL: LED DRLs | Taillamps: LED Taillamps | 335L boot | Best space
-SWIFT | Premium Hatchback | 1197cc Z12E | 81.58PS | MT/AMT/CNG | 24.80-32.85 | Headlamps: LED Projector Headlamps | DRL: LED DRLs | Taillamps: 3D LED Taillamps | ESP+Hill Hold all variants | Fun-to-drive
-DZIRE | Compact Sedan | 1197cc Z12E | 81.58PS | MT/AMT/CNG | 24.79-33.73 | Headlamps: LED Projector Headlamps | DRL: LED DRLs | Taillamps: LED Taillamps | 382L boot | India's most fuel-efficient sedan
-BREZZA | Compact SUV | 1462cc Smart Hybrid | 103.1PS | MT/AT/CNG | 17.80-25.51 | 198mm GC | Headlamps: LED Crystal Vision Headlamps | DRL: Floating LED DRL | Taillamps: 3D Trinity LED Rear Lamps Signature | HUD+360° cam on ZXi+
-ERTIGA | 7-Seat MPV | 1462cc Smart Hybrid | 103.06PS | MT/AT/CNG | 20.51-26.11 | 2740mm WB | Headlamps: LED Headlamps | DRL: LED DRLs | Taillamps: LED Taillamps | Best family MPV
-EECO | Van/MPV | 1197cc | 60.5PS | MT/CNG | 19.71-26.78 | 5 or 6 seater | Headlamps: Halogen Headlamps | Commercial/utility use
-VICTORIS | Premium SUV | 1462/1490cc Strong Hybrid | 103PS+/ADAS | MT/AT/eCVT/AWD | 21.18-28.65 | Headlamps: LED Projector Headlamps | DRL: LED DRLs | Taillamps: LED Connected Taillamps | Level 2 ADAS | Top-of-lineup
-`;
+ARENA:
+ALTO K10    | Entry Hatchback  | 998cc K10C  | 68.5PS | MT/AGS/CNG | 24.39–33.40 | 27L  | 6 airbags std | Best entry value, Honeycomb design
+S-PRESSO    | Mini SUV         | 998cc K10C  | 68.5PS | MT/AGS/CNG | 24.12–32.73 | 27L  | 6 airbags std | 180mm GC, SUV look on hatch budget
+CELERIO     | Hatchback        | 998cc K10C  | 68.5PS | MT/AGS/CNG | 26.00–34.43 | 32L  | 6 airbags std | India's most fuel-efficient car, 292L boot
+WAGONR      | Tall Hatchback   | 998/1197cc  | 68.5/90.9PS | MT/AGS/CNG | 24.35–33.47 | 32L | 6 airbags std | 335L boot, most space
+SWIFT       | Premium Hatch    | 1197cc Z12E | 81.58PS| MT/AMT/CNG | 24.80–32.85 | 37L  | 6 airbags std | ESP+HHA all variants, fun-to-drive
+DZIRE       | Compact Sedan    | 1197cc Z12E | 81.58PS| MT/AMT/CNG | 24.79–33.73 | 37L  | 6 airbags std | 382L boot, most fuel-eff sedan, sunroof on ZXi+
+BREZZA      | Compact SUV      | 1462cc K15C | 103.1PS| MT/AT/CNG  | 17.80–25.51 | 48L  | 6 airbags std | 198mm GC, Smart Hybrid, HUD+360 on ZXi+
+ERTIGA      | 7-Seat MPV       | 1462cc K15C | 103PS  | MT/AT/CNG  | 20.51–26.11 | 45L  | 6 airbags std | 7-seats 2+3+2, Smart Hybrid
+EECO        | Van/MPV          | 1197cc K12N | 83.1PS | MT/CNG     | 19.71–26.66 | 32L  | 6 airbags + ESP | 5 or 7 seater, factory CNG, commercial use
+VICTORIS    | Premium SUV      | 1462/1490cc | 103PS+ | MT/AT/eCVT/AWD | 19.38–28.65 | 45L | 6 airbags std | Level 2 ADAS, Strong Hybrid, AllGrip AWD
 
-// ─── Function to detect which car(s) are mentioned in a query ────────────────
+NEXA:
+BALENO       | Premium Hatch   | 1197cc K12N | 89.7PS | MT/AMT/CNG | 22.35–30.61 | 37L  | 6 airbags std | HUD, 360 cam, 9" SmartPlay Pro+, ARKAMYS
+FRONX        | Compact SUV     | 1.0 Turbo / 1.2L | 100PS (Turbo) | MT/AT/AMT/CNG | 20.01–28.51 | 37L | 6 airbags std | Turbo Boosterjet, 6AT paddle shifters, HUD, 360 cam
+XL6          | 6-Seat MPV      | 1462cc K15C | 103PS  | MT/AT/CNG  | 20.27–26.23 | 45L  | 6 airbags std | Captain seats, Quad LED headlamps, ventilated seats
+JIMNY        | Off-Road SUV    | 1462cc K15B | 104.8PS| MT/AT      | 16.39–16.94 | 40L  | 6 airbags std | ALLGRIP PRO 4WD low-range, 210mm GC, ladder-frame
+GRAND VITARA | Mid-Size SUV    | 1.5L Hybrid | 103/115.6PS | MT/AT/eCVT/AWD | 20.58–27.97 | 45L | 6 airbags std | Strong Hybrid, ALLGRIP 4x4, panoramic sunroof
+INVICTO      | Premium MPV     | 2.0L Strong Hybrid | 188.9PS sys | e-CVT | 22.16 | 52L | 6 airbags std | Flagship, EV mode, Ottoman captain seats, 7/8 seats
+e-VITARA     | Electric SUV    | 49/61 kWh EV | 144–174PS | Single-speed | 440–543 km range | 61 kWh | 7 airbags + ADAS | Maruti's first EV, R18 alloys, Level 2 ADAS`;
+
+// ─── Detect which car(s) a query refers to ────────────────────────────────────
 function detectCars(query) {
-  const q = query.toLowerCase();
+  const q = (query || '').toLowerCase();
   const detected = [];
-  for (const [carKey, keywords] of Object.entries(CAR_KEYWORDS)) {
-    if (keywords.some(kw => q.includes(kw))) {
-      detected.push(carKey);
-    }
+  for (const key in CAR_KEYWORDS) {
+    if (CAR_KEYWORDS[key].some(kw => q.includes(kw))) detected.push(key);
   }
   return detected;
 }
 
 // ─── Topic-aware context for "all cars" queries ───────────────────────────────
-// Instead of sending full overview or full JSON, extract only the relevant field
 function buildAllCarsTopicContext(query) {
   const q = query.toLowerCase();
 
-  // Lamps / exterior / lights
   if (q.includes("lamp") || q.includes("light") || q.includes("headlamp") || q.includes("taillight") ||
       q.includes("tail") || q.includes("drl") || q.includes("exterior") || q.includes("grille") ||
       q.includes("wheel") || q.includes("alloy")) {
-    let ctx = "EXTERIOR & LAMP DATA — ALL ARENA CARS:\n";
+    let ctx = "EXTERIOR & LAMP DATA — ALL CARS:\n";
     for (const car of Object.values(CAR_DATABASE)) {
       ctx += `\n${car.name.toUpperCase()}: ${JSON.stringify(car.exterior || {})}`;
     }
     return ctx;
   }
 
-  // Safety
   if (q.includes("safe") || q.includes("airbag") || q.includes("esp") || q.includes("adas") ||
       q.includes("abs") || q.includes("ebd") || q.includes("crash") || q.includes("rating")) {
-    let ctx = "SAFETY DATA — ALL ARENA CARS:\n";
+    let ctx = "SAFETY DATA — ALL CARS:\n";
     for (const car of Object.values(CAR_DATABASE)) {
       ctx += `\n${car.name.toUpperCase()}: ${JSON.stringify(car.safety || {})}`;
     }
     return ctx;
   }
 
-  // Engine / specs / mileage / performance
   if (q.includes("engine") || q.includes("power") || q.includes("torque") || q.includes("cc") ||
       q.includes("mileage") || q.includes("fuel") || q.includes("kmpl") || q.includes("km/l") ||
       q.includes("cng") || q.includes("agt") || q.includes("spec") || q.includes("performance")) {
-    let ctx = "ENGINE & SPECS DATA — ALL ARENA CARS:\n";
+    let ctx = "ENGINE & SPECS DATA — ALL CARS:\n";
     for (const car of Object.values(CAR_DATABASE)) {
       ctx += `\n${car.name.toUpperCase()}: ${JSON.stringify(car.specs || {})}`;
     }
     return ctx;
   }
 
-  // Variants
   if (q.includes("variant") || q.includes("version") || q.includes("trim") || q.includes("grade")) {
-    let ctx = "VARIANT DATA — ALL ARENA CARS:\n";
+    let ctx = "VARIANT DATA — ALL CARS:\n";
     for (const car of Object.values(CAR_DATABASE)) {
       ctx += `\n${car.name.toUpperCase()}: ${(car.variants || []).join(" | ")}`;
     }
     return ctx;
   }
 
-  // Colours
   if (q.includes("colour") || q.includes("color") || q.includes("shade") || q.includes("paint")) {
-    let ctx = "COLOUR OPTIONS — ALL ARENA CARS:\n";
+    let ctx = "COLOUR OPTIONS — ALL CARS:\n";
     for (const car of Object.values(CAR_DATABASE)) {
       ctx += `\n${car.name.toUpperCase()}: ${(car.colors || []).join(", ")}`;
     }
     return ctx;
   }
 
-  // Infotainment / features
   if (q.includes("infotainment") || q.includes("screen") || q.includes("touchscreen") ||
       q.includes("music") || q.includes("speaker") || q.includes("android") || q.includes("apple") ||
       q.includes("smartplay") || q.includes("feature")) {
-    let ctx = "INFOTAINMENT & FEATURES — ALL ARENA CARS:\n";
+    let ctx = "INFOTAINMENT & FEATURES — ALL CARS:\n";
     for (const car of Object.values(CAR_DATABASE)) {
-      ctx += `\n${car.name.toUpperCase()}: ${JSON.stringify(car.infotainment || car.keySellingPoints || [])}`;
+      ctx += `\n${car.name.toUpperCase()}: ${JSON.stringify(car.infotainment || car.keyHighlights || [])}`;
     }
     return ctx;
   }
 
-  // Default — compact overview
   return ALL_CARS_OVERVIEW;
 }
 
@@ -1453,7 +1771,6 @@ function buildCarContext(query) {
   const detected = detectCars(query);
 
   if (detected.length === 0) {
-    // No specific car detected — use topic-aware all-cars context
     return buildAllCarsTopicContext(query);
   }
 
@@ -1463,7 +1780,6 @@ function buildCarContext(query) {
     return `DETAILED DATA FOR ${car.name.toUpperCase()}:\n` + JSON.stringify(car, null, 2);
   }
 
-  // Multiple cars — return detailed data for each (comparison)
   let context = "DETAILED COMPARISON DATA:\n";
   for (const key of detected) {
     const car = CAR_DATABASE[key];
@@ -1475,7 +1791,7 @@ function buildCarContext(query) {
 // Build a full system prompt for chat — injects only the relevant car data
 function buildSystemPrompt(userQuery) {
   const carContext = buildCarContext(userQuery);
-  return `You are an expert Maruti Suzuki Arena sales trainer AI for Bharath Auto dealership. Answer all queries using ONLY the data below — never guess or invent specs.
+  return `You are an expert Maruti Suzuki sales trainer AI for Bharath Auto dealership (Arena + NEXA). Answer all queries using ONLY the data below — never guess or invent specs.
 
 ${carContext}
 
@@ -1489,7 +1805,35 @@ RULES:
 - Never invent specs not present in the data above`;
 }
 
+// ─── Flat comparison summaries — SINGLE SOURCE OF TRUTH ───────────────────────
+// The Compare tab and Cars tab read their figures from here, so they always
+// match the data the AI uses (CAR_DATABASE). NEXA cars carry their `summary`
+// inside their CAR_DATABASE entry; the original Arena cars are listed below and
+// attached onto CAR_DATABASE at load so every car has car.summary.
+const LEGACY_SUMMARIES = {
+  "Alto K10": { body: "Hatchback", engine: "998cc K10C Dual Jet 3-cyl", power: "68.5 PS", torque: "91.1 Nm", petrolMT: "24.39 km/l", petrolAuto: "24.90 km/l (AGS)", cng: "33.40 km/kg", tank: "27 L", boot: "—", seats: "5", airbags: "6 (all variants)", gc: "160 mm", segment: "Entry hatchback", topVariant: "VXi+(O)", topFeatures: "SmartPlay Studio, Android Auto, Steering Voice Controls, AGS auto option, 6 airbags all variants" },
+  "S-Presso": { body: "Micro SUV", engine: "998cc K10C Next Gen Dual Jet 3-cyl", power: "68.5 PS", torque: "91.1 Nm", petrolMT: "24.76 km/l", petrolAuto: "25.30 km/l (AGS)", cng: "32.73 km/kg", tank: "27 L", boot: "—", seats: "5 (CNG: 4)", airbags: "6 (all variants)", gc: "180 mm", segment: "Mini SUV", topVariant: "VXi+(O) AGS", topFeatures: "SUV stance at hatchback price, 180mm GC, first-in-class Steering Voice Controls, Twin Chamber Headlamps, ESP on AGS" },
+  "Celerio": { body: "Hatchback", engine: "998cc K10C Next Gen Dual Jet 3-cyl", power: "68.5 PS", torque: "91.1 Nm", petrolMT: "25.24 km/l", petrolAuto: "26.00 km/l (AGS)", cng: "34.43 km/kg", tank: "32 L", boot: "292 L", seats: "5", airbags: "6 (all variants)", gc: "170 mm", segment: "Hatchback", topVariant: "ZXi+ AGS", topFeatures: "India's Most Fuel Efficient 26 km/l, Urbane Black Alloy Wheels R15, Animated Sweeping Headlamps, first-in-segment Hill Hold Assist" },
+  "WagonR": { body: "Tall Hatchback", engine: "998cc K10C / 1197cc K12N", power: "68.5 / 90.9 PS", torque: "91.1 / 113 Nm", petrolMT: "24.43 km/l", petrolAuto: "25.19 km/l (AGS)", cng: "33.54 km/kg", tank: "32 L", boot: "335 L", seats: "5", airbags: "6 (all variants)", gc: "170 mm", segment: "Tall Hatchback", topVariant: "ZXi+ 1.2L", topFeatures: "335L boot (largest in class), 1.2L K12N engine option, Dynamic Alloy Wheels, Sporty Floating Roof Design" },
+  "Swift": { body: "Hatchback", engine: "1197cc Z12E 3-cyl", power: "81.58 PS", torque: "111.7 Nm", petrolMT: "24.80 km/l", petrolAuto: "25.75 km/l (AMT)", cng: "32.85 km/kg", tank: "37 L", boot: "265 L", seats: "5", airbags: "6 (all variants)", gc: "163 mm", segment: "Premium hatchback", topVariant: "ZXi+", topFeatures: "Smokey Projector Headlamps with Boomerang DRLs, Precision Cut Dual-Tone Alloys, ARKAMYS Surround Sound, All-Black Interior" },
+  "Dzire": { body: "Sedan", engine: "1197cc Z12E 3-cyl", power: "81.58 PS", torque: "111.7 Nm", petrolMT: "24.79 km/l", petrolAuto: "25.71 km/l (AMT)", cng: "33.73 km/kg", tank: "37 L", boot: "382 L", seats: "5", airbags: "6 (all variants)", gc: "163 mm", segment: "Compact sedan", topVariant: "ZXi+", topFeatures: "India's Most Fuel-Efficient Sedan, LED Crystal Vision Headlamps, 3D Trinity LED Rear Lamps, Two Tone Precision Cut Alloys, 382L boot, Sunroof" },
+  "Brezza": { body: "Compact SUV", engine: "1462cc K15C Smart Hybrid 4-cyl", power: "103.1 PS", torque: "137 Nm", petrolMT: "19.89 km/l", petrolAuto: "19.80 km/l (AT)", cng: "25.51 km/kg", tank: "48 L", boot: "328 L", seats: "5", airbags: "6 (all variants)", gc: "198 mm", segment: "Compact SUV", topVariant: "ZXi+ AT", topFeatures: "Bold Geometric Alloy Wheels 215/60R16, Dual LED Projector Headlamps, HUD with Turn-by-Turn Nav, Smart Hybrid, 360° Camera" },
+  "Ertiga": { body: "MPV 7-Seater", engine: "1462cc K15C Smart Hybrid 4-cyl", power: "103.06 PS", torque: "137 Nm", petrolMT: "20.30 km/l", petrolAuto: "19.01 km/l (AT)", cng: "26.11 km/kg", tank: "45 L", boot: "209 L (3rd row up)", seats: "7", airbags: "6 (ZXi/ZXi+)", gc: "180 mm", segment: "MPV", topVariant: "ZXi+ AT", topFeatures: "7 seats 2+3+2, Smart Hybrid, Dual Tone Diamond Cut Alloys, ARKAMYS Surround Sound, Paddle Shifters (AT)" },
+  "EECO": { body: "Van / MPV", engine: "1197cc K12N 4-cyl", power: "83.1 PS", torque: "108.6 Nm", petrolMT: "19.71 km/l", petrolAuto: "—", cng: "26.66 km/kg", tank: "32 L", boot: "—", seats: "5 or 7", airbags: "6 + ESP (all variants)", gc: "170 mm", segment: "Commercial van", topVariant: "AC CNG 7-Str", topFeatures: "ESP + 6 airbags every variant (segment unique), 5 or 7-seater, factory CNG, 155R13C 8PR tyres, lowest running cost" },
+  "Victoris": { body: "Premium SUV", engine: "1462cc K15C Smart Hybrid 4-cyl", power: "103 PS", torque: "137 Nm", petrolMT: "19.38 km/l", petrolAuto: "19.68 km/l (AT)", cng: "—", tank: "45 L", boot: "—", seats: "5", airbags: "6 (all variants)", gc: "210 mm", segment: "Premium SUV", topVariant: "Zxi+(O) AT", topFeatures: "Level 2 ADAS (10 features), ALLGRIP AWD, Aero Cut Alloy Wheels 17-inch, Infinity Dolby Atmos, Smart Powered Tailgate + Gesture, Electronic Parking Brake, Panoramic Sunroof" }
+};
+
+for (const displayName in LEGACY_SUMMARIES) {
+  const key = Object.keys(CAR_DATABASE).find(k => CAR_DATABASE[k].name === displayName);
+  if (key && !CAR_DATABASE[key].summary) CAR_DATABASE[key].summary = LEGACY_SUMMARIES[displayName];
+}
+
+const CAR_SUMMARIES = {};
+for (const k in CAR_DATABASE) {
+  if (CAR_DATABASE[k].summary) CAR_SUMMARIES[CAR_DATABASE[k].name] = CAR_DATABASE[k].summary;
+}
+
 // Export for use in the app
 if (typeof module !== 'undefined') {
-  module.exports = { CAR_DATABASE, CAR_KEYWORDS, ALL_CARS_OVERVIEW, detectCars, buildCarContext, buildSystemPrompt };
+  module.exports = { CAR_DATABASE, CAR_KEYWORDS, CAR_SUMMARIES, ALL_CARS_OVERVIEW, detectCars, buildCarContext, buildSystemPrompt };
 }
